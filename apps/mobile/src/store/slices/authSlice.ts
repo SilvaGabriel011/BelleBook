@@ -5,6 +5,7 @@ interface User {
   email: string;
   role: 'customer' | 'provider';
   displayName?: string;
+  avatarUrl?: string;
 }
 
 interface AuthState {
@@ -41,8 +42,18 @@ const authSlice = createSlice({
       state.error = action.payload;
       state.isLoading = false;
     },
+    updateDisplayName: (state, action: PayloadAction<string>) => {
+      if (state.user) {
+        state.user.displayName = action.payload;
+      }
+    },
+    updateAvatarUrl: (state, action: PayloadAction<string>) => {
+      if (state.user) {
+        state.user.avatarUrl = action.payload;
+      }
+    },
   },
 });
 
-export const { setUser, clearUser, setLoading, setError } = authSlice.actions;
+export const { setUser, clearUser, setLoading, setError, updateDisplayName, updateAvatarUrl } = authSlice.actions;
 export default authSlice.reducer;
