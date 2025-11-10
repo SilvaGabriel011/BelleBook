@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface ServiceStyle {
+export interface ServiceStyle {
   id: string;
   name: string;
   description: string;
@@ -10,7 +10,7 @@ interface ServiceStyle {
   categoryId: string;
 }
 
-interface CatalogState {
+export interface CatalogState {
   services: ServiceStyle[];
   favorites: string[];
   isLoading: boolean;

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface BookingState {
+export interface BookingState {
   selectedServiceId: string | null;
   selectedProviderId: string | null;
   selectedDateTime: string | null;
