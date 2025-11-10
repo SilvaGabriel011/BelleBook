@@ -15,7 +15,12 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
-import { clearUser, updateDisplayName, updateAvatarUrl, setLoading } from '../store/slices/authSlice';
+import {
+  clearUser,
+  updateDisplayName,
+  updateAvatarUrl,
+  setLoading,
+} from '../store/slices/authSlice';
 import { signOut, updateProfile } from 'firebase/auth';
 import { auth, db, storage } from '../config/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
@@ -125,40 +130,33 @@ const ProfileScreen = () => {
   };
 
   const handleLogout = async () => {
-    Alert.alert(
-      'Logout',
-      'Are you sure you want to logout?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
+    Alert.alert('Logout', 'Are you sure you want to logout?', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Logout',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await signOut(auth);
+            dispatch(clearUser());
+            navigation.navigate('Onboarding');
+          } catch (error) {
+            console.error('Logout error:', error);
+            Alert.alert('Error', 'Failed to logout. Please try again.');
+          }
         },
-        {
-          text: 'Logout',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await signOut(auth);
-              dispatch(clearUser());
-              navigation.navigate('Onboarding');
-            } catch (error) {
-              console.error('Logout error:', error);
-              Alert.alert('Error', 'Failed to logout. Please try again.');
-            }
-          },
-        },
-      ]
-    );
+      },
+    ]);
   };
 
   if (!user) {
     return (
       <View style={styles.container}>
         <Text style={styles.errorText}>No user is currently logged in</Text>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate('Login')}
-        >
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
           <Text style={styles.buttonText}>Go to Login</Text>
         </TouchableOpacity>
       </View>
@@ -177,7 +175,9 @@ const ProfileScreen = () => {
             ) : (
               <View style={styles.avatarPlaceholder}>
                 <Text style={styles.avatarPlaceholderText}>
-                  {user.displayName ? user.displayName.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
+                  {user.displayName
+                    ? user.displayName.charAt(0).toUpperCase()
+                    : user.email.charAt(0).toUpperCase()}
                 </Text>
               </View>
             )}
@@ -220,9 +220,7 @@ const ProfileScreen = () => {
             />
           ) : (
             <View style={styles.infoBox}>
-              <Text style={styles.infoText}>
-                {user.displayName || 'Not set'}
-              </Text>
+              <Text style={styles.infoText}>{user.displayName || 'Not set'}</Text>
             </View>
           )}
 
@@ -260,10 +258,7 @@ const ProfileScreen = () => {
           )}
         </View>
 
-        <TouchableOpacity
-          style={[styles.button, styles.logoutButton]}
-          onPress={handleLogout}
-        >
+        <TouchableOpacity style={[styles.button, styles.logoutButton]} onPress={handleLogout}>
           <Text style={styles.buttonText}>Logout</Text>
         </TouchableOpacity>
       </View>

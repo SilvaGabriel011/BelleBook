@@ -82,29 +82,27 @@ const SignupScreen = () => {
         updatedAt: serverTimestamp(),
       });
 
-      dispatch(setUser({
-        id: user.uid,
-        email: user.email || '',
-        role: 'customer',
-        displayName: displayName || '',
-        avatarUrl: '',
-      }));
-
-      Alert.alert(
-        'Success',
-        'Your account has been created successfully!',
-        [
-          {
-            text: 'OK',
-            onPress: () => navigation.navigate('Home'),
-          },
-        ]
+      dispatch(
+        setUser({
+          id: user.uid,
+          email: user.email || '',
+          role: 'customer',
+          displayName: displayName || '',
+          avatarUrl: '',
+        })
       );
+
+      Alert.alert('Success', 'Your account has been created successfully!', [
+        {
+          text: 'OK',
+          onPress: () => navigation.navigate('Home'),
+        },
+      ]);
     } catch (error) {
       console.error('Signup error:', error);
       const err = error as { code?: string };
       let errorMessage = 'Failed to create account. Please try again.';
-      
+
       if (err.code === 'auth/email-already-in-use') {
         errorMessage = 'An account with this email already exists.';
       } else if (err.code === 'auth/invalid-email') {
@@ -170,9 +168,7 @@ const SignupScreen = () => {
             editable={!isLoading}
           />
 
-          <Text style={styles.helperText}>
-            Password must be at least 6 characters long
-          </Text>
+          <Text style={styles.helperText}>Password must be at least 6 characters long</Text>
 
           <TouchableOpacity
             style={[styles.button, isLoading && styles.buttonDisabled]}

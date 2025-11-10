@@ -49,20 +49,22 @@ const LoginScreen = () => {
       const userDoc = await getDoc(doc(db, 'users', user.uid));
       const userData = userDoc.data();
 
-      dispatch(setUser({
-        id: user.uid,
-        email: user.email || '',
-        role: userData?.role || 'customer',
-        displayName: userData?.displayName || user.displayName || '',
-        avatarUrl: userData?.avatarUrl || '',
-      }));
+      dispatch(
+        setUser({
+          id: user.uid,
+          email: user.email || '',
+          role: userData?.role || 'customer',
+          displayName: userData?.displayName || user.displayName || '',
+          avatarUrl: userData?.avatarUrl || '',
+        })
+      );
 
       navigation.navigate('Home');
     } catch (error) {
       console.error('Login error:', error);
       const err = error as { code?: string };
       let errorMessage = 'Failed to login. Please try again.';
-      
+
       if (err.code === 'auth/user-not-found') {
         errorMessage = 'No account found with this email.';
       } else if (err.code === 'auth/wrong-password') {
@@ -108,7 +110,7 @@ const LoginScreen = () => {
       console.error('Magic link error:', error);
       const err = error as { code?: string };
       let errorMessage = 'Failed to send magic link. Please try again.';
-      
+
       if (err.code === 'auth/invalid-email') {
         errorMessage = 'Invalid email address.';
       }
@@ -168,26 +170,50 @@ const LoginScreen = () => {
 
           <View style={styles.authMethodContainer}>
             <TouchableOpacity
-              style={[styles.authMethodButton, authMethod === 'email' && styles.authMethodButtonActive]}
+              style={[
+                styles.authMethodButton,
+                authMethod === 'email' && styles.authMethodButtonActive,
+              ]}
               onPress={() => setAuthMethod('email')}
             >
-              <Text style={[styles.authMethodText, authMethod === 'email' && styles.authMethodTextActive]}>
+              <Text
+                style={[
+                  styles.authMethodText,
+                  authMethod === 'email' && styles.authMethodTextActive,
+                ]}
+              >
                 Email
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.authMethodButton, authMethod === 'magic-link' && styles.authMethodButtonActive]}
+              style={[
+                styles.authMethodButton,
+                authMethod === 'magic-link' && styles.authMethodButtonActive,
+              ]}
               onPress={() => setAuthMethod('magic-link')}
             >
-              <Text style={[styles.authMethodText, authMethod === 'magic-link' && styles.authMethodTextActive]}>
+              <Text
+                style={[
+                  styles.authMethodText,
+                  authMethod === 'magic-link' && styles.authMethodTextActive,
+                ]}
+              >
                 Magic Link
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.authMethodButton, authMethod === 'phone' && styles.authMethodButtonActive]}
+              style={[
+                styles.authMethodButton,
+                authMethod === 'phone' && styles.authMethodButtonActive,
+              ]}
               onPress={() => setAuthMethod('phone')}
             >
-              <Text style={[styles.authMethodText, authMethod === 'phone' && styles.authMethodTextActive]}>
+              <Text
+                style={[
+                  styles.authMethodText,
+                  authMethod === 'phone' && styles.authMethodTextActive,
+                ]}
+              >
                 Phone
               </Text>
             </TouchableOpacity>
@@ -247,7 +273,11 @@ const LoginScreen = () => {
               <ActivityIndicator color="#fff" />
             ) : (
               <Text style={styles.buttonText}>
-                {authMethod === 'email' ? 'Sign In' : authMethod === 'magic-link' ? 'Send Magic Link' : 'Send Code'}
+                {authMethod === 'email'
+                  ? 'Sign In'
+                  : authMethod === 'magic-link'
+                    ? 'Send Magic Link'
+                    : 'Send Code'}
               </Text>
             )}
           </TouchableOpacity>

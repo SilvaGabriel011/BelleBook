@@ -23,13 +23,15 @@ function AppContent() {
           const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
           const userData = userDoc.data();
 
-          store.dispatch(setUser({
-            id: firebaseUser.uid,
-            email: firebaseUser.email || '',
-            role: userData?.role || 'customer',
-            displayName: userData?.displayName || firebaseUser.displayName || '',
-            avatarUrl: userData?.avatarUrl || firebaseUser.photoURL || '',
-          }));
+          store.dispatch(
+            setUser({
+              id: firebaseUser.uid,
+              email: firebaseUser.email || '',
+              role: userData?.role || 'customer',
+              displayName: userData?.displayName || firebaseUser.displayName || '',
+              avatarUrl: userData?.avatarUrl || firebaseUser.photoURL || '',
+            })
+          );
         } catch (error) {
           console.error('Error fetching user data:', error);
           store.dispatch(clearUser());

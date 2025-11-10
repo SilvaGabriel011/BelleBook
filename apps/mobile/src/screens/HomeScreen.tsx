@@ -16,19 +16,14 @@ const HomeScreen = () => {
     <View style={styles.container}>
       <Text style={styles.title}>BelleBook</Text>
       <Text style={styles.subtitle}>Beauty Services Booking</Text>
-      
+
       {user && (
         <View style={styles.welcomeContainer}>
-          <Text style={styles.welcomeText}>
-            Welcome, {user.displayName || user.email}!
-          </Text>
+          <Text style={styles.welcomeText}>Welcome, {user.displayName || user.email}!</Text>
         </View>
       )}
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Profile')}
-      >
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Profile')}>
         <Text style={styles.buttonText}>View Profile</Text>
       </TouchableOpacity>
     </View>
