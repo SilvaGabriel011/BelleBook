@@ -79,9 +79,7 @@ const applyFiltersAndSearch = (state: CatalogState) => {
   }
 
   if (state.filters.categoryId) {
-    filtered = filtered.filter(
-      (service) => service.categoryId === state.filters.categoryId
-    );
+    filtered = filtered.filter((service) => service.categoryId === state.filters.categoryId);
   }
 
   if (state.filters.priceMin !== null) {

@@ -18,18 +18,21 @@ BelleBook is a mobile-first platform that connects beauty service customers with
 ### Tech Stack
 
 **Mobile App**
+
 - React Native with Expo
 - TypeScript
 - Redux for state management
 - React Navigation
 
 **Backend**
+
 - Firebase Cloud Functions
 - Firestore (NoSQL database)
 - Firebase Authentication (JWT)
 - Firebase Cloud Storage
 
 **Integrations**
+
 - Stripe for payments
 - Google Calendar API
 - Sentry for monitoring
@@ -105,46 +108,54 @@ npm run format
 ## 🗺️ Roadmap
 
 ### Milestone 1: Setup ✅
+
 - [x] Repository structure
 - [x] Development environment
 - [x] CI/CD pipeline
 - [x] Database schema
 
 ### Milestone 2: Authentication (In Progress)
+
 - [ ] User signup/login
 - [ ] Passwordless authentication
 - [ ] Session management
 - [ ] Profile basics
 
 ### Milestone 3: Catalog
+
 - [ ] Service browsing
 - [ ] Categories
 - [ ] Favorites
 - [ ] Search and filters
 
 ### Milestone 4: Booking
+
 - [ ] Provider selection
 - [ ] Date/time picker
 - [ ] Booking confirmation
 - [ ] Payment integration
 
 ### Milestone 5: Integrations
+
 - [ ] Google Calendar sync
 - [ ] Stripe payments
 - [ ] Webhooks
 
 ### Milestone 6: User Management
+
 - [ ] Booking history
 - [ ] Cancel/reschedule
 - [ ] Payment methods
 - [ ] Notifications
 
 ### Milestone 7: Documentation
+
 - [ ] API documentation
 - [ ] OpenAPI spec
 - [ ] Deployment guides
 
 ### Milestone 8: Production
+
 - [ ] Performance optimization
 - [ ] Security hardening
 - [ ] Monitoring
@@ -166,6 +177,7 @@ This project is proprietary software. All rights reserved.
 ## 📞 Support
 
 For issues and questions:
+
 - Open an issue on GitHub
 - Contact: pedrogabriieell@gmail.com
 

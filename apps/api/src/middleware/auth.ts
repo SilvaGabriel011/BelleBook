@@ -12,7 +12,7 @@ export const authMiddleware = async (
 ): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
-    
+
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       res.status(401).json({ error: 'Unauthorized: No token provided' });
       return;
@@ -20,7 +20,7 @@ export const authMiddleware = async (
 
     const token = authHeader.split('Bearer ')[1];
     const decodedToken = await admin.auth().verifyIdToken(token);
-    
+
     req.user = decodedToken;
     next();
   } catch (error) {

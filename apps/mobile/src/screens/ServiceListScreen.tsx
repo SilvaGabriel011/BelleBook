@@ -280,10 +280,7 @@ const ServiceListScreen = () => {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setShowFilters(false)}
-            >
+            <TouchableOpacity style={styles.closeButton} onPress={() => setShowFilters(false)}>
               <Text style={styles.closeButtonText}>Cancel</Text>
             </TouchableOpacity>
           </View>
