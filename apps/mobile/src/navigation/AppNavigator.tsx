@@ -6,6 +6,7 @@ import CategoriesScreen from '../screens/CategoriesScreen';
 import ServiceListScreen from '../screens/ServiceListScreen';
 import ServiceDetailScreen from '../screens/ServiceDetailScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
+import BookingFlowScreen from '../screens/BookingFlowScreen';
 
 export type RootStackParamList = {
   Onboarding: undefined;
@@ -34,6 +35,7 @@ const AppNavigator = () => {
       <Stack.Screen name="ServiceList" component={ServiceListScreen} />
       <Stack.Screen name="ServiceDetail" component={ServiceDetailScreen} />
       <Stack.Screen name="Favorites" component={FavoritesScreen} />
+      <Stack.Screen name="BookingFlow" component={BookingFlowScreen} />
     </Stack.Navigator>
   );
 };
