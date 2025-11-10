@@ -1,0 +1,56 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isProvider() {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'provider';
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isOwner(userId);
+      allow delete: if false;
+    }
+    
+    // Service styles collection
+    match /service_styles/{styleId} {
+      allow read: if true;
+      allow write: if isProvider();
+    }
+    
+    // Appointments collection
+    match /appointments/{appointmentId} {
+      allow read: if isAuthenticated() && 
+                     (resource.data.customerId == request.auth.uid || 
+                      resource.data.providerId == request.auth.uid);
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated() && 
+                       (resource.data.customerId == request.auth.uid || 
+                        resource.data.providerId == request.auth.uid);
+      allow delete: if false;
+    }
+    
+    // Favorites collection
+    match /favorites/{favoriteId} {
+      allow read, write: if isAuthenticated() && 
+                            resource.data.userId == request.auth.uid;
+    }
+    
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

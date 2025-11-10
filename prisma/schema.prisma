@@ -1,0 +1,79 @@
+// This is a reference schema for documentation purposes
+// BelleBook uses Firestore as the primary database
+// This schema documents the data structure
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  displayName   String?
+  role          String   @default("customer") // customer, provider, admin
+  avatarUrl     String?
+  timezone      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  appointments  Appointment[]
+  favorites     Favorite[]
+  
+  @@map("users")
+}
+
+model ServiceStyle {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  imageUrl    String
+  categoryId  String
+  likes       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  appointments Appointment[]
+  favorites    Favorite[]
+  
+  @@map("service_styles")
+}
+
+model Appointment {
+  id            String   @id @default(uuid())
+  customerId    String
+  providerId    String
+  serviceId     String
+  scheduledAt   DateTime
+  status        String   @default("pending") // pending, confirmed, completed, cancelled
+  paymentMethod String?  // pay_now, pay_on_site
+  paymentStatus String?  // pending, paid, refunded
+  totalAmount   Float
+  discount      Float    @default(0)
+  timezone      String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  customer      User         @relation(fields: [customerId], references: [id])
+  service       ServiceStyle @relation(fields: [serviceId], references: [id])
+  
+  @@map("appointments")
+}
+
+model Favorite {
+  id        String   @id @default(uuid())
+  userId    String
+  serviceId String
+  createdAt DateTime @default(now())
+  
+  user    User         @relation(fields: [userId], references: [id])
+  service ServiceStyle @relation(fields: [serviceId], references: [id])
+  
+  @@unique([userId, serviceId])
+  @@map("favorites")
+}
