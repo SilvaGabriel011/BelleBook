@@ -37,7 +37,7 @@ export interface FilterState {
   sortBy: SortOption;
 }
 
-interface CatalogState {
+export interface CatalogState {
   services: ServiceStyle[];
   filteredServices: ServiceStyle[];
   categories: Category[];
