@@ -48,12 +48,9 @@ const FavoritesScreen = () => {
       dispatch(setLoading(true));
       dispatch(setError(null));
 
-      const favoritesQuery = query(
-        collection(db, 'favorites'),
-        where('userId', '==', user.uid)
-      );
+      const favoritesQuery = query(collection(db, 'favorites'), where('userId', '==', user.id));
       const favoritesSnapshot = await getDocs(favoritesQuery);
-      
+
       const favoriteIds = favoritesSnapshot.docs.map((doc) => doc.data().serviceId);
       dispatch(setFavorites(favoriteIds));
 
@@ -92,7 +89,7 @@ const FavoritesScreen = () => {
 
       const favQuery = query(
         collection(db, 'favorites'),
-        where('userId', '==', user.uid),
+        where('userId', '==', user.id),
         where('serviceId', '==', service.id)
       );
       const favSnapshot = await getDocs(favQuery);

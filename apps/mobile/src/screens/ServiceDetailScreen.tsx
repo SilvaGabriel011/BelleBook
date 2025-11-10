@@ -13,8 +13,22 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { RootState } from '../store';
-import { setSelectedService, toggleFavorite, setLoading, setError } from '../store/slices/catalogSlice';
-import { doc, getDoc, collection, addDoc, deleteDoc, query, where, getDocs } from 'firebase/firestore';
+import {
+  setSelectedService,
+  toggleFavorite,
+  setLoading,
+  setError,
+} from '../store/slices/catalogSlice';
+import {
+  doc,
+  getDoc,
+  collection,
+  addDoc,
+  deleteDoc,
+  query,
+  where,
+  getDocs,
+} from 'firebase/firestore';
 import { db } from '../config/firebase';
 import type { ServiceStyle } from '../store/slices/catalogSlice';
 
@@ -76,17 +90,17 @@ const ServiceDetailScreen = () => {
       if (isFav) {
         const favQuery = query(
           collection(db, 'favorites'),
-          where('userId', '==', user.uid),
+          where('userId', '==', user.id),
           where('serviceId', '==', service.id)
         );
         const favSnapshot = await getDocs(favQuery);
-        
+
         for (const favDoc of favSnapshot.docs) {
           await deleteDoc(doc(db, 'favorites', favDoc.id));
         }
       } else {
         await addDoc(collection(db, 'favorites'), {
-          userId: user.uid,
+          userId: user.id,
           serviceId: service.id,
           createdAt: new Date().toISOString(),
         });
