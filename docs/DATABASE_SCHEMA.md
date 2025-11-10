@@ -24,6 +24,7 @@ Stores user profiles for both customers and service providers.
 ```
 
 **Indexes:**
+
 - `email` (unique)
 - `role`
 
@@ -48,6 +49,7 @@ Catalog of beauty services and styles offered by providers.
 ```
 
 **Indexes:**
+
 - `categoryId`
 - `categoryId + likes` (composite, for sorting by popularity)
 
@@ -76,6 +78,7 @@ Booking records linking customers, providers, and services.
 ```
 
 **Indexes:**
+
 - `customerId + scheduledAt` (composite)
 - `providerId + scheduledAt` (composite)
 - `status`
@@ -96,6 +99,7 @@ User favorites for quick access to preferred services.
 ```
 
 **Indexes:**
+
 - `userId + serviceId` (composite, unique)
 
 ---
@@ -142,6 +146,7 @@ Stored payment methods for users (tokenized via Stripe).
 See `apps/api/firestore.rules` for detailed security rules.
 
 ### Key Principles:
+
 - Users can only read/write their own data
 - Providers can manage their services and view their appointments
 - Service catalog is publicly readable

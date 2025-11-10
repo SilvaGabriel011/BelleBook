@@ -88,6 +88,7 @@ npm run api
 ```
 
 This will start:
+
 - Functions emulator on port 5001
 - Firestore emulator on port 8080
 - Auth emulator on port 9099
@@ -103,6 +104,7 @@ npm run mobile
 ```
 
 This will start the Expo development server. You can then:
+
 - Press `i` for iOS simulator
 - Press `a` for Android emulator
 - Scan QR code with Expo Go app on your phone
