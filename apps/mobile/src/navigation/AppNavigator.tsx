@@ -7,14 +7,22 @@ import OnboardingScreen from '../screens/OnboardingScreen';
 import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import CategoriesScreen from '../screens/CategoriesScreen';
+import ServiceListScreen from '../screens/ServiceListScreen';
+import ServiceDetailScreen from '../screens/ServiceDetailScreen';
+import FavoritesScreen from '../screens/FavoritesScreen';
+import BookingFlowScreen from '../screens/BookingFlowScreen';
 
 export type RootStackParamList = {
   Onboarding: undefined;
   Login: undefined;
   Signup: undefined;
   Home: undefined;
-  Catalog: undefined;
-  BookingFlow: undefined;
+  Categories: undefined;
+  ServiceList: { categoryId?: string; categoryName?: string };
+  ServiceDetail: { serviceId: string };
+  Favorites: undefined;
+  BookingFlow: { serviceId: string };
   Profile: undefined;
 };
 
@@ -40,6 +48,11 @@ const AppNavigator = () => {
         <>
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Profile" component={ProfileScreen} />
+          <Stack.Screen name="Categories" component={CategoriesScreen} />
+          <Stack.Screen name="ServiceList" component={ServiceListScreen} />
+          <Stack.Screen name="ServiceDetail" component={ServiceDetailScreen} />
+          <Stack.Screen name="Favorites" component={FavoritesScreen} />
+          <Stack.Screen name="BookingFlow" component={BookingFlowScreen} />
         </>
       )}
     </Stack.Navigator>

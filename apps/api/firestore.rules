@@ -30,6 +30,12 @@ service cloud.firestore {
       allow write: if isProvider();
     }
     
+    // Categories collection
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isProvider();
+    }
+    
     // Appointments collection
     match /appointments/{appointmentId} {
       allow read: if isAuthenticated() && 
@@ -44,8 +50,12 @@ service cloud.firestore {
     
     // Favorites collection
     match /favorites/{favoriteId} {
-      allow read, write: if isAuthenticated() && 
-                            resource.data.userId == request.auth.uid;
+      allow read: if isAuthenticated() && 
+                     resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && 
+                       request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAuthenticated() && 
+                               resource.data.userId == request.auth.uid;
     }
     
     // Default deny
