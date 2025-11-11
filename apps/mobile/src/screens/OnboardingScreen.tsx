@@ -16,7 +16,7 @@ const OnboardingScreen = () => {
         Book beauty services with ease. Find professionals, schedule appointments, and manage your
         bookings all in one place.
       </Text>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
         <Text style={styles.buttonText}>Get Started</Text>
       </TouchableOpacity>
     </View>

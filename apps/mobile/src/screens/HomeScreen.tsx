@@ -3,18 +3,26 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
 const HomeScreen = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
-
+  const user = useSelector((state: RootState) => state.auth.user);
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       <View style={styles.header}>
         <Text style={styles.title}>BelleBook</Text>
         <Text style={styles.subtitle}>Beauty Services Booking</Text>
       </View>
+
+      {user && (
+        <View style={styles.welcomeContainer}>
+          <Text style={styles.welcomeText}>Welcome, {user.displayName || user.email}!</Text>
+        </View>
+      )}
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Explore Services</Text>
@@ -40,6 +48,12 @@ const HomeScreen = () => {
         >
           <Text style={styles.secondaryButtonText}>My Favorites</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.secondaryButton}
+          onPress={() => navigation.navigate('Profile')}
+        >
+          <Text style={styles.secondaryButtonText}>My Profile</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.footer}>
@@ -63,7 +77,7 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     marginTop: 40,
-    marginBottom: 40,
+    marginBottom: 20,
   },
   title: {
     fontSize: 36,
@@ -131,6 +145,15 @@ const styles = StyleSheet.create({
   footerSubtext: {
     fontSize: 14,
     color: '#6B7280',
+    textAlign: 'center',
+  },
+  welcomeContainer: {
+    marginBottom: 24,
+    alignItems: 'center',
+  },
+  welcomeText: {
+    fontSize: 18,
+    color: '#333',
     textAlign: 'center',
   },
 });
