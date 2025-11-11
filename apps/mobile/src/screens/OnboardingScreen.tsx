@@ -13,12 +13,10 @@ const OnboardingScreen = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Welcome to BelleBook</Text>
       <Text style={styles.description}>
-        Book beauty services with ease. Find professionals, schedule appointments, and manage your bookings all in one place.
+        Book beauty services with ease. Find professionals, schedule appointments, and manage your
+        bookings all in one place.
       </Text>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Home')}
-      >
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
         <Text style={styles.buttonText}>Get Started</Text>
       </TouchableOpacity>
     </View>
