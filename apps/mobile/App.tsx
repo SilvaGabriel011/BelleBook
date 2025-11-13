@@ -17,7 +17,12 @@ import ErrorBoundary from './src/components/ErrorBoundary';
 
 // Web URL configuration
 const linking: LinkingOptions<RootStackParamList> = {
-  prefixes: [Linking.createURL('/'), 'http://localhost:8081', 'http://localhost:8082', 'http://localhost:8083'],
+  prefixes: [
+    Linking.createURL('/'),
+    'http://localhost:8081',
+    'http://localhost:8082',
+    'http://localhost:8083',
+  ],
   config: {
     screens: {
       Home: '',

@@ -42,7 +42,7 @@ class ErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Log error details
     console.error('Error Boundary caught:', error, errorInfo);
-    
+
     // Handle the error
     errorHandler.handle(error, {
       componentStack: errorInfo.componentStack,
@@ -78,16 +78,12 @@ class ErrorBoundary extends Component<Props, State> {
                 : 'Something Went Wrong'}
             </Text>
 
-            <Text style={styles.userMessage}>
-              {this.state.error.userMessage}
-            </Text>
+            <Text style={styles.userMessage}>{this.state.error.userMessage}</Text>
 
             {this.state.error.suggestedAction && (
               <View style={styles.suggestionBox}>
                 <Text style={styles.suggestionTitle}>💡 Suggestion:</Text>
-                <Text style={styles.suggestion}>
-                  {this.state.error.suggestedAction}
-                </Text>
+                <Text style={styles.suggestion}>{this.state.error.suggestedAction}</Text>
               </View>
             )}
 
@@ -95,27 +91,17 @@ class ErrorBoundary extends Component<Props, State> {
               style={[responsiveStyles.button, responsiveStyles.primaryButton]}
               onPress={this.resetError}
             >
-              <Text style={[responsiveStyles.buttonText, { color: '#fff' }]}>
-                Try Again
-              </Text>
+              <Text style={[responsiveStyles.buttonText, { color: '#fff' }]}>Try Again</Text>
             </TouchableOpacity>
 
             {isWeb && __DEV__ && (
               <View style={styles.debugInfo}>
                 <Text style={styles.debugTitle}>Debug Information:</Text>
-                <Text style={styles.debugText}>
-                  Code: {this.state.error.code}
-                </Text>
-                <Text style={styles.debugText}>
-                  Category: {this.state.error.category}
-                </Text>
-                <Text style={styles.debugText}>
-                  Severity: {this.state.error.severity}
-                </Text>
+                <Text style={styles.debugText}>Code: {this.state.error.code}</Text>
+                <Text style={styles.debugText}>Category: {this.state.error.category}</Text>
+                <Text style={styles.debugText}>Severity: {this.state.error.severity}</Text>
                 {this.state.error.stack && (
-                  <Text style={styles.debugStack}>
-                    {this.state.error.stack}
-                  </Text>
+                  <Text style={styles.debugStack}>{this.state.error.stack}</Text>
                 )}
               </View>
             )}

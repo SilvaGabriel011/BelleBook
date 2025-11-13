@@ -1,10 +1,10 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
   turbopack: {
-    root: "d:/BelleBook/BelleBook/bellebook-web",
+    root: 'd:/BelleBook/BelleBook/bellebook-web',
   },
 };
 

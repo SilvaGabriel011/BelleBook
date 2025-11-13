@@ -365,9 +365,9 @@ export const FIREBASE_ERROR_MAP: Record<string, ErrorCode> = {
   'auth/too-many-requests': ErrorCode.AUTH_TOO_MANY_REQUESTS,
   'auth/network-request-failed': ErrorCode.NETWORK_CONNECTION_FAILED,
   'permission-denied': ErrorCode.DB_PERMISSION_DENIED,
-  'unavailable': ErrorCode.SERVER_SERVICE_UNAVAILABLE,
+  unavailable: ErrorCode.SERVER_SERVICE_UNAVAILABLE,
   'deadline-exceeded': ErrorCode.NETWORK_TIMEOUT,
   'not-found': ErrorCode.DB_DOCUMENT_NOT_FOUND,
   'resource-exhausted': ErrorCode.SERVER_RATE_LIMIT,
-  'aborted': ErrorCode.DB_TRANSACTION_FAILED,
+  aborted: ErrorCode.DB_TRANSACTION_FAILED,
 };

@@ -37,7 +37,7 @@ export class ServicesService {
 
     // Definir ordenação
     let orderBy: Prisma.ServiceOrderByWithRelationInput = { name: 'asc' };
-    
+
     if (filters.sort === 'price-asc') {
       orderBy = { price: 'asc' };
     } else if (filters.sort === 'price-desc') {
@@ -79,7 +79,7 @@ export class ServicesService {
           reviewsCount: service._count.reviews,
           bookingsCount: service._count.bookings,
         };
-      })
+      }),
     );
 
     return servicesWithRating;
@@ -114,7 +114,8 @@ export class ServicesService {
 
     // Calcular média de avaliações
     const avgRating = service.reviews.length
-      ? service.reviews.reduce((sum, r) => sum + r.rating, 0) / service.reviews.length
+      ? service.reviews.reduce((sum, r) => sum + r.rating, 0) /
+        service.reviews.length
       : 0;
 
     return {
@@ -139,7 +140,7 @@ export class ServicesService {
       },
     });
 
-    return categories.map(category => ({
+    return categories.map((category) => ({
       ...category,
       servicesCount: category._count.services,
     }));
@@ -165,7 +166,7 @@ export class ServicesService {
       take: 20,
     });
 
-    return services.map(service => ({
+    return services.map((service) => ({
       ...service,
       images: JSON.parse(service.images || '[]'),
     }));

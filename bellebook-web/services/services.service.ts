@@ -53,7 +53,7 @@ export const servicesService = {
 
   async getByCategory(categoryId: string, filters?: ServiceFilters): Promise<Service[]> {
     const params = new URLSearchParams();
-    
+
     if (filters?.sort) params.append('sort', filters.sort);
     if (filters?.minPrice) params.append('minPrice', filters.minPrice.toString());
     if (filters?.maxPrice) params.append('maxPrice', filters.maxPrice.toString());

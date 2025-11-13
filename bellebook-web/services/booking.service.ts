@@ -66,11 +66,7 @@ export const bookingService = {
     return data;
   },
 
-  async rescheduleBooking(
-    bookingId: string,
-    date: string,
-    time: string
-  ): Promise<Booking> {
+  async rescheduleBooking(bookingId: string, date: string, time: string): Promise<Booking> {
     const { data } = await api.put<Booking>(`/bookings/${bookingId}/reschedule`, {
       date,
       time,

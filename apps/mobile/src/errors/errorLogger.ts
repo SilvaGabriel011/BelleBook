@@ -26,7 +26,10 @@ class ErrorLogger {
   /**
    * Log an error
    */
-  log(error: Error & { code?: ErrorCode; severity?: ErrorSeverity }, context?: Record<string, unknown>): void {
+  log(
+    error: Error & { code?: ErrorCode; severity?: ErrorSeverity },
+    context?: Record<string, unknown>
+  ): void {
     const entry: ErrorLogEntry = {
       code: error.code || ErrorCode.UNKNOWN_ERROR,
       message: error.message,
@@ -58,7 +61,7 @@ class ErrorLogger {
    */
   private logToConsole(entry: ErrorLogEntry): void {
     const prefix = `[${entry.severity}] [${entry.code}]`;
-    
+
     switch (entry.severity) {
       case ErrorSeverity.CRITICAL:
       case ErrorSeverity.HIGH:
@@ -86,14 +89,14 @@ class ErrorLogger {
    * Get logs by severity
    */
   getLogsBySeverity(severity: ErrorSeverity): ErrorLogEntry[] {
-    return this.logs.filter(log => log.severity === severity);
+    return this.logs.filter((log) => log.severity === severity);
   }
 
   /**
    * Get logs by code
    */
   getLogsByCode(code: ErrorCode): ErrorLogEntry[] {
-    return this.logs.filter(log => log.code === code);
+    return this.logs.filter((log) => log.code === code);
   }
 
   /**
@@ -126,7 +129,7 @@ class ErrorLogger {
       recent: this.logs.slice(-5),
     };
 
-    this.logs.forEach(log => {
+    this.logs.forEach((log) => {
       stats.bySeverity[log.severity]++;
       stats.byCode[log.code] = (stats.byCode[log.code] || 0) + 1;
     });

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
+import {
   ArrowLeft,
   Calendar as CalendarIcon,
   Clock,
@@ -17,13 +17,7 @@ import { ptBR } from 'date-fns/locale';
 import { useCartStore } from '@/store/cart.store';
 import { bookingService, TimeSlot } from '@/services/booking.service';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -35,7 +29,7 @@ import { cn } from '@/lib/utils';
 export default function BookingPage() {
   const router = useRouter();
   const { items, clearCart } = useCartStore();
-  
+
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string>('');
@@ -55,10 +49,7 @@ export default function BookingPage() {
       setLoadingSlots(true);
       try {
         const dateStr = format(selectedDate, 'yyyy-MM-dd');
-        const slots = await bookingService.getAvailableSlots(
-          currentItem.service.id,
-          dateStr
-        );
+        const slots = await bookingService.getAvailableSlots(currentItem.service.id, dateStr);
         setTimeSlots(slots);
       } catch (error) {
         console.error('Erro ao carregar horários:', error);
@@ -67,7 +58,7 @@ export default function BookingPage() {
         setLoadingSlots(false);
       }
     };
-    
+
     loadSlots();
   }, [selectedDate, currentItem]);
 
@@ -85,7 +76,7 @@ export default function BookingPage() {
     setLoading(true);
     try {
       const dateStr = format(selectedDate, 'yyyy-MM-dd');
-      
+
       await bookingService.createBooking({
         serviceId: currentItem.service.id,
         date: dateStr,
@@ -93,7 +84,9 @@ export default function BookingPage() {
         notes: notes || undefined,
       });
 
-      toast.success(`Agendamento confirmado para ${format(selectedDate, "dd/MM/yyyy")} às ${selectedTime}`);
+      toast.success(
+        `Agendamento confirmado para ${format(selectedDate, 'dd/MM/yyyy')} às ${selectedTime}`
+      );
 
       // Se houver mais itens no carrinho, ir para o próximo
       if (currentBookingIndex < items.length - 1) {
@@ -122,11 +115,11 @@ export default function BookingPage() {
   };
 
   const handlePreviousMonth = () => {
-    setCurrentMonth(prev => new Date(prev.getFullYear(), prev.getMonth() - 1));
+    setCurrentMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() - 1));
   };
 
   const handleNextMonth = () => {
-    setCurrentMonth(prev => new Date(prev.getFullYear(), prev.getMonth() + 1));
+    setCurrentMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1));
   };
 
   if (items.length === 0) {
@@ -135,11 +128,7 @@ export default function BookingPage() {
         <header className="bg-white shadow-sm border-b border-pink-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => router.back()}
-              >
+              <Button variant="ghost" size="icon" onClick={() => router.back()}>
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <h1 className="text-2xl font-bold text-gray-800">Agendamento</h1>
@@ -157,9 +146,7 @@ export default function BookingPage() {
               <p className="text-gray-500 mb-6">
                 Adicione serviços ao carrinho para fazer o agendamento
               </p>
-              <Button onClick={() => router.push('/home')}>
-                Explorar Serviços
-              </Button>
+              <Button onClick={() => router.push('/home')}>Explorar Serviços</Button>
             </CardContent>
           </Card>
         </main>
@@ -173,11 +160,7 @@ export default function BookingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => router.back()}
-              >
+              <Button variant="ghost" size="icon" onClick={() => router.back()}>
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <h1 className="text-2xl font-bold text-gray-800">
@@ -186,7 +169,8 @@ export default function BookingPage() {
             </div>
 
             <Badge variant="secondary" className="text-sm">
-              {items.length - currentBookingIndex} {items.length - currentBookingIndex === 1 ? 'restante' : 'restantes'}
+              {items.length - currentBookingIndex}{' '}
+              {items.length - currentBookingIndex === 1 ? 'restante' : 'restantes'}
             </Badge>
           </div>
         </div>
@@ -209,9 +193,7 @@ export default function BookingPage() {
                     </div>
                     <div className="flex-1">
                       <h3 className="font-bold text-lg">{currentItem.service.name}</h3>
-                      <p className="text-sm text-gray-600">
-                        {currentItem.service.category?.name}
-                      </p>
+                      <p className="text-sm text-gray-600">{currentItem.service.category?.name}</p>
                       <div className="flex items-center gap-2 mt-2">
                         <Clock className="h-4 w-4 text-gray-500" />
                         <span className="text-sm text-gray-600">
@@ -230,21 +212,13 @@ export default function BookingPage() {
                 <div className="flex items-center justify-between">
                   <CardTitle>Escolha uma Data</CardTitle>
                   <div className="flex items-center gap-2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={handlePreviousMonth}
-                    >
+                    <Button variant="ghost" size="icon" onClick={handlePreviousMonth}>
                       <ChevronLeft className="h-4 w-4" />
                     </Button>
                     <span className="text-sm font-medium">
                       {format(currentMonth, 'MMMM yyyy', { locale: ptBR })}
                     </span>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={handleNextMonth}
-                    >
+                    <Button variant="ghost" size="icon" onClick={handleNextMonth}>
                       <ChevronRight className="h-4 w-4" />
                     </Button>
                   </div>
@@ -252,14 +226,14 @@ export default function BookingPage() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-7 gap-1 text-center mb-2">
-                  {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(day => (
+                  {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map((day) => (
                     <div key={day} className="text-xs font-medium text-gray-600 py-2">
                       {day}
                     </div>
                   ))}
                 </div>
                 <div className="grid grid-cols-7 gap-1">
-                  {getDaysInMonth().map(day => {
+                  {getDaysInMonth().map((day) => {
                     const isSelected = selectedDate && isSameDay(day, selectedDate);
                     const isPast = day < new Date(new Date().setHours(0, 0, 0, 0));
                     const isTodayDate = isToday(day);
@@ -294,7 +268,8 @@ export default function BookingPage() {
                 <CardHeader>
                   <CardTitle>Escolha um Horário</CardTitle>
                   <CardDescription>
-                    Horários disponíveis para {format(selectedDate, "dd 'de' MMMM", { locale: ptBR })}
+                    Horários disponíveis para{' '}
+                    {format(selectedDate, "dd 'de' MMMM", { locale: ptBR })}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -311,13 +286,14 @@ export default function BookingPage() {
                     </Alert>
                   ) : (
                     <div className="grid grid-cols-3 md:grid-cols-4 gap-2">
-                      {timeSlots.map(slot => (
+                      {timeSlots.map((slot) => (
                         <Button
                           key={slot.time}
                           variant={selectedTime === slot.time ? 'default' : 'outline'}
                           className={cn(
                             'h-12',
-                            selectedTime === slot.time && 'bg-pink-500 hover:bg-pink-600 text-white',
+                            selectedTime === slot.time &&
+                              'bg-pink-500 hover:bg-pink-600 text-white',
                             !slot.available && 'opacity-50 cursor-not-allowed'
                           )}
                           disabled={!slot.available}
@@ -384,9 +360,8 @@ export default function BookingPage() {
                 <div>
                   <Label className="text-xs text-gray-500">Valor</Label>
                   <p className="text-2xl font-bold text-pink-600">
-                    {currentItem && formatPrice(
-                      currentItem.service.promoPrice || currentItem.service.price
-                    )}
+                    {currentItem &&
+                      formatPrice(currentItem.service.promoPrice || currentItem.service.price)}
                   </p>
                 </div>
 
@@ -401,9 +376,7 @@ export default function BookingPage() {
                 ) : (
                   <Alert>
                     <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>
-                      Selecione data e horário para continuar
-                    </AlertDescription>
+                    <AlertDescription>Selecione data e horário para continuar</AlertDescription>
                   </Alert>
                 )}
 
@@ -426,7 +399,7 @@ export default function BookingPage() {
                       'Confirmar Agendamento'
                     )}
                   </Button>
-                  
+
                   {currentBookingIndex < items.length - 1 && (
                     <Button
                       variant="ghost"
