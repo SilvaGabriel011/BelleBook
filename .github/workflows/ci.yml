@@ -55,6 +55,10 @@ jobs:
       - name: Install dependencies for ${{ matrix.package }}
         run: cd ${{ matrix.package }} && npm ci
       
+      - name: Generate Prisma Client for bellebook-backend
+        if: matrix.package == 'bellebook-backend'
+        run: cd ${{ matrix.package }} && DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy" npx prisma generate
+      
       - name: Type check ${{ matrix.package }}
         run: cd ${{ matrix.package }} && npx -y tsc -p ${{ matrix.tsconfig }} --noEmit
 
