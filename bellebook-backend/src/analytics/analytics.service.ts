@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, subDays, subMonths, format } from 'date-fns';
+import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, subDays, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 export interface DashboardMetrics {
@@ -570,7 +570,7 @@ export class AnalyticsService {
       },
       clients: {
         newClients,
-        returningClients: bookings.filter(b => {
+        returningClients: bookings.filter(_b => {
           // Contar clientes recorrentes (implementar lógica específica)
           return true;
         }).length

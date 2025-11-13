@@ -3,8 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  BarChart,
-  Bar,
   LineChart,
   Line,
   PieChart,
@@ -19,16 +17,11 @@ import {
 } from 'recharts';
 import {
   TrendingUp,
-  TrendingDown,
   Users,
   Calendar,
   DollarSign,
   Star,
-  Clock,
   CheckCircle,
-  XCircle,
-  BarChart3,
-  PieChartIcon,
   Activity,
   FileText,
   Download,
@@ -432,7 +425,7 @@ export default function AdminDashboard() {
                                 ))}
                               </div>
                               {review.comment && (
-                                <p className="text-sm text-gray-600 mt-2">"{review.comment}"</p>
+                                <p className="text-sm text-gray-600 mt-2">&ldquo;{review.comment}&rdquo;</p>
                               )}
                               <p className="text-xs text-gray-500 mt-1">
                                 {review.service?.name}

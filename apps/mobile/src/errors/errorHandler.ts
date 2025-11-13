@@ -1,5 +1,5 @@
 import { FirebaseError } from 'firebase/app';
-import { ErrorCode, ErrorDetails, ErrorSeverity } from './errorTypes';
+import { ErrorCode, ErrorSeverity } from './errorTypes';
 import { ERROR_MAP, FIREBASE_ERROR_MAP } from './errorMapping';
 import { errorLogger } from './errorLogger';
 

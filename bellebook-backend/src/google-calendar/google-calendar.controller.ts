@@ -1,13 +1,11 @@
 import {
   Controller,
   Get,
-  Post,
   Query,
-  Redirect,
   UseGuards,
   Request,
-  Body,
 } from '@nestjs/common';
+import { OAuth2Client } from 'google-auth-library';
 import { GoogleCalendarService } from './google-calendar.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
@@ -42,7 +40,7 @@ export class GoogleCalendarController {
       const { userId, isProvider } = stateData;
 
       // Trocar código por tokens
-      const oauth2Client = new (require('google-auth-library').OAuth2Client)(
+      const oauth2Client = new OAuth2Client(
         process.env.GOOGLE_CLIENT_ID,
         process.env.GOOGLE_CLIENT_SECRET,
         process.env.GOOGLE_REDIRECT_URI,

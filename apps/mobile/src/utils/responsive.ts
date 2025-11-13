@@ -74,7 +74,7 @@ export const responsiveStyles = StyleSheet.create<{
     flex: 1,
     ...(isWeb && {
       maxWidth: 1200,
-      marginHorizontal: 'auto' as 'auto',
+      marginHorizontal: 'auto' as const,
       width: '100%',
     } as ExtendedViewStyle),
   },

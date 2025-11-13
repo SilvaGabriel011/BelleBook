@@ -3,7 +3,7 @@ import { google, calendar_v3 } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
-import { Booking, User } from '@prisma/client';
+import { Booking } from '@prisma/client';
 
 export interface GoogleCalendarEvent {
   summary: string;

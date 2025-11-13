@@ -55,7 +55,7 @@ api.interceptors.response.use(
   },
   (error) => {
     // Log detalhado do erro
-    const apiError = ErrorHandler.handleApiError(error);
+    ErrorHandler.handleApiError(error);
 
     // Se for erro de autenticação, redirecionar para login
     if (ErrorHandler.isAuthError(error)) {

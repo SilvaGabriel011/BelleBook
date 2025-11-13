@@ -47,6 +47,7 @@ export default function RegisterPage() {
     setError('');
 
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { confirmPassword, ...registerData } = data;
       const response = await authService.register(registerData);
       setUser(response.user);

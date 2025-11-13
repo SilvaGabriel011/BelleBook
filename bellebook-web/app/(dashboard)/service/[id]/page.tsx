@@ -21,7 +21,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -31,26 +30,12 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useAuthStore } from '@/store/auth.store';
 import { useCartStore } from '@/store/cart.store';
 import { toast } from 'sonner';
-
-interface Review {
-  id: string;
-  rating: number;
-  comment: string;
-  createdAt: string;
-  user: {
-    id: string;
-    name: string;
-    avatar?: string;
-  };
-}
 
 export default function ServiceDetailPage() {
   const { id } = useParams();
   const router = useRouter();
-  const { user } = useAuthStore();
   const { addToCart } = useCartStore();
   
   const [service, setService] = useState<Service | null>(null);
