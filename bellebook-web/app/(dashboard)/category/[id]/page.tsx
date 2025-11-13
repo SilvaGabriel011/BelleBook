@@ -5,18 +5,24 @@ import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Filter, Star, Clock, ShoppingCart } from 'lucide-react';
 import { servicesService, Service, Category } from '@/services/services.service';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 
-// Mapeamento de ícones de categorias
-const categoryMeta: Record<string, { color: string; icon: string }> = {
-  '1': { color: 'bg-pink-100 text-pink-700', icon: '👁️' },
-  '2': { color: 'bg-purple-100 text-purple-700', icon: '💅' },
-  '3': { color: 'bg-blue-100 text-blue-700', icon: '✂️' },
-  '4': { color: 'bg-green-100 text-green-700', icon: '✨' },
+const categoryIconMap: Record<string, string> = {
+  'Sobrancelha': '👁️',
+  'Unha': '💅',
+  'Cabelo': '✂️',
+  'Depilação': '✨',
+};
+
+const categoryColorMap: Record<string, string> = {
+  'Sobrancelha': 'bg-pink-100 text-pink-700',
+  'Unha': 'bg-purple-100 text-purple-700',
+  'Cabelo': 'bg-blue-100 text-blue-700',
+  'Depilação': 'bg-green-100 text-green-700',
 };
 
 export default function CategoryPage() {
@@ -82,7 +88,11 @@ export default function CategoryPage() {
     );
   }
 
-  const meta = categoryMeta[id as string] || { color: 'bg-gray-100 text-gray-700', icon: '📦' };
+  const categoryName = category?.name || '';
+  const meta = {
+    icon: categoryIconMap[categoryName] || '📦',
+    color: categoryColorMap[categoryName] || 'bg-gray-100 text-gray-700',
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">

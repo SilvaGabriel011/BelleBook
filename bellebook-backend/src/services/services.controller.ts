@@ -3,7 +3,6 @@ import {
   Get,
   Param,
   Query,
-  ParseIntPipe,
   BadRequestException,
 } from '@nestjs/common';
 import { ServicesService, ServiceFilters } from './services.service';
