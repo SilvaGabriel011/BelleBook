@@ -37,8 +37,10 @@ jobs:
         include:
           - package: bellebook-web
             node: '20'
+            tsconfig: tsconfig.json
           - package: bellebook-backend
             node: '20'
+            tsconfig: tsconfig.build.json
     
     steps:
       - uses: actions/checkout@v3
@@ -54,7 +56,7 @@ jobs:
         run: cd ${{ matrix.package }} && npm ci
       
       - name: Type check ${{ matrix.package }}
-        run: cd ${{ matrix.package }} && npm run type-check
+        run: cd ${{ matrix.package }} && npx -y typescript tsc -p ${{ matrix.tsconfig }} --noEmit
 
   test:
     name: Test
