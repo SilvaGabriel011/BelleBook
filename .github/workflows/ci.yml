@@ -56,7 +56,7 @@ jobs:
         run: cd ${{ matrix.package }} && npm ci
       
       - name: Type check ${{ matrix.package }}
-        run: cd ${{ matrix.package }} && npx -y typescript tsc -p ${{ matrix.tsconfig }} --noEmit
+        run: cd ${{ matrix.package }} && npx -y tsc -p ${{ matrix.tsconfig }} --noEmit
 
   test:
     name: Test
