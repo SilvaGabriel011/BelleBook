@@ -2,14 +2,37 @@ import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, LinkingOptions } from '@react-navigation/native';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import * as Linking from 'expo-linking';
 import { store } from './src/store';
 import AppNavigator from './src/navigation/AppNavigator';
 import { auth, db } from './src/config/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { setUser, clearUser, setLoading } from './src/store/slices/authSlice';
+import { isWeb } from './src/utils/platform';
+import { RootStackParamList } from './src/navigation/AppNavigator';
+import ErrorBoundary from './src/components/ErrorBoundary';
+
+// Web URL configuration
+const linking: LinkingOptions<RootStackParamList> = {
+  prefixes: [Linking.createURL('/'), 'http://localhost:8081', 'http://localhost:8082', 'http://localhost:8083'],
+  config: {
+    screens: {
+      Home: '',
+      Onboarding: 'welcome',
+      Login: 'login',
+      Signup: 'signup',
+      Categories: 'categories',
+      ServiceList: 'services',
+      ServiceDetail: 'service/:serviceId',
+      BookingFlow: 'booking/:serviceId',
+      Favorites: 'favorites',
+      Profile: 'profile',
+    },
+  },
+};
 
 function AppContent() {
   const [isInitializing, setIsInitializing] = useState(true);
@@ -56,20 +79,30 @@ function AppContent() {
   }
 
   return (
-    <NavigationContainer>
-      <AppNavigator />
-      <StatusBar style="auto" />
+    <NavigationContainer linking={isWeb ? linking : undefined}>
+      {isWeb ? (
+        <View style={styles.webContainer}>
+          <AppNavigator />
+        </View>
+      ) : (
+        <>
+          <AppNavigator />
+          <StatusBar style="auto" />
+        </>
+      )}
     </NavigationContainer>
   );
 }
 
 export default function App() {
   return (
-    <Provider store={store}>
-      <SafeAreaProvider>
-        <AppContent />
-      </SafeAreaProvider>
-    </Provider>
+    <ErrorBoundary>
+      <Provider store={store}>
+        <SafeAreaProvider>
+          <AppContent />
+        </SafeAreaProvider>
+      </Provider>
+    </ErrorBoundary>
   );
 }
 
@@ -79,5 +112,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
+  },
+  webContainer: {
+    flex: 1,
+    backgroundColor: '#F9FAFB',
+    ...(isWeb && {
+      height: '100vh' as any,
+      overflow: 'auto' as any,
+    }),
   },
 });

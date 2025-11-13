@@ -1,0 +1,159 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Usuárias da plataforma
+model User {
+  id              String    @id @default(cuid())
+  email           String    @unique
+  password        String
+  name            String
+  phone           String?
+  avatar          String?
+  birthDate       DateTime?
+  googleId        String?   @unique
+  role            String    @default("CLIENT") // CLIENT, ADMIN, EMPLOYEE
+  points          Int       @default(0)
+  googleTokens    String? // Tokens OAuth do cliente
+  googleTokensProvider String? // Tokens OAuth do prestador
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  bookings        Booking[]
+  reviews         Review[]
+  favorites       Service[] @relation("UserFavorites")
+  cart            CartItem[]
+  notifications   Notification[]
+  
+  @@map("users")
+}
+
+// Categorias de serviços
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  description String?
+  icon        String?
+  image       String?
+  order       Int       @default(0)
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  
+  services    Service[]
+  
+  @@map("categories")
+}
+
+// Serviços oferecidos
+model Service {
+  id            String    @id @default(cuid())
+  categoryId    String
+  name          String
+  description   String
+  duration      Int       // minutos
+  price         Decimal
+  promoPrice    Decimal?
+  images        String    // JSON string com array de URLs
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  category      Category  @relation(fields: [categoryId], references: [id])
+  bookings      Booking[]
+  reviews       Review[]
+  favoritedBy   User[]    @relation("UserFavorites")
+  cartItems     CartItem[]
+  
+  @@map("services")
+}
+
+// Agendamentos
+model Booking {
+  id              String    @id @default(cuid())
+  userId          String
+  serviceId       String
+  date            DateTime
+  time            String    // Horário do agendamento (HH:mm)
+  status          String    @default("PENDING") // PENDING, CONFIRMED, COMPLETED, CANCELLED
+  paymentStatus   String    @default("PENDING") // PENDING, PAID, REFUNDED
+  paymentId       String?
+  totalPaid       Decimal
+  notes           String?
+  googleEventId   String?   // ID do evento na agenda do cliente
+  googleProviderEventId String? // ID do evento na agenda do prestador
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  user            User      @relation(fields: [userId], references: [id])
+  service         Service   @relation(fields: [serviceId], references: [id])
+  review          Review?
+  reminders       Reminder[]
+  
+  @@map("bookings")
+}
+
+// Carrinho de compras
+model CartItem {
+  id        String    @id @default(cuid())
+  userId    String
+  serviceId String
+  quantity  Int       @default(1)
+  addedAt   DateTime  @default(now())
+  
+  user      User      @relation(fields: [userId], references: [id])
+  service   Service   @relation(fields: [serviceId], references: [id])
+  
+  @@unique([userId, serviceId])
+  @@map("cart_items")
+}
+
+// Avaliações
+model Review {
+  id        String    @id @default(cuid())
+  userId    String
+  serviceId String
+  bookingId String    @unique
+  rating    Int       // 1-5 estrelas
+  comment   String?
+  images    String?   // JSON string com array de URLs
+  createdAt DateTime  @default(now())
+  
+  user      User      @relation(fields: [userId], references: [id])
+  service   Service   @relation(fields: [serviceId], references: [id])
+  booking   Booking   @relation(fields: [bookingId], references: [id])
+  
+  @@map("reviews")
+}
+
+// Notificações
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  type      String    // BOOKING_REMINDER, REVIEW_REQUEST, PROMOTION, etc
+  title     String
+  message   String
+  isRead    Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  
+  user      User      @relation(fields: [userId], references: [id])
+  
+  @@map("notifications")
+}
+
+// Lembretes (para filas)
+model Reminder {
+  id        String    @id @default(cuid())
+  bookingId String
+  type      String    // EMAIL, WHATSAPP, PUSH
+  sentAt    DateTime?
+  createdAt DateTime  @default(now())
+  
+  booking   Booking   @relation(fields: [bookingId], references: [id])
+  
+  @@map("reminders")
+}
