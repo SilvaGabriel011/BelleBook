@@ -1,6 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, subDays, format } from 'date-fns';
+import {
+  startOfDay,
+  endOfDay,
+  startOfWeek,
+  endOfWeek,
+  startOfMonth,
+  endOfMonth,
+  subDays,
+  format,
+} from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 export interface DashboardMetrics {
@@ -47,7 +56,9 @@ export class AnalyticsService {
   constructor(private prisma: PrismaService) {}
 
   // Obter métricas do dashboard
-  async getDashboardMetrics(period: 'day' | 'week' | 'month' = 'month'): Promise<DashboardMetrics> {
+  async getDashboardMetrics(
+    period: 'day' | 'week' | 'month' = 'month',
+  ): Promise<DashboardMetrics> {
     const timeRange = this.getTimeRange(period);
 
     // Métricas básicas
@@ -62,7 +73,7 @@ export class AnalyticsService {
       revenueByDay,
       bookingsByStatus,
       upcomingBookings,
-      recentReviews
+      recentReviews,
     ] = await Promise.all([
       this.getTotalBookings(timeRange),
       this.getTotalRevenue(timeRange),
@@ -74,7 +85,7 @@ export class AnalyticsService {
       this.getRevenueByDay(timeRange),
       this.getBookingsByStatus(timeRange),
       this.getUpcomingBookings(5),
-      this.getRecentReviews(5)
+      this.getRecentReviews(5),
     ]);
 
     return {
@@ -88,7 +99,7 @@ export class AnalyticsService {
       revenueByDay,
       bookingsByStatus,
       upcomingBookings,
-      recentReviews
+      recentReviews,
     };
   }
 
@@ -122,9 +133,9 @@ export class AnalyticsService {
       where: {
         createdAt: {
           gte: timeRange.start,
-          lte: timeRange.end
-        }
-      }
+          lte: timeRange.end,
+        },
+      },
     });
   }
 
@@ -132,15 +143,15 @@ export class AnalyticsService {
   private async getTotalRevenue(timeRange: TimeRange): Promise<number> {
     const result = await this.prisma.booking.aggregate({
       _sum: {
-        totalPaid: true
+        totalPaid: true,
       },
       where: {
         status: 'COMPLETED',
         createdAt: {
           gte: timeRange.start,
-          lte: timeRange.end
-        }
-      }
+          lte: timeRange.end,
+        },
+      },
     });
 
     return result._sum.totalPaid?.toNumber() || 0;
@@ -153,9 +164,9 @@ export class AnalyticsService {
         role: 'CLIENT',
         createdAt: {
           gte: timeRange.start,
-          lte: timeRange.end
-        }
-      }
+          lte: timeRange.end,
+        },
+      },
     });
   }
 
@@ -166,9 +177,9 @@ export class AnalyticsService {
         status: 'COMPLETED',
         updatedAt: {
           gte: timeRange.start,
-          lte: timeRange.end
-        }
-      }
+          lte: timeRange.end,
+        },
+      },
     });
   }
 
@@ -179,9 +190,9 @@ export class AnalyticsService {
         status: 'CANCELLED',
         updatedAt: {
           gte: timeRange.start,
-          lte: timeRange.end
-        }
-      }
+          lte: timeRange.end,
+        },
+      },
     });
   }
 
@@ -189,35 +200,38 @@ export class AnalyticsService {
   private async getAverageRating(): Promise<number> {
     const result = await this.prisma.review.aggregate({
       _avg: {
-        rating: true
-      }
+        rating: true,
+      },
     });
 
     return result._avg.rating || 0;
   }
 
   // Top serviços mais agendados
-  private async getTopServices(timeRange: TimeRange, limit: number): Promise<ServiceMetric[]> {
+  private async getTopServices(
+    timeRange: TimeRange,
+    limit: number,
+  ): Promise<ServiceMetric[]> {
     const bookings = await this.prisma.booking.findMany({
       where: {
         createdAt: {
           gte: timeRange.start,
-          lte: timeRange.end
-        }
+          lte: timeRange.end,
+        },
       },
       include: {
         service: {
           include: {
-            category: true
-          }
-        }
-      }
+            category: true,
+          },
+        },
+      },
     });
 
     // Agrupar por serviço
     const serviceMap = new Map<string, ServiceMetric>();
 
-    bookings.forEach(booking => {
+    bookings.forEach((booking) => {
       if (!booking.service) return;
 
       const key = booking.service.id;
@@ -232,7 +246,7 @@ export class AnalyticsService {
           name: booking.service.name,
           category: booking.service.category?.name || '',
           count: 1,
-          revenue: booking.totalPaid.toNumber()
+          revenue: booking.totalPaid.toNumber(),
         });
       }
     });
@@ -250,19 +264,19 @@ export class AnalyticsService {
         status: 'COMPLETED',
         date: {
           gte: timeRange.start,
-          lte: timeRange.end
-        }
+          lte: timeRange.end,
+        },
       },
       select: {
         date: true,
-        totalPaid: true
-      }
+        totalPaid: true,
+      },
     });
 
     // Agrupar por data
     const revenueMap = new Map<string, RevenueByDay>();
 
-    bookings.forEach(booking => {
+    bookings.forEach((booking) => {
       const dateKey = format(booking.date, 'yyyy-MM-dd');
       const existing = revenueMap.get(dateKey);
 
@@ -273,73 +287,73 @@ export class AnalyticsService {
         revenueMap.set(dateKey, {
           date: dateKey,
           revenue: booking.totalPaid.toNumber(),
-          bookings: 1
+          bookings: 1,
         });
       }
     });
 
     // Converter para array e ordenar por data
-    return Array.from(revenueMap.values())
-      .sort((a, b) => a.date.localeCompare(b.date));
+    return Array.from(revenueMap.values()).sort((a, b) =>
+      a.date.localeCompare(b.date),
+    );
   }
 
   // Agendamentos por status
-  private async getBookingsByStatus(timeRange: TimeRange): Promise<BookingStatus[]> {
+  private async getBookingsByStatus(
+    timeRange: TimeRange,
+  ): Promise<BookingStatus[]> {
     const bookings = await this.prisma.booking.groupBy({
       by: ['status'],
       _count: {
-        status: true
+        status: true,
       },
       where: {
         createdAt: {
           gte: timeRange.start,
-          lte: timeRange.end
-        }
-      }
+          lte: timeRange.end,
+        },
+      },
     });
 
     const total = bookings.reduce((sum, b) => sum + b._count.status, 0);
 
-    return bookings.map(b => ({
+    return bookings.map((b) => ({
       status: b.status,
       count: b._count.status,
-      percentage: total > 0 ? (b._count.status / total) * 100 : 0
+      percentage: total > 0 ? (b._count.status / total) * 100 : 0,
     }));
   }
 
   // Próximos agendamentos
   private async getUpcomingBookings(limit: number): Promise<any[]> {
     const now = new Date();
-    
+
     return this.prisma.booking.findMany({
       where: {
         date: {
-          gte: now
+          gte: now,
         },
         status: {
-          in: ['PENDING', 'CONFIRMED']
-        }
+          in: ['PENDING', 'CONFIRMED'],
+        },
       },
       include: {
         service: {
           include: {
-            category: true
-          }
+            category: true,
+          },
         },
         user: {
           select: {
             id: true,
             name: true,
             email: true,
-            phone: true
-          }
-        }
+            phone: true,
+          },
+        },
       },
-      orderBy: [
-        { date: 'asc' },
-        { time: 'asc' }
-      ],
-      take: limit
+      orderBy: [{ date: 'asc' }, { time: 'asc' }],
+      take: limit,
     });
   }
 
@@ -351,20 +365,20 @@ export class AnalyticsService {
           select: {
             id: true,
             name: true,
-            avatar: true
-          }
+            avatar: true,
+          },
         },
         service: {
           select: {
             id: true,
-            name: true
-          }
-        }
+            name: true,
+          },
+        },
       },
       orderBy: {
-        createdAt: 'desc'
+        createdAt: 'desc',
       },
-      take: limit
+      take: limit,
     });
   }
 
@@ -375,25 +389,28 @@ export class AnalyticsService {
         status: 'COMPLETED',
         date: {
           gte: startDate,
-          lte: endDate
-        }
+          lte: endDate,
+        },
       },
       include: {
         service: {
           include: {
-            category: true
-          }
-        }
-      }
+            category: true,
+          },
+        },
+      },
     });
 
     // Calcular totais
-    const totalRevenue = bookings.reduce((sum, b) => sum + b.totalPaid.toNumber(), 0);
+    const totalRevenue = bookings.reduce(
+      (sum, b) => sum + b.totalPaid.toNumber(),
+      0,
+    );
     const totalBookings = bookings.length;
 
     // Agrupar por categoria
     const byCategory = new Map<string, number>();
-    bookings.forEach(booking => {
+    bookings.forEach((booking) => {
       const category = booking.service?.category?.name || 'Outros';
       const current = byCategory.get(category) || 0;
       byCategory.set(category, current + booking.totalPaid.toNumber());
@@ -401,7 +418,7 @@ export class AnalyticsService {
 
     // Agrupar por mês
     const byMonth = new Map<string, number>();
-    bookings.forEach(booking => {
+    bookings.forEach((booking) => {
       const month = format(booking.date, 'yyyy-MM');
       const current = byMonth.get(month) || 0;
       byMonth.set(month, current + booking.totalPaid.toNumber());
@@ -410,22 +427,24 @@ export class AnalyticsService {
     return {
       period: {
         start: startDate,
-        end: endDate
+        end: endDate,
       },
       summary: {
         totalRevenue,
         totalBookings,
-        averageTicket: totalBookings > 0 ? totalRevenue / totalBookings : 0
+        averageTicket: totalBookings > 0 ? totalRevenue / totalBookings : 0,
       },
-      byCategory: Array.from(byCategory.entries()).map(([category, revenue]) => ({
-        category,
-        revenue,
-        percentage: (revenue / totalRevenue) * 100
-      })),
+      byCategory: Array.from(byCategory.entries()).map(
+        ([category, revenue]) => ({
+          category,
+          revenue,
+          percentage: (revenue / totalRevenue) * 100,
+        }),
+      ),
       byMonth: Array.from(byMonth.entries()).map(([month, revenue]) => ({
         month,
-        revenue
-      }))
+        revenue,
+      })),
     };
   }
 
@@ -434,7 +453,7 @@ export class AnalyticsService {
     const [totalClients, activeClients, topClients] = await Promise.all([
       // Total de clientes
       this.prisma.user.count({
-        where: { role: 'CLIENT' }
+        where: { role: 'CLIENT' },
       }),
 
       // Clientes ativos (com agendamentos nos últimos 30 dias)
@@ -444,11 +463,11 @@ export class AnalyticsService {
           bookings: {
             some: {
               createdAt: {
-                gte: subDays(new Date(), 30)
-              }
-            }
-          }
-        }
+                gte: subDays(new Date(), 30),
+              },
+            },
+          },
+        },
       }),
 
       // Top clientes (por número de agendamentos)
@@ -460,38 +479,39 @@ export class AnalyticsService {
           email: true,
           phone: true,
           _count: {
-            select: { bookings: true }
-          }
+            select: { bookings: true },
+          },
         },
         orderBy: {
           bookings: {
-            _count: 'desc'
-          }
+            _count: 'desc',
+          },
         },
-        take: 10
-      })
+        take: 10,
+      }),
     ]);
 
     // Taxa de retenção
-    const retentionRate = totalClients > 0 ? (activeClients / totalClients) * 100 : 0;
+    const retentionRate =
+      totalClients > 0 ? (activeClients / totalClients) * 100 : 0;
 
     return {
       totalClients,
       activeClients,
       retentionRate,
-      topClients: topClients.map(client => ({
+      topClients: topClients.map((client) => ({
         ...client,
-        totalBookings: client._count.bookings
-      }))
+        totalBookings: client._count.bookings,
+      })),
     };
   }
 
   // Relatório de desempenho por período
   async getPerformanceReport(year: number, month?: number): Promise<any> {
-    const startDate = month 
+    const startDate = month
       ? new Date(year, month - 1, 1)
       : new Date(year, 0, 1);
-    
+
     const endDate = month
       ? new Date(year, month, 0, 23, 59, 59)
       : new Date(year, 11, 31, 23, 59, 59);
@@ -502,12 +522,12 @@ export class AnalyticsService {
         where: {
           date: {
             gte: startDate,
-            lte: endDate
-          }
+            lte: endDate,
+          },
         },
         include: {
-          service: true
-        }
+          service: true,
+        },
       }),
 
       // Avaliações
@@ -515,9 +535,9 @@ export class AnalyticsService {
         where: {
           createdAt: {
             gte: startDate,
-            lte: endDate
-          }
-        }
+            lte: endDate,
+          },
+        },
       }),
 
       // Novos clientes
@@ -526,66 +546,73 @@ export class AnalyticsService {
           role: 'CLIENT',
           createdAt: {
             gte: startDate,
-            lte: endDate
-          }
-        }
-      })
+            lte: endDate,
+          },
+        },
+      }),
     ]);
 
     // Calcular métricas
-    const completedBookings = bookings.filter(b => b.status === 'COMPLETED');
-    const cancelledBookings = bookings.filter(b => b.status === 'CANCELLED');
-    const totalRevenue = completedBookings.reduce((sum, b) => sum + b.totalPaid.toNumber(), 0);
-    const averageRating = reviews.length > 0
-      ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
-      : 0;
+    const completedBookings = bookings.filter((b) => b.status === 'COMPLETED');
+    const cancelledBookings = bookings.filter((b) => b.status === 'CANCELLED');
+    const totalRevenue = completedBookings.reduce(
+      (sum, b) => sum + b.totalPaid.toNumber(),
+      0,
+    );
+    const averageRating =
+      reviews.length > 0
+        ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+        : 0;
 
     // Taxa de conclusão
-    const completionRate = bookings.length > 0 
-      ? (completedBookings.length / bookings.length) * 100
-      : 0;
+    const completionRate =
+      bookings.length > 0
+        ? (completedBookings.length / bookings.length) * 100
+        : 0;
 
     // Taxa de cancelamento
-    const cancellationRate = bookings.length > 0
-      ? (cancelledBookings.length / bookings.length) * 100
-      : 0;
+    const cancellationRate =
+      bookings.length > 0
+        ? (cancelledBookings.length / bookings.length) * 100
+        : 0;
 
     return {
       period: {
         year,
-        month: month || null
+        month: month || null,
       },
       bookings: {
         total: bookings.length,
         completed: completedBookings.length,
         cancelled: cancelledBookings.length,
         completionRate,
-        cancellationRate
+        cancellationRate,
       },
       financial: {
         totalRevenue,
-        averageTicket: completedBookings.length > 0 
-          ? totalRevenue / completedBookings.length
-          : 0
+        averageTicket:
+          completedBookings.length > 0
+            ? totalRevenue / completedBookings.length
+            : 0,
       },
       clients: {
         newClients,
-        returningClients: bookings.filter(_b => {
+        returningClients: bookings.filter((_b) => {
           // Contar clientes recorrentes (implementar lógica específica)
           return true;
-        }).length
+        }).length,
       },
       satisfaction: {
         totalReviews: reviews.length,
         averageRating,
         distribution: {
-          5: reviews.filter(r => r.rating === 5).length,
-          4: reviews.filter(r => r.rating === 4).length,
-          3: reviews.filter(r => r.rating === 3).length,
-          2: reviews.filter(r => r.rating === 2).length,
-          1: reviews.filter(r => r.rating === 1).length
-        }
-      }
+          5: reviews.filter((r) => r.rating === 5).length,
+          4: reviews.filter((r) => r.rating === 4).length,
+          3: reviews.filter((r) => r.rating === 3).length,
+          2: reviews.filter((r) => r.rating === 2).length,
+          1: reviews.filter((r) => r.rating === 1).length,
+        },
+      },
     };
   }
 }

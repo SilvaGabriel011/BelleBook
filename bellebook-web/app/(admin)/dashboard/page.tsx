@@ -51,7 +51,7 @@ const COLORS = ['#FF6B9D', '#C44569', '#A8DADC', '#FFB5A7', '#E4C1F9'];
 export default function AdminDashboard() {
   const router = useRouter();
   const { user, isAuthenticated } = useAuthStore();
-  
+
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState<'day' | 'week' | 'month'>('month');
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
@@ -114,11 +114,9 @@ export default function AdminDashboard() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Dashboard Admin</h1>
-              <p className="text-sm text-gray-500 mt-1">
-                Bem-vinda, {user?.name} 👋
-              </p>
+              <p className="text-sm text-gray-500 mt-1">Bem-vinda, {user?.name} 👋</p>
             </div>
-            
+
             <div className="flex items-center gap-4">
               <Select value={period} onValueChange={(v: any) => setPeriod(v)}>
                 <SelectTrigger className="w-40">
@@ -146,9 +144,7 @@ export default function AdminDashboard() {
           {/* Total Agendamentos */}
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">
-                Agendamentos
-              </CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-600">Agendamentos</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
@@ -167,9 +163,7 @@ export default function AdminDashboard() {
           {/* Receita Total */}
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">
-                Receita Total
-              </CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-600">Receita Total</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
@@ -188,9 +182,7 @@ export default function AdminDashboard() {
           {/* Novos Clientes */}
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">
-                Novos Clientes
-              </CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-600">Novos Clientes</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
@@ -209,16 +201,15 @@ export default function AdminDashboard() {
           {/* Serviços Completados */}
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">
-                Completados
-              </CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-600">Completados</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-2xl font-bold">{metrics.completedServices}</p>
                   <p className="text-xs text-gray-500 mt-1">
-                    {formatPercentage((metrics.completedServices / metrics.totalBookings) * 100)} do total
+                    {formatPercentage((metrics.completedServices / metrics.totalBookings) * 100)} do
+                    total
                   </p>
                 </div>
                 <CheckCircle className="h-8 w-8 text-green-500" />
@@ -229,9 +220,7 @@ export default function AdminDashboard() {
           {/* Avaliação Média */}
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">
-                Avaliação Média
-              </CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-600">Avaliação Média</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
@@ -240,9 +229,7 @@ export default function AdminDashboard() {
                     {metrics.averageRating.toFixed(1)}
                     <Star className="h-5 w-5 ml-1 text-yellow-500 fill-current" />
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Excelente
-                  </p>
+                  <p className="text-xs text-gray-500 mt-1">Excelente</p>
                 </div>
                 <Star className="h-8 w-8 text-yellow-500" />
               </div>
@@ -271,20 +258,22 @@ export default function AdminDashboard() {
                   <ResponsiveContainer width="100%" height={300}>
                     <LineChart data={metrics.revenueByDay}>
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis 
-                        dataKey="date" 
+                      <XAxis
+                        dataKey="date"
                         tickFormatter={(date) => format(new Date(date), 'dd/MM')}
                       />
                       <YAxis tickFormatter={(value) => `R$ ${value}`} />
-                      <Tooltip 
+                      <Tooltip
                         formatter={(value: number) => formatCurrency(value)}
-                        labelFormatter={(date) => format(new Date(date), "dd 'de' MMMM", { locale: ptBR })}
+                        labelFormatter={(date) =>
+                          format(new Date(date), "dd 'de' MMMM", { locale: ptBR })
+                        }
                       />
                       <Legend />
-                      <Line 
-                        type="monotone" 
-                        dataKey="revenue" 
-                        stroke="#FF6B9D" 
+                      <Line
+                        type="monotone"
+                        dataKey="revenue"
+                        stroke="#FF6B9D"
                         strokeWidth={2}
                         name="Receita"
                       />
@@ -334,8 +323,10 @@ export default function AdminDashboard() {
                   {metrics.topServices.map((service, index) => (
                     <div key={service.id} className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold`}
-                          style={{ backgroundColor: COLORS[index % COLORS.length] }}>
+                        <div
+                          className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold`}
+                          style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                        >
                           {index + 1}
                         </div>
                         <div>
@@ -363,21 +354,29 @@ export default function AdminDashboard() {
               <CardContent>
                 <div className="space-y-4">
                   {metrics.upcomingBookings.map((booking) => (
-                    <div key={booking.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                    <div
+                      key={booking.id}
+                      className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                    >
                       <div>
                         <p className="font-medium">{booking.service?.name}</p>
                         <p className="text-sm text-gray-600">
                           Cliente: {booking.user?.name} | {booking.user?.phone}
                         </p>
                         <p className="text-xs text-gray-500 mt-1">
-                          {format(new Date(booking.date), "dd 'de' MMMM", { locale: ptBR })} às {booking.time}
+                          {format(new Date(booking.date), "dd 'de' MMMM", { locale: ptBR })} às{' '}
+                          {booking.time}
                         </p>
                       </div>
-                      <Badge variant={
-                        booking.status === 'CONFIRMED' ? 'default' : 
-                        booking.status === 'PENDING' ? 'secondary' : 
-                        'outline'
-                      }>
+                      <Badge
+                        variant={
+                          booking.status === 'CONFIRMED'
+                            ? 'default'
+                            : booking.status === 'PENDING'
+                              ? 'secondary'
+                              : 'outline'
+                        }
+                      >
                         {booking.status}
                       </Badge>
                     </div>
@@ -385,9 +384,7 @@ export default function AdminDashboard() {
 
                   {metrics.upcomingBookings.length === 0 && (
                     <Alert>
-                      <AlertDescription>
-                        Nenhum agendamento próximo
-                      </AlertDescription>
+                      <AlertDescription>Nenhum agendamento próximo</AlertDescription>
                     </Alert>
                   )}
                 </div>
@@ -419,17 +416,19 @@ export default function AdminDashboard() {
                                   <Star
                                     key={i}
                                     className={`h-4 w-4 ${
-                                      i < review.rating ? 'text-yellow-500 fill-current' : 'text-gray-300'
+                                      i < review.rating
+                                        ? 'text-yellow-500 fill-current'
+                                        : 'text-gray-300'
                                     }`}
                                   />
                                 ))}
                               </div>
                               {review.comment && (
-                                <p className="text-sm text-gray-600 mt-2">&ldquo;{review.comment}&rdquo;</p>
+                                <p className="text-sm text-gray-600 mt-2">
+                                  &ldquo;{review.comment}&rdquo;
+                                </p>
                               )}
-                              <p className="text-xs text-gray-500 mt-1">
-                                {review.service?.name}
-                              </p>
+                              <p className="text-xs text-gray-500 mt-1">{review.service?.name}</p>
                             </div>
                           </div>
                         </div>
@@ -495,31 +494,22 @@ export default function AdminDashboard() {
 
         {/* Ações Rápidas */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Button 
+          <Button
             className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600"
             onClick={() => router.push('/admin/reports')}
           >
             <FileText className="h-4 w-4 mr-2" />
             Gerar Relatório
           </Button>
-          <Button 
-            variant="outline"
-            onClick={() => router.push('/admin/services')}
-          >
+          <Button variant="outline" onClick={() => router.push('/admin/services')}>
             <Activity className="h-4 w-4 mr-2" />
             Gerenciar Serviços
           </Button>
-          <Button 
-            variant="outline"
-            onClick={() => router.push('/admin/bookings')}
-          >
+          <Button variant="outline" onClick={() => router.push('/admin/bookings')}>
             <Calendar className="h-4 w-4 mr-2" />
             Ver Agenda
           </Button>
-          <Button 
-            variant="outline"
-            onClick={() => router.push('/admin/clients')}
-          >
+          <Button variant="outline" onClick={() => router.push('/admin/clients')}>
             <Users className="h-4 w-4 mr-2" />
             Gerenciar Clientes
           </Button>

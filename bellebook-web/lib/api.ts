@@ -26,11 +26,7 @@ api.interceptors.request.use(
     }
 
     // Log da requisição
-    ErrorHandler.logRequest(
-      config.method || 'unknown',
-      config.url || 'unknown',
-      config.data
-    );
+    ErrorHandler.logRequest(config.method || 'unknown', config.url || 'unknown', config.data);
 
     return config;
   },
@@ -62,7 +58,7 @@ api.interceptors.response.use(
       console.warn('🔒 Erro de autenticação - redirecionando para login');
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      
+
       // Evitar loop infinito se já estiver na página de login
       if (typeof window !== 'undefined' && !window.location.pathname.includes('/login')) {
         window.location.href = '/login';

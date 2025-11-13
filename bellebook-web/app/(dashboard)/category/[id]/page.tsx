@@ -6,7 +6,13 @@ import { ArrowLeft, Filter, Star, Clock, ShoppingCart } from 'lucide-react';
 import { servicesService, Service, Category } from '@/services/services.service';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -26,7 +32,7 @@ export default function CategoryPage() {
   const [category, setCategory] = useState<Category | null>(null);
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
-  
+
   // Estados dos filtros
   const [sort, setSort] = useState('name');
   const [priceRange, setPriceRange] = useState([0, 1000]);
@@ -39,10 +45,10 @@ export default function CategoryPage() {
   const loadServices = async () => {
     try {
       setLoading(true);
-      
+
       // Buscar categoria
       const categories = await servicesService.getAllCategories();
-      const currentCategory = categories.find(cat => cat.id === id);
+      const currentCategory = categories.find((cat) => cat.id === id);
       setCategory(currentCategory || null);
 
       // Buscar serviços
@@ -91,11 +97,7 @@ export default function CategoryPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => router.push('/home')}
-              >
+              <Button variant="ghost" size="icon" onClick={() => router.push('/home')}>
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <div className="flex items-center space-x-3">
@@ -130,9 +132,7 @@ export default function CategoryPage() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {/* Ordenação */}
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1 block">
-                  Ordenar por
-                </label>
+                <label className="text-sm font-medium text-gray-700 mb-1 block">Ordenar por</label>
                 <Select value={sort} onValueChange={setSort}>
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione" />
@@ -162,9 +162,7 @@ export default function CategoryPage() {
 
               {/* Busca */}
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1 block">
-                  Buscar
-                </label>
+                <label className="text-sm font-medium text-gray-700 mb-1 block">Buscar</label>
                 <Input
                   placeholder="Nome do serviço..."
                   value={searchQuery}
@@ -197,19 +195,13 @@ export default function CategoryPage() {
                     <span className="text-6xl opacity-30">{meta.icon}</span>
                   </div>
                   {service.promoPrice && (
-                    <Badge className="absolute top-2 right-2 bg-red-500 text-white">
-                      Promoção
-                    </Badge>
+                    <Badge className="absolute top-2 right-2 bg-red-500 text-white">Promoção</Badge>
                   )}
                 </div>
 
                 <CardContent className="p-4">
-                  <h3 className="font-bold text-lg text-gray-800 mb-2">
-                    {service.name}
-                  </h3>
-                  <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-                    {service.description}
-                  </p>
+                  <h3 className="font-bold text-lg text-gray-800 mb-2">{service.name}</h3>
+                  <p className="text-sm text-gray-600 mb-4 line-clamp-2">{service.description}</p>
 
                   {/* Informações */}
                   <div className="flex items-center justify-between mb-3">
@@ -221,9 +213,7 @@ export default function CategoryPage() {
                       <div className="flex items-center text-sm">
                         <Star className="h-4 w-4 text-yellow-500 fill-current mr-1" />
                         <span className="font-medium">{service.averageRating}</span>
-                        <span className="text-gray-500 ml-1">
-                          ({service.reviewsCount})
-                        </span>
+                        <span className="text-gray-500 ml-1">({service.reviewsCount})</span>
                       </div>
                     ) : (
                       <span className="text-sm text-gray-400">Sem avaliações</span>

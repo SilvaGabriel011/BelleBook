@@ -28,7 +28,7 @@ export interface GoogleCalendarEvent {
 export class GoogleCalendarService {
   private oauth2Client: OAuth2Client;
   private calendar: calendar_v3.Calendar;
-  
+
   constructor(
     private configService: ConfigService,
     private prisma: PrismaService,
@@ -65,20 +65,23 @@ export class GoogleCalendarService {
   async saveTokens(
     userId: string,
     tokens: any,
-    isProvider = false
+    isProvider = false,
   ): Promise<void> {
     const tokenField = isProvider ? 'googleTokensProvider' : 'googleTokens';
-    
+
     await this.prisma.user.update({
       where: { id: userId },
-      data: { 
+      data: {
         [tokenField]: JSON.stringify(tokens),
       },
     });
   }
 
   // Obter cliente OAuth autenticado para um usuário
-  async getAuthenticatedClient(userId: string, isProvider = false): Promise<OAuth2Client> {
+  async getAuthenticatedClient(
+    userId: string,
+    isProvider = false,
+  ): Promise<OAuth2Client> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });
@@ -92,7 +95,7 @@ export class GoogleCalendarService {
 
     if (!tokens) {
       throw new BadRequestException(
-        `${isProvider ? 'Prestador' : 'Cliente'} não autenticado com Google Calendar`
+        `${isProvider ? 'Prestador' : 'Cliente'} não autenticado com Google Calendar`,
       );
     }
 
@@ -105,7 +108,10 @@ export class GoogleCalendarService {
     oauth2Client.setCredentials(JSON.parse(tokens));
 
     // Verificar se o token expirou e renovar se necessário
-    if (oauth2Client.credentials.expiry_date && oauth2Client.credentials.expiry_date <= Date.now()) {
+    if (
+      oauth2Client.credentials.expiry_date &&
+      oauth2Client.credentials.expiry_date <= Date.now()
+    ) {
       const { credentials } = await oauth2Client.refreshAccessToken();
       oauth2Client.setCredentials(credentials);
       await this.saveTokens(userId, credentials, isProvider);
@@ -116,12 +122,12 @@ export class GoogleCalendarService {
 
   // Criar evento no Google Calendar
   async createCalendarEvent(
-    booking: Booking & { 
-      service?: any; 
+    booking: Booking & {
+      service?: any;
       user?: any;
     },
     userId: string,
-    isProvider = false
+    isProvider = false,
   ): Promise<string> {
     try {
       const authClient = await this.getAuthenticatedClient(userId, isProvider);
@@ -133,7 +139,9 @@ export class GoogleCalendarService {
       startDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
 
       const endDate = new Date(startDate);
-      endDate.setMinutes(endDate.getMinutes() + (booking.service?.duration || 60));
+      endDate.setMinutes(
+        endDate.getMinutes() + (booking.service?.duration || 60),
+      );
 
       // Montar descrição do evento
       const description = `
@@ -152,8 +160,8 @@ Agendamento realizado via BelleBook
 
       // Preparar o evento
       const event: GoogleCalendarEvent = {
-        summary: isProvider 
-          ? `${booking.service?.name} - ${booking.user?.name}` 
+        summary: isProvider
+          ? `${booking.service?.name} - ${booking.user?.name}`
           : `${booking.service?.name} - BelleBook`,
         description,
         location: this.configService.get('BUSINESS_ADDRESS') || 'A confirmar',
@@ -191,7 +199,8 @@ Agendamento realizado via BelleBook
           event.attendees = [
             {
               email: providerEmail,
-              displayName: this.configService.get('PROVIDER_NAME') || 'Prestador',
+              displayName:
+                this.configService.get('PROVIDER_NAME') || 'Prestador',
             },
           ];
         }
@@ -212,7 +221,9 @@ Agendamento realizado via BelleBook
   }
 
   // Criar evento em ambas as agendas (cliente e prestador)
-  async createBookingEvents(booking: Booking & { service?: any; user?: any }): Promise<{
+  async createBookingEvents(
+    booking: Booking & { service?: any; user?: any },
+  ): Promise<{
     clientEventId?: string;
     providerEventId?: string;
   }> {
@@ -222,7 +233,11 @@ Agendamento realizado via BelleBook
       // Criar evento na agenda do cliente
       if (booking.userId) {
         try {
-          result.clientEventId = await this.createCalendarEvent(booking, booking.userId, false);
+          result.clientEventId = await this.createCalendarEvent(
+            booking,
+            booking.userId,
+            false,
+          );
         } catch (error) {
           console.log('Cliente não autenticado com Google Calendar');
         }
@@ -232,7 +247,11 @@ Agendamento realizado via BelleBook
       const providerId = this.configService.get('PROVIDER_USER_ID');
       if (providerId) {
         try {
-          result.providerEventId = await this.createCalendarEvent(booking, providerId, true);
+          result.providerEventId = await this.createCalendarEvent(
+            booking,
+            providerId,
+            true,
+          );
         } catch (error) {
           console.log('Prestador não autenticado com Google Calendar');
         }
@@ -261,7 +280,7 @@ Agendamento realizado via BelleBook
     eventId: string,
     booking: Booking & { service?: any; user?: any },
     userId: string,
-    isProvider = false
+    isProvider = false,
   ): Promise<void> {
     try {
       const authClient = await this.getAuthenticatedClient(userId, isProvider);
@@ -272,11 +291,13 @@ Agendamento realizado via BelleBook
       startDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
 
       const endDate = new Date(startDate);
-      endDate.setMinutes(endDate.getMinutes() + (booking.service?.duration || 60));
+      endDate.setMinutes(
+        endDate.getMinutes() + (booking.service?.duration || 60),
+      );
 
       const event: GoogleCalendarEvent = {
-        summary: isProvider 
-          ? `${booking.service?.name} - ${booking.user?.name}` 
+        summary: isProvider
+          ? `${booking.service?.name} - ${booking.user?.name}`
           : `${booking.service?.name} - BelleBook`,
         start: {
           dateTime: startDate.toISOString(),
@@ -304,7 +325,7 @@ Agendamento realizado via BelleBook
   async cancelCalendarEvent(
     eventId: string,
     userId: string,
-    isProvider = false
+    isProvider = false,
   ): Promise<void> {
     try {
       const authClient = await this.getAuthenticatedClient(userId, isProvider);
@@ -329,7 +350,11 @@ Agendamento realizado via BelleBook
     // Cancelar na agenda do cliente
     if (booking.googleEventId && booking.userId) {
       try {
-        await this.cancelCalendarEvent(booking.googleEventId, booking.userId, false);
+        await this.cancelCalendarEvent(
+          booking.googleEventId,
+          booking.userId,
+          false,
+        );
       } catch (error) {
         console.log('Erro ao cancelar evento do cliente:', error);
       }
@@ -340,7 +365,11 @@ Agendamento realizado via BelleBook
       const providerId = this.configService.get('PROVIDER_USER_ID');
       if (providerId) {
         try {
-          await this.cancelCalendarEvent(booking.googleProviderEventId, providerId, true);
+          await this.cancelCalendarEvent(
+            booking.googleProviderEventId,
+            providerId,
+            true,
+          );
         } catch (error) {
           console.log('Erro ao cancelar evento do prestador:', error);
         }
@@ -359,7 +388,7 @@ Agendamento realizado via BelleBook
 
       const startOfDay = new Date(date);
       startOfDay.setHours(0, 0, 0, 0);
-      
+
       const endOfDay = new Date(date);
       endOfDay.setHours(23, 59, 59, 999);
 
@@ -373,9 +402,9 @@ Agendamento realizado via BelleBook
       });
 
       const busySlots: string[] = [];
-      
+
       if (response.data.items) {
-        response.data.items.forEach(event => {
+        response.data.items.forEach((event) => {
           if (event.start?.dateTime) {
             const eventTime = new Date(event.start.dateTime);
             const hours = eventTime.getHours().toString().padStart(2, '0');
@@ -385,8 +414,9 @@ Agendamento realizado via BelleBook
             // Adicionar slots de 30 em 30 minutos durante a duração do evento
             if (event.end?.dateTime) {
               const endTime = new Date(event.end.dateTime);
-              const duration = (endTime.getTime() - eventTime.getTime()) / (1000 * 60); // em minutos
-              
+              const duration =
+                (endTime.getTime() - eventTime.getTime()) / (1000 * 60); // em minutos
+
               for (let i = 30; i < duration; i += 30) {
                 const slotTime = new Date(eventTime);
                 slotTime.setMinutes(slotTime.getMinutes() + i);

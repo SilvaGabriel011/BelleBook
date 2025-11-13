@@ -31,8 +31,14 @@ export class ServicesController {
       search,
     };
 
-    if (filters.minPrice && filters.maxPrice && filters.minPrice > filters.maxPrice) {
-      throw new BadRequestException('Preço mínimo não pode ser maior que o máximo');
+    if (
+      filters.minPrice &&
+      filters.maxPrice &&
+      filters.minPrice > filters.maxPrice
+    ) {
+      throw new BadRequestException(
+        'Preço mínimo não pode ser maior que o máximo',
+      );
     }
 
     return this.servicesService.findByCategory(categoryId, filters);

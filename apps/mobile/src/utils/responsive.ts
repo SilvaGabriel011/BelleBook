@@ -72,11 +72,12 @@ export const responsiveStyles = StyleSheet.create<{
 }>({
   container: {
     flex: 1,
-    ...(isWeb && {
-      maxWidth: 1200,
-      marginHorizontal: 'auto' as const,
-      width: '100%',
-    } as ExtendedViewStyle),
+    ...(isWeb &&
+      ({
+        maxWidth: 1200,
+        marginHorizontal: 'auto' as const,
+        width: '100%',
+      } as ExtendedViewStyle)),
   },
   contentContainer: {
     paddingHorizontal: spacing('md'),
@@ -86,9 +87,10 @@ export const responsiveStyles = StyleSheet.create<{
     backgroundColor: '#fff',
     borderRadius: 12,
     padding: spacing('md'),
-    ...(isWeb && {
-      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-    } as ExtendedViewStyle),
+    ...(isWeb &&
+      ({
+        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+      } as ExtendedViewStyle)),
     ...(!isWeb && {
       elevation: 2,
       shadowColor: '#000',
@@ -103,10 +105,11 @@ export const responsiveStyles = StyleSheet.create<{
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    ...(isWeb && {
-      cursor: 'pointer',
-      transition: 'all 0.2s ease',
-    } as ExtendedViewStyle),
+    ...(isWeb &&
+      ({
+        cursor: 'pointer',
+        transition: 'all 0.2s ease',
+      } as ExtendedViewStyle)),
   },
   primaryButton: {
     backgroundColor: '#8B5CF6',

@@ -10,7 +10,14 @@ import { Loader2, Mail, Lock, Crown, User, Briefcase, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { authService } from '@/services/auth.service';
 import { useAuthStore } from '@/store/auth.store';
@@ -69,9 +76,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 p-4">
       <Card className="w-full max-w-md border-pink-200 shadow-xl">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center text-pink-700">
-            BelleBook
-          </CardTitle>
+          <CardTitle className="text-2xl font-bold text-center text-pink-700">BelleBook</CardTitle>
           <CardDescription className="text-center text-gray-600">
             Entre na sua conta para continuar
           </CardDescription>
@@ -81,9 +86,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {error && (
               <Alert className="border-red-200 bg-red-50">
-                <AlertDescription className="text-red-700">
-                  {error}
-                </AlertDescription>
+                <AlertDescription className="text-red-700">{error}</AlertDescription>
               </Alert>
             )}
 
@@ -101,9 +104,7 @@ export default function LoginPage() {
                   {...register('email')}
                 />
               </div>
-              {errors.email && (
-                <p className="text-sm text-red-500">{errors.email.message}</p>
-              )}
+              {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
             </div>
 
             <div className="space-y-2">
@@ -120,9 +121,7 @@ export default function LoginPage() {
                   {...register('password')}
                 />
               </div>
-              {errors.password && (
-                <p className="text-sm text-red-500">{errors.password.message}</p>
-              )}
+              {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
             </div>
 
             <Button
@@ -156,7 +155,7 @@ export default function LoginPage() {
               <p className="text-xs text-center text-gray-600 font-medium">
                 🎭 Contas Demo para Testes
               </p>
-              
+
               <div className="grid grid-cols-2 gap-2">
                 <Button
                   type="button"
@@ -208,16 +207,14 @@ export default function LoginPage() {
               </div>
 
               <p className="text-[10px] text-center text-gray-400">
-                Todas as contas usam a senha: <code className="bg-gray-100 px-1 rounded">senha123</code>
+                Todas as contas usam a senha:{' '}
+                <code className="bg-gray-100 px-1 rounded">senha123</code>
               </p>
             </div>
 
             <div className="mt-4">
               <Link href="/register" passHref>
-                <Button
-                  variant="outline"
-                  className="w-full border-pink-200 hover:bg-pink-50"
-                >
+                <Button variant="outline" className="w-full border-pink-200 hover:bg-pink-50">
                   Criar nova conta
                 </Button>
               </Link>

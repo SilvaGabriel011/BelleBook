@@ -16,15 +16,11 @@ export class AppError extends Error {
   public readonly originalError?: Error;
   public readonly timestamp: Date;
 
-  constructor(
-    code: ErrorCode,
-    originalError?: Error,
-    additionalContext?: Record<string, any>
-  ) {
+  constructor(code: ErrorCode, originalError?: Error, additionalContext?: Record<string, any>) {
     const errorDetails = ERROR_MAP[code] || ERROR_MAP[ErrorCode.UNKNOWN_ERROR];
-    
+
     super(errorDetails.technicalMessage);
-    
+
     this.name = 'AppError';
     this.code = code;
     this.category = errorDetails.category;
@@ -97,7 +93,7 @@ class ErrorHandler {
   private handleFirebaseError(error: FirebaseError, context?: Record<string, any>): AppError {
     const firebaseCode = error.code;
     const mappedCode = FIREBASE_ERROR_MAP[firebaseCode] || ErrorCode.UNKNOWN_ERROR;
-    
+
     return new AppError(mappedCode, error, {
       ...context,
       firebaseCode,
@@ -145,7 +141,9 @@ class ErrorHandler {
    * Type Guards
    */
   private isFirebaseError(error: any): error is FirebaseError {
-    return error instanceof FirebaseError || (error && error.code && error.code.startsWith('auth/'));
+    return (
+      error instanceof FirebaseError || (error && error.code && error.code.startsWith('auth/'))
+    );
   }
 
   private isNetworkError(error: any): boolean {
