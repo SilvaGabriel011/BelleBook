@@ -19,54 +19,43 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { CartBadge } from "@/components/CartBadge";
+import { servicesService, Category } from '@/services/services.service';
+import { LucideIcon } from 'lucide-react';
 
-// Dados mockados das categorias (depois vem do backend)
-const categories = [
-  {
-    id: '1',
-    name: 'Sobrancelha',
-    description: 'Design e micropigmentação',
-    icon: Eye,
-    image: '/images/sobrancelha.jpg',
-    color: 'bg-pink-100 text-pink-700',
-    services: 12,
-  },
-  {
-    id: '2',
-    name: 'Unha',
-    description: 'Manicure, pedicure e nail art',
-    icon: Palette,
-    image: '/images/unha.jpg',
-    color: 'bg-purple-100 text-purple-700',
-    services: 18,
-  },
-  {
-    id: '3',
-    name: 'Cabelo',
-    description: 'Corte, cor e tratamentos',
-    icon: Scissors,
-    image: '/images/cabelo.jpg',
-    color: 'bg-blue-100 text-blue-700',
-    services: 25,
-  },
-  {
-    id: '4',
-    name: 'Depilação',
-    description: 'Laser e cera',
-    icon: Sparkles,
-    image: '/images/depilacao.jpg',
-    color: 'bg-green-100 text-green-700',
-    services: 10,
-  },
-];
+const iconMap: Record<string, LucideIcon> = {
+  Eye,
+  Palette,
+  Scissors,
+  Sparkles,
+};
+
+const colorMap: Record<string, string> = {
+  'Sobrancelha': 'bg-pink-100 text-pink-700',
+  'Unha': 'bg-purple-100 text-purple-700',
+  'Cabelo': 'bg-blue-100 text-blue-700',
+  'Depilação': 'bg-green-100 text-green-700',
+};
 
 export default function HomePage() {
   const router = useRouter();
   const { user, isAuthenticated, checkAuth, logout } = useAuthStore();
   const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     checkAuth();
+    
+    const loadCategories = async () => {
+      try {
+        const data = await servicesService.getAllCategories();
+        setCategories(data);
+      } catch (error) {
+        console.error('Erro ao carregar categorias:', error);
+      }
+    };
+    
+    loadCategories();
+    
     const timer = setTimeout(() => {
       if (!isAuthenticated) {
         router.push('/login');
@@ -220,7 +209,8 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {categories.map((category) => {
-            const Icon = category.icon;
+            const Icon = category.icon ? iconMap[category.icon] || Sparkles : Sparkles;
+            const color = colorMap[category.name] || 'bg-gray-100 text-gray-700';
             return (
               <Card
                 key={category.id}
@@ -235,8 +225,8 @@ export default function HomePage() {
                     <h4 className="font-bold text-lg text-gray-800">
                       {category.name}
                     </h4>
-                    <Badge className={category.color}>
-                      {category.services} serviços
+                    <Badge className={color}>
+                      {category.servicesCount} serviços
                     </Badge>
                   </div>
                   <p className="text-sm text-gray-600">
