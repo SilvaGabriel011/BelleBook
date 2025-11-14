@@ -32,6 +32,15 @@ jobs:
   type-check:
     name: Type Check
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - package: bellebook-web
+            node: '20'
+            tsconfig: tsconfig.json
+          - package: bellebook-backend
+            node: '20'
+            tsconfig: tsconfig.build.json
     
     steps:
       - uses: actions/checkout@v3
@@ -39,14 +48,19 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: ${{ matrix.node }}
           cache: 'npm'
+          cache-dependency-path: ${{ matrix.package }}/package-lock.json
       
-      - name: Install dependencies
-        run: npm ci
+      - name: Install dependencies for ${{ matrix.package }}
+        run: cd ${{ matrix.package }} && npm ci
       
-      - name: Type check
-        run: npm run type-check
+      - name: Generate Prisma Client for bellebook-backend
+        if: matrix.package == 'bellebook-backend'
+        run: cd ${{ matrix.package }} && DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy" npx prisma generate
+      
+      - name: Type check ${{ matrix.package }}
+        run: cd ${{ matrix.package }} && npx -y tsc -p ${{ matrix.tsconfig }} --noEmit
 
   test:
     name: Test

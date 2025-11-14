@@ -17,9 +17,7 @@ export class AuthService {
 
   async register(registerDto: RegisterDto) {
     // Verificar se email já existe
-    const existingUser = await this.usersService.findByEmail(
-      registerDto.email,
-    );
+    const existingUser = await this.usersService.findByEmail(registerDto.email);
 
     if (existingUser) {
       throw new ConflictException('Email já está em uso');

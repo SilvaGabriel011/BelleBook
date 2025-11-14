@@ -14,12 +14,7 @@ import {
 } from 'lucide-react';
 import { useCartStore } from '@/store/cart.store';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
@@ -66,14 +61,14 @@ export default function CartPage() {
 
     setIsApplyingCoupon(true);
     const success = await applyCoupon(couponInput.trim());
-    
+
     if (success) {
       toast.success('Cupom aplicado com sucesso!');
       setCouponInput('');
     } else {
       toast.error('Cupom inválido ou expirado');
     }
-    
+
     setIsApplyingCoupon(false);
   };
 
@@ -96,11 +91,7 @@ export default function CartPage() {
         <header className="bg-white shadow-sm border-b border-pink-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => router.back()}
-              >
+              <Button variant="ghost" size="icon" onClick={() => router.back()}>
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <h1 className="text-2xl font-bold text-gray-800">Carrinho</h1>
@@ -112,15 +103,9 @@ export default function CartPage() {
           <Card className="text-center py-12">
             <CardContent>
               <ShoppingBag className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-700 mb-2">
-                Seu carrinho está vazio
-              </h2>
-              <p className="text-gray-500 mb-6">
-                Adicione serviços ao carrinho para continuar
-              </p>
-              <Button onClick={handleContinueShopping}>
-                Explorar Serviços
-              </Button>
+              <h2 className="text-xl font-semibold text-gray-700 mb-2">Seu carrinho está vazio</h2>
+              <p className="text-gray-500 mb-6">Adicione serviços ao carrinho para continuar</p>
+              <Button onClick={handleContinueShopping}>Explorar Serviços</Button>
             </CardContent>
           </Card>
         </main>
@@ -134,11 +119,7 @@ export default function CartPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => router.back()}
-              >
+              <Button variant="ghost" size="icon" onClick={() => router.back()}>
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <h1 className="text-2xl font-bold text-gray-800">
@@ -173,12 +154,8 @@ export default function CartPage() {
                     {/* Detalhes */}
                     <div className="flex-1 space-y-3">
                       <div>
-                        <h3 className="font-bold text-lg text-gray-800">
-                          {item.service.name}
-                        </h3>
-                        <p className="text-sm text-gray-600">
-                          {item.service.category?.name}
-                        </p>
+                        <h3 className="font-bold text-lg text-gray-800">{item.service.name}</h3>
+                        <p className="text-sm text-gray-600">{item.service.category?.name}</p>
                       </div>
 
                       {/* Duração e Preço */}
@@ -188,9 +165,7 @@ export default function CartPage() {
                           {item.service.duration} min
                         </div>
                         <div className="font-semibold text-pink-600">
-                          {formatPrice(
-                            Number(item.service.promoPrice || item.service.price)
-                          )}
+                          {formatPrice(Number(item.service.promoPrice || item.service.price))}
                         </div>
                       </div>
 
@@ -203,11 +178,7 @@ export default function CartPage() {
                             value={item.selectedDate || ''}
                             min={new Date().toISOString().split('T')[0]}
                             onChange={(e) =>
-                              updateSchedule(
-                                item.id,
-                                e.target.value,
-                                item.selectedTime || ''
-                              )
+                              updateSchedule(item.id, e.target.value, item.selectedTime || '')
                             }
                             className="h-8 text-sm"
                           />
@@ -217,11 +188,7 @@ export default function CartPage() {
                           <Select
                             value={item.selectedTime || ''}
                             onValueChange={(value) =>
-                              updateSchedule(
-                                item.id,
-                                item.selectedDate || '',
-                                value
-                              )
+                              updateSchedule(item.id, item.selectedDate || '', value)
                             }
                           >
                             <SelectTrigger className="h-8 text-sm">
@@ -256,22 +223,16 @@ export default function CartPage() {
                             variant="outline"
                             size="icon"
                             className="h-8 w-8"
-                            onClick={() =>
-                              updateQuantity(item.id, item.quantity - 1)
-                            }
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
                           >
                             <Minus className="h-3 w-3" />
                           </Button>
-                          <span className="w-12 text-center font-medium">
-                            {item.quantity}
-                          </span>
+                          <span className="w-12 text-center font-medium">{item.quantity}</span>
                           <Button
                             variant="outline"
                             size="icon"
                             className="h-8 w-8"
-                            onClick={() =>
-                              updateQuantity(item.id, item.quantity + 1)
-                            }
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
                           >
                             <Plus className="h-3 w-3" />
                           </Button>
@@ -309,9 +270,7 @@ export default function CartPage() {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <CheckCircle className="h-4 w-4 text-green-600" />
-                          <span className="font-medium text-green-800">
-                            {coupon}
-                          </span>
+                          <span className="font-medium text-green-800">{coupon}</span>
                           <Badge variant="secondary" className="bg-green-100">
                             {discount}% OFF
                           </Badge>
@@ -353,26 +312,22 @@ export default function CartPage() {
                     <span className="text-gray-600">Subtotal</span>
                     <span>{formatPrice(subtotal)}</span>
                   </div>
-                  
+
                   {discountValue > 0 && (
                     <div className="flex justify-between text-sm">
                       <span className="text-green-600">Desconto</span>
-                      <span className="text-green-600">
-                        - {formatPrice(discountValue)}
-                      </span>
+                      <span className="text-green-600">- {formatPrice(discountValue)}</span>
                     </div>
                   )}
-                  
+
                   <Separator />
-                  
+
                   <div className="flex justify-between text-lg font-bold">
                     <span>Total</span>
                     <span className="text-pink-600">{formatPrice(total)}</span>
                   </div>
 
-                  <p className="text-xs text-gray-500">
-                    ou em até 3x de {formatPrice(total / 3)}
-                  </p>
+                  <p className="text-xs text-gray-500">ou em até 3x de {formatPrice(total / 3)}</p>
                 </div>
 
                 <Separator />
@@ -386,20 +341,14 @@ export default function CartPage() {
                   >
                     Finalizar Pedido
                   </Button>
-                  <Button
-                    onClick={handleContinueShopping}
-                    variant="outline"
-                    className="w-full"
-                  >
+                  <Button onClick={handleContinueShopping} variant="outline" className="w-full">
                     Continuar Comprando
                   </Button>
                 </div>
 
                 {/* Cupons disponíveis */}
                 <div className="pt-4">
-                  <p className="text-xs text-gray-500 mb-2">
-                    💡 Cupons disponíveis:
-                  </p>
+                  <p className="text-xs text-gray-500 mb-2">💡 Cupons disponíveis:</p>
                   <div className="space-y-1">
                     <Badge variant="outline" className="text-xs">
                       PRIMEIRA10 - 10% off

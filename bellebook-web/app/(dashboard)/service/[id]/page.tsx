@@ -17,42 +17,27 @@ import {
 } from 'lucide-react';
 import { servicesService, Service } from '@/services/services.service';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useAuthStore } from '@/store/auth.store';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { useCartStore } from '@/store/cart.store';
 import { toast } from 'sonner';
-
-interface Review {
-  id: string;
-  rating: number;
-  comment: string;
-  createdAt: string;
-  user: {
-    id: string;
-    name: string;
-    avatar?: string;
-  };
-}
 
 export default function ServiceDetailPage() {
   const { id } = useParams();
   const router = useRouter();
-  const { user } = useAuthStore();
   const { addToCart } = useCartStore();
-  
+
   const [service, setService] = useState<Service | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -88,7 +73,7 @@ export default function ServiceDetailPage() {
     // Adicionar ao carrinho usando a store
     addToCart(service, 1, selectedDate?.toISOString().split('T')[0], selectedTime);
     toast.success(`${service.name} foi adicionado ao seu carrinho`);
-    
+
     // Redirecionar para o carrinho
     setTimeout(() => {
       router.push('/cart');
@@ -130,17 +115,13 @@ export default function ServiceDetailPage() {
 
   const nextImage = () => {
     if (service?.images) {
-      setCurrentImageIndex((prev) =>
-        prev === service.images.length - 1 ? 0 : prev + 1
-      );
+      setCurrentImageIndex((prev) => (prev === service.images.length - 1 ? 0 : prev + 1));
     }
   };
 
   const prevImage = () => {
     if (service?.images) {
-      setCurrentImageIndex((prev) =>
-        prev === 0 ? service.images.length - 1 : prev - 1
-      );
+      setCurrentImageIndex((prev) => (prev === 0 ? service.images.length - 1 : prev - 1));
     }
   };
 
@@ -161,9 +142,7 @@ export default function ServiceDetailPage() {
         <Card className="text-center p-8">
           <CardContent>
             <p className="text-gray-500 mb-4">Serviço não encontrado</p>
-            <Button onClick={() => router.push('/home')}>
-              Voltar para Home
-            </Button>
+            <Button onClick={() => router.push('/home')}>Voltar para Home</Button>
           </CardContent>
         </Card>
       </div>
@@ -171,7 +150,9 @@ export default function ServiceDetailPage() {
   }
 
   const discount = service.promoPrice
-    ? Math.round(((Number(service.price) - Number(service.promoPrice)) / Number(service.price)) * 100)
+    ? Math.round(
+        ((Number(service.price) - Number(service.promoPrice)) / Number(service.price)) * 100
+      )
     : 0;
 
   return (
@@ -181,16 +162,10 @@ export default function ServiceDetailPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => router.back()}
-              >
+              <Button variant="ghost" size="icon" onClick={() => router.back()}>
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <h1 className="text-xl font-bold text-gray-800">
-                Detalhes do Serviço
-              </h1>
+              <h1 className="text-xl font-bold text-gray-800">Detalhes do Serviço</h1>
             </div>
 
             <div className="flex space-x-2">
@@ -247,9 +222,7 @@ export default function ServiceDetailPage() {
                             <div
                               key={index}
                               className={`w-2 h-2 rounded-full ${
-                                index === currentImageIndex
-                                  ? 'bg-white'
-                                  : 'bg-white/50'
+                                index === currentImageIndex ? 'bg-white' : 'bg-white/50'
                               }`}
                             />
                           ))}
@@ -271,14 +244,10 @@ export default function ServiceDetailPage() {
                 <div className="flex items-start justify-between">
                   <div>
                     <CardTitle className="text-2xl">{service.name}</CardTitle>
-                    <CardDescription className="mt-2">
-                      {service.category?.name}
-                    </CardDescription>
+                    <CardDescription className="mt-2">{service.category?.name}</CardDescription>
                   </div>
                   {service.promoPrice && (
-                    <Badge className="bg-red-500 text-white">
-                      {discount}% OFF
-                    </Badge>
+                    <Badge className="bg-red-500 text-white">{discount}% OFF</Badge>
                   )}
                 </div>
               </CardHeader>
@@ -294,9 +263,7 @@ export default function ServiceDetailPage() {
                   <div className="text-center p-3 bg-purple-50 rounded-lg">
                     <Star className="h-6 w-6 text-purple-600 mx-auto mb-1" />
                     <p className="text-sm text-gray-600">Avaliação</p>
-                    <p className="font-semibold">
-                      {service.averageRating || 'N/A'}
-                    </p>
+                    <p className="font-semibold">{service.averageRating || 'N/A'}</p>
                   </div>
                   <div className="text-center p-3 bg-blue-50 rounded-lg">
                     <Calendar className="h-6 w-6 text-blue-600 mx-auto mb-1" />
@@ -350,9 +317,7 @@ export default function ServiceDetailPage() {
                                     ))}
                                   </div>
                                 </div>
-                                <p className="text-sm text-gray-600 mt-1">
-                                  {review.comment}
-                                </p>
+                                <p className="text-sm text-gray-600 mt-1">{review.comment}</p>
                                 <p className="text-xs text-gray-400 mt-2">
                                   {new Date(review.createdAt).toLocaleDateString('pt-BR')}
                                 </p>
@@ -398,19 +363,17 @@ export default function ServiceDetailPage() {
                           Política de Cancelamento
                         </h4>
                         <p>
-                          Cancelamentos devem ser feitos com no mínimo 24 horas de
-                          antecedência. Cancelamentos tardios ou não comparecimento
-                          podem resultar em cobrança de 50% do valor do serviço.
+                          Cancelamentos devem ser feitos com no mínimo 24 horas de antecedência.
+                          Cancelamentos tardios ou não comparecimento podem resultar em cobrança de
+                          50% do valor do serviço.
                         </p>
                       </div>
                       <Separator />
                       <div>
-                        <h4 className="font-semibold text-gray-800 mb-2">
-                          Reagendamento
-                        </h4>
+                        <h4 className="font-semibold text-gray-800 mb-2">Reagendamento</h4>
                         <p>
-                          Você pode reagendar seu horário gratuitamente até 12 horas
-                          antes do agendamento.
+                          Você pode reagendar seu horário gratuitamente até 12 horas antes do
+                          agendamento.
                         </p>
                       </div>
                     </div>
@@ -440,7 +403,8 @@ export default function ServiceDetailPage() {
                         </span>
                       </div>
                       <p className="text-sm text-green-600 mt-1">
-                        Você economiza {formatPrice(Number(service.price) - Number(service.promoPrice))}
+                        Você economiza{' '}
+                        {formatPrice(Number(service.price) - Number(service.promoPrice))}
                       </p>
                     </>
                   ) : (
@@ -448,9 +412,7 @@ export default function ServiceDetailPage() {
                       {formatPrice(service.price)}
                     </span>
                   )}
-                  <p className="text-xs text-gray-500 mt-2">
-                    ou em até 3x sem juros
-                  </p>
+                  <p className="text-xs text-gray-500 mt-2">ou em até 3x sem juros</p>
                 </div>
 
                 <Separator />

@@ -10,21 +10,30 @@ import { Loader2, Mail, Lock, User, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { authService } from '@/services/auth.service';
 import { useAuthStore } from '@/store/auth.store';
 
-const registerSchema = z.object({
-  name: z.string().min(3, 'Nome deve ter no mínimo 3 caracteres'),
-  email: z.string().email('Email inválido').min(1, 'Email é obrigatório'),
-  phone: z.string().optional(),
-  password: z.string().min(6, 'Senha deve ter no mínimo 6 caracteres'),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'As senhas não coincidem',
-  path: ['confirmPassword'],
-});
+const registerSchema = z
+  .object({
+    name: z.string().min(3, 'Nome deve ter no mínimo 3 caracteres'),
+    email: z.string().email('Email inválido').min(1, 'Email é obrigatório'),
+    phone: z.string().optional(),
+    password: z.string().min(6, 'Senha deve ter no mínimo 6 caracteres'),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'As senhas não coincidem',
+    path: ['confirmPassword'],
+  });
 
 type RegisterFormData = z.infer<typeof registerSchema>;
 
@@ -47,6 +56,7 @@ export default function RegisterPage() {
     setError('');
 
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { confirmPassword, ...registerData } = data;
       const response = await authService.register(registerData);
       setUser(response.user);
@@ -62,9 +72,7 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 p-4">
       <Card className="w-full max-w-md border-pink-200 shadow-xl">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center text-pink-700">
-            BelleBook
-          </CardTitle>
+          <CardTitle className="text-2xl font-bold text-center text-pink-700">BelleBook</CardTitle>
           <CardDescription className="text-center text-gray-600">
             Crie sua conta e agende seus serviços de beleza
           </CardDescription>
@@ -74,9 +82,7 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {error && (
               <Alert className="border-red-200 bg-red-50">
-                <AlertDescription className="text-red-700">
-                  {error}
-                </AlertDescription>
+                <AlertDescription className="text-red-700">{error}</AlertDescription>
               </Alert>
             )}
 
@@ -94,9 +100,7 @@ export default function RegisterPage() {
                   {...register('name')}
                 />
               </div>
-              {errors.name && (
-                <p className="text-sm text-red-500">{errors.name.message}</p>
-              )}
+              {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
             </div>
 
             <div className="space-y-2">
@@ -113,9 +117,7 @@ export default function RegisterPage() {
                   {...register('email')}
                 />
               </div>
-              {errors.email && (
-                <p className="text-sm text-red-500">{errors.email.message}</p>
-              )}
+              {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
             </div>
 
             <div className="space-y-2">
@@ -132,9 +134,7 @@ export default function RegisterPage() {
                   {...register('phone')}
                 />
               </div>
-              {errors.phone && (
-                <p className="text-sm text-red-500">{errors.phone.message}</p>
-              )}
+              {errors.phone && <p className="text-sm text-red-500">{errors.phone.message}</p>}
             </div>
 
             <div className="space-y-2">
@@ -151,9 +151,7 @@ export default function RegisterPage() {
                   {...register('password')}
                 />
               </div>
-              {errors.password && (
-                <p className="text-sm text-red-500">{errors.password.message}</p>
-              )}
+              {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
             </div>
 
             <div className="space-y-2">
@@ -203,10 +201,7 @@ export default function RegisterPage() {
 
             <div className="mt-6">
               <Link href="/login" passHref>
-                <Button
-                  variant="outline"
-                  className="w-full border-pink-200 hover:bg-pink-50"
-                >
+                <Button variant="outline" className="w-full border-pink-200 hover:bg-pink-50">
                   Fazer login
                 </Button>
               </Link>

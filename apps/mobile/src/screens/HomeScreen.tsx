@@ -25,17 +25,11 @@ const HomeScreen = () => {
       ]}
       onPress={onPress}
     >
-      <Text style={[
-        responsiveStyles.buttonText,
-        { color: isPrimary ? '#fff' : '#8B5CF6' }
-      ]}>
+      <Text style={[responsiveStyles.buttonText, { color: isPrimary ? '#fff' : '#8B5CF6' }]}>
         {title}
       </Text>
       {subtitle && (
-        <Text style={[
-          styles.buttonSubtext,
-          { color: isPrimary ? '#E9D5FF' : '#6B7280' }
-        ]}>
+        <Text style={[styles.buttonSubtext, { color: isPrimary ? '#E9D5FF' : '#6B7280' }]}>
           {subtitle}
         </Text>
       )}
@@ -55,10 +49,7 @@ const HomeScreen = () => {
         </View>
       )}
 
-      <View style={[
-        styles.section,
-        isWeb && deviceType === 'desktop' && styles.desktopSection
-      ]}>
+      <View style={[styles.section, isWeb && deviceType === 'desktop' && styles.desktopSection]}>
         <Text style={responsiveStyles.sectionTitle}>Explore Services</Text>
         <View style={isWeb && deviceType === 'desktop' ? styles.cardGrid : null}>
           <ServiceCard
@@ -75,10 +66,7 @@ const HomeScreen = () => {
         </View>
       </View>
 
-      <View style={[
-        styles.section,
-        isWeb && deviceType === 'desktop' && styles.desktopSection
-      ]}>
+      <View style={[styles.section, isWeb && deviceType === 'desktop' && styles.desktopSection]}>
         <Text style={responsiveStyles.sectionTitle}>Your Account</Text>
         <View style={isWeb && deviceType === 'desktop' ? styles.cardGrid : null}>
           <ServiceCard

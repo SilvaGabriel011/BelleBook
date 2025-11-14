@@ -1,4 +1,9 @@
-import { Injectable, BadRequestException, NotFoundException, Optional } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+  Optional,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Booking } from '@prisma/client';
 import { GoogleCalendarService } from '../google-calendar/google-calendar.service';
@@ -25,7 +30,10 @@ export class BookingsService {
   ) {}
 
   // Buscar horários disponíveis para uma data
-  async getAvailableSlots(serviceId: string, date: string): Promise<TimeSlot[]> {
+  async getAvailableSlots(
+    serviceId: string,
+    date: string,
+  ): Promise<TimeSlot[]> {
     const service = await this.prisma.service.findUnique({
       where: { id: serviceId },
     });
@@ -36,9 +44,24 @@ export class BookingsService {
 
     // Horários de funcionamento (9h às 18h)
     const workingHours = [
-      '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
-      '12:00', '12:30', '13:00', '13:30', '14:00', '14:30',
-      '15:00', '15:30', '16:00', '16:30', '17:00', '17:30'
+      '09:00',
+      '09:30',
+      '10:00',
+      '10:30',
+      '11:00',
+      '11:30',
+      '12:00',
+      '12:30',
+      '13:00',
+      '13:30',
+      '14:00',
+      '14:30',
+      '15:00',
+      '15:30',
+      '16:00',
+      '16:30',
+      '17:00',
+      '17:30',
     ];
 
     // Buscar agendamentos existentes para esta data
@@ -54,10 +77,10 @@ export class BookingsService {
       },
     });
 
-    const bookedTimes = existingBookings.map(b => b.time);
+    const bookedTimes = existingBookings.map((b) => b.time);
 
     // Calcular slots disponíveis
-    const slots: TimeSlot[] = workingHours.map(time => {
+    const slots: TimeSlot[] = workingHours.map((time) => {
       // Verificar se já passou (para hoje)
       const now = new Date();
       const slotDate = new Date(`${date} ${time}`);
@@ -69,7 +92,11 @@ export class BookingsService {
       return {
         time,
         available: !isPast && !isBooked,
-        reason: isPast ? 'Horário já passou' : isBooked ? 'Horário ocupado' : undefined,
+        reason: isPast
+          ? 'Horário já passou'
+          : isBooked
+            ? 'Horário ocupado'
+            : undefined,
       };
     });
 
@@ -80,7 +107,7 @@ export class BookingsService {
   async createBooking(data: CreateBookingDto): Promise<Booking> {
     // Validar disponibilidade
     const slots = await this.getAvailableSlots(data.serviceId, data.date);
-    const selectedSlot = slots.find(s => s.time === data.time);
+    const selectedSlot = slots.find((s) => s.time === data.time);
 
     if (!selectedSlot || !selectedSlot.available) {
       throw new BadRequestException('Horário não está disponível');
@@ -148,10 +175,7 @@ export class BookingsService {
           },
         },
       },
-      orderBy: [
-        { date: 'desc' },
-        { time: 'desc' },
-      ],
+      orderBy: [{ date: 'desc' }, { time: 'desc' }],
     });
 
     return bookings;
@@ -160,7 +184,7 @@ export class BookingsService {
   // Buscar próximo agendamento
   async getNextBooking(userId: string): Promise<Booking | null> {
     const now = new Date();
-    
+
     const booking = await this.prisma.booking.findFirst({
       where: {
         userId,
@@ -178,10 +202,7 @@ export class BookingsService {
           },
         },
       },
-      orderBy: [
-        { date: 'asc' },
-        { time: 'asc' },
-      ],
+      orderBy: [{ date: 'asc' }, { time: 'asc' }],
     });
 
     return booking;
@@ -205,17 +226,22 @@ export class BookingsService {
     }
 
     if (booking.status === 'COMPLETED') {
-      throw new BadRequestException('Não é possível cancelar um agendamento concluído');
+      throw new BadRequestException(
+        'Não é possível cancelar um agendamento concluído',
+      );
     }
 
     // Verificar política de cancelamento (24h de antecedência)
-    const bookingDate = new Date(`${booking.date.toISOString().split('T')[0]} ${booking.time}`);
+    const bookingDate = new Date(
+      `${booking.date.toISOString().split('T')[0]} ${booking.time}`,
+    );
     const now = new Date();
-    const hoursDiff = (bookingDate.getTime() - now.getTime()) / (1000 * 60 * 60);
+    const hoursDiff =
+      (bookingDate.getTime() - now.getTime()) / (1000 * 60 * 60);
 
     if (hoursDiff < 24) {
       throw new BadRequestException(
-        'Cancelamentos devem ser feitos com no mínimo 24 horas de antecedência'
+        'Cancelamentos devem ser feitos com no mínimo 24 horas de antecedência',
       );
     }
 
@@ -244,7 +270,7 @@ export class BookingsService {
     bookingId: string,
     userId: string,
     newDate: string,
-    newTime: string
+    newTime: string,
   ): Promise<Booking> {
     const booking = await this.prisma.booking.findFirst({
       where: {
@@ -263,7 +289,7 @@ export class BookingsService {
 
     // Validar disponibilidade do novo horário
     const slots = await this.getAvailableSlots(booking.serviceId, newDate);
-    const selectedSlot = slots.find(s => s.time === newTime);
+    const selectedSlot = slots.find((s) => s.time === newTime);
 
     if (!selectedSlot || !selectedSlot.available) {
       throw new BadRequestException('Novo horário não está disponível');

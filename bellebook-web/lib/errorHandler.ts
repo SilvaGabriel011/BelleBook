@@ -33,7 +33,7 @@ export class ErrorHandler {
       // Erro de resposta do servidor
       if (error.response) {
         const { status, data } = error.response;
-        
+
         console.error('Server Response Error:', {
           status,
           data,
@@ -42,7 +42,7 @@ export class ErrorHandler {
         // Erro estruturado do backend (NestJS)
         if (data && typeof data === 'object') {
           const errorData = data as any;
-          
+
           console.groupEnd();
           return {
             message: errorData.message || error.message || 'Erro no servidor',
@@ -66,9 +66,10 @@ export class ErrorHandler {
           message: 'Servidor não respondeu',
         });
         console.groupEnd();
-        
+
         return {
-          message: '❌ Não foi possível conectar ao servidor. Verifique se o backend está rodando em http://localhost:3001',
+          message:
+            '❌ Não foi possível conectar ao servidor. Verifique se o backend está rodando em http://localhost:3001',
           statusCode: 0,
         };
       }
@@ -84,7 +85,7 @@ export class ErrorHandler {
     // Erro genérico
     console.error('Generic Error:', error);
     console.groupEnd();
-    
+
     return {
       message: 'Ocorreu um erro inesperado. Verifique o console para mais detalhes.',
     };

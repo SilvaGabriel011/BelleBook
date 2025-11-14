@@ -32,7 +32,7 @@ export const responsiveSize = (mobile: number, tablet?: number, desktop?: number
 };
 
 // Platform-specific styles
-export const platformSelect = <T,>(options: {
+export const platformSelect = <T>(options: {
   web?: T;
   ios?: T;
   android?: T;
@@ -45,11 +45,13 @@ export const platformSelect = <T,>(options: {
 };
 
 // Web-specific utilities
-export const webStyles = isWeb ? {
-  maxWidth: '100%',
-  cursor: 'pointer',
-  userSelect: 'none' as const,
-} : {};
+export const webStyles = isWeb
+  ? {
+      maxWidth: '100%',
+      cursor: 'pointer',
+      userSelect: 'none' as const,
+    }
+  : {};
 
 // Container max width for web
 export const getContainerMaxWidth = () => {

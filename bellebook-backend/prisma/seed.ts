@@ -20,7 +20,7 @@ async function main() {
 
   // Criar contas demo com diferentes roles
   const hashedPassword = await bcrypt.hash('senha123', 10);
-  
+
   // 1. Admin Demo
   const adminUser = await prisma.user.create({
     data: {
@@ -123,23 +123,23 @@ async function main() {
       name: 'Design de Sobrancelha',
       description: 'Design personalizado com pinça e tesoura',
       duration: 45,
-      price: 65.00,
-      promoPrice: 52.00,
+      price: 65.0,
+      promoPrice: 52.0,
     },
     {
       categoryId: categories[0].id,
       name: 'Micropigmentação',
       description: 'Micropigmentação fio a fio realista',
       duration: 120,
-      price: 350.00,
-      promoPrice: 280.00,
+      price: 350.0,
+      promoPrice: 280.0,
     },
     {
       categoryId: categories[0].id,
       name: 'Henna',
       description: 'Aplicação de henna para sobrancelhas',
       duration: 30,
-      price: 35.00,
+      price: 35.0,
       promoPrice: null,
     },
     // Unha
@@ -148,31 +148,31 @@ async function main() {
       name: 'Manicure Tradicional',
       description: 'Manicure completa com esmaltação',
       duration: 60,
-      price: 45.00,
-      promoPrice: 36.00,
+      price: 45.0,
+      promoPrice: 36.0,
     },
     {
       categoryId: categories[1].id,
       name: 'Pedicure Completa',
       description: 'Pedicure com esfoliação e hidratação',
       duration: 75,
-      price: 55.00,
-      promoPrice: 44.00,
+      price: 55.0,
+      promoPrice: 44.0,
     },
     {
       categoryId: categories[1].id,
       name: 'Alongamento em Gel',
       description: 'Alongamento de unhas com gel moldado',
       duration: 120,
-      price: 120.00,
-      promoPrice: 96.00,
+      price: 120.0,
+      promoPrice: 96.0,
     },
     {
       categoryId: categories[1].id,
       name: 'Nail Art',
       description: 'Decoração artística nas unhas',
       duration: 30,
-      price: 25.00,
+      price: 25.0,
       promoPrice: null,
     },
     // Cabelo
@@ -181,31 +181,31 @@ async function main() {
       name: 'Corte Feminino',
       description: 'Corte personalizado com lavagem e secagem',
       duration: 60,
-      price: 80.00,
-      promoPrice: 64.00,
+      price: 80.0,
+      promoPrice: 64.0,
     },
     {
       categoryId: categories[2].id,
       name: 'Coloração',
       description: 'Coloração completa com produtos de qualidade',
       duration: 150,
-      price: 180.00,
-      promoPrice: 144.00,
+      price: 180.0,
+      promoPrice: 144.0,
     },
     {
       categoryId: categories[2].id,
       name: 'Hidratação Profunda',
       description: 'Tratamento de hidratação com máscara profissional',
       duration: 90,
-      price: 95.00,
-      promoPrice: 76.00,
+      price: 95.0,
+      promoPrice: 76.0,
     },
     {
       categoryId: categories[2].id,
       name: 'Escova Progressiva',
       description: 'Alisamento progressivo sem formol',
       duration: 180,
-      price: 250.00,
+      price: 250.0,
       promoPrice: null,
     },
     // Depilação
@@ -214,31 +214,31 @@ async function main() {
       name: 'Depilação Axilas',
       description: 'Depilação completa das axilas com cera',
       duration: 20,
-      price: 30.00,
-      promoPrice: 24.00,
+      price: 30.0,
+      promoPrice: 24.0,
     },
     {
       categoryId: categories[3].id,
       name: 'Depilação Pernas Completas',
       description: 'Depilação de pernas inteiras com cera',
       duration: 60,
-      price: 75.00,
-      promoPrice: 60.00,
+      price: 75.0,
+      promoPrice: 60.0,
     },
     {
       categoryId: categories[3].id,
       name: 'Depilação Virilha Completa',
       description: 'Depilação íntima completa com cera',
       duration: 45,
-      price: 65.00,
-      promoPrice: 52.00,
+      price: 65.0,
+      promoPrice: 52.0,
     },
     {
       categoryId: categories[3].id,
       name: 'Laser Axilas (Sessão)',
       description: 'Sessão de depilação a laser para axilas',
       duration: 15,
-      price: 90.00,
+      price: 90.0,
       promoPrice: null,
     },
   ];
@@ -251,15 +251,15 @@ async function main() {
           images: JSON.stringify(['/placeholder.jpg']), // Array como JSON
           isActive: true,
         },
-      })
-    )
+      }),
+    ),
   );
 
   console.log('✅ Serviços criados:', services.length);
 
   // Criar múltiplos agendamentos de exemplo
   const bookings: Booking[] = [];
-  
+
   // Agendamento futuro confirmado - Cliente
   const booking1 = await prisma.booking.create({
     data: {
@@ -328,7 +328,8 @@ async function main() {
       serviceId: services[3].id,
       bookingId: booking3.id,
       rating: 5,
-      comment: 'Adorei o atendimento! Profissional muito atenciosa e o resultado ficou perfeito. Com certeza voltarei!',
+      comment:
+        'Adorei o atendimento! Profissional muito atenciosa e o resultado ficou perfeito. Com certeza voltarei!',
     },
   });
 
@@ -350,7 +351,8 @@ async function main() {
       userId: clientUser.id,
       type: 'BOOKING_REMINDER',
       title: 'Lembrete de Agendamento',
-      message: 'Você tem um agendamento em 2 dias: Design de Sobrancelha às 14:00',
+      message:
+        'Você tem um agendamento em 2 dias: Design de Sobrancelha às 14:00',
       isRead: false,
     },
   });

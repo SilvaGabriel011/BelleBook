@@ -15,7 +15,7 @@ export interface CartStore {
   items: CartItem[];
   coupon: string | null;
   discount: number;
-  
+
   // Actions
   addToCart: (service: Service, quantity?: number, date?: string, time?: string) => void;
   removeFromCart: (itemId: string) => void;
@@ -24,7 +24,7 @@ export interface CartStore {
   clearCart: () => void;
   applyCoupon: (code: string) => Promise<boolean>;
   removeCoupon: () => void;
-  
+
   // Getters
   getSubtotal: () => number;
   getDiscount: () => number;
@@ -41,17 +41,13 @@ export const useCartStore = create<CartStore>()(
 
       addToCart: (service, quantity = 1, date, time) => {
         set((state) => {
-          const existingItem = state.items.find(
-            (item) => item.service.id === service.id
-          );
+          const existingItem = state.items.find((item) => item.service.id === service.id);
 
           if (existingItem) {
             // Se já existe, aumenta a quantidade
             return {
               items: state.items.map((item) =>
-                item.id === existingItem.id
-                  ? { ...item, quantity: item.quantity + quantity }
-                  : item
+                item.id === existingItem.id ? { ...item, quantity: item.quantity + quantity } : item
               ),
             };
           }
@@ -82,18 +78,14 @@ export const useCartStore = create<CartStore>()(
         }
 
         set((state) => ({
-          items: state.items.map((item) =>
-            item.id === itemId ? { ...item, quantity } : item
-          ),
+          items: state.items.map((item) => (item.id === itemId ? { ...item, quantity } : item)),
         }));
       },
 
       updateSchedule: (itemId, date, time) => {
         set((state) => ({
           items: state.items.map((item) =>
-            item.id === itemId
-              ? { ...item, selectedDate: date, selectedTime: time }
-              : item
+            item.id === itemId ? { ...item, selectedDate: date, selectedTime: time } : item
           ),
         }));
       },
@@ -112,12 +104,12 @@ export const useCartStore = create<CartStore>()(
         };
 
         const discountPercent = coupons[code.toUpperCase()];
-        
+
         if (discountPercent) {
           set({ coupon: code, discount: discountPercent });
           return true;
         }
-        
+
         return false;
       },
 

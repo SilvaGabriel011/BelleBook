@@ -2,23 +2,23 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-  Scissors, 
-  Eye, 
-  Palette, 
-  Sparkles, 
-  Star, 
+import {
+  Scissors,
+  Eye,
+  Palette,
+  Sparkles,
+  Star,
   Calendar,
   Gift,
   LogOut,
   User as UserIcon,
-  Search
+  Search,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { CartBadge } from "@/components/CartBadge";
+import { CartBadge } from '@/components/CartBadge';
 
 // Dados mockados das categorias (depois vem do backend)
 const categories = [
@@ -99,9 +99,7 @@ export default function HomePage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <h1 className="text-2xl font-bold text-pink-700">BelleBook</h1>
-              <Badge className="bg-pink-100 text-pink-700 hover:bg-pink-200">
-                Beta
-              </Badge>
+              <Badge className="bg-pink-100 text-pink-700 hover:bg-pink-200">Beta</Badge>
             </div>
 
             <div className="flex items-center space-x-4">
@@ -117,11 +115,7 @@ export default function HomePage() {
 
               {/* Menu do usuário */}
               <div className="flex items-center space-x-3">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-gray-600 hover:text-gray-800"
-                >
+                <Button variant="ghost" size="icon" className="text-gray-600 hover:text-gray-800">
                   <Search className="h-5 w-5" />
                 </Button>
                 <CartBadge />
@@ -153,9 +147,7 @@ export default function HomePage() {
           <h2 className="text-3xl font-bold text-gray-800 mb-2">
             Olá, {user?.name?.split(' ')[0]}! 👋
           </h2>
-          <p className="text-gray-600">
-            Que tal agendar um momento especial para você hoje?
-          </p>
+          <p className="text-gray-600">Que tal agendar um momento especial para você hoje?</p>
         </div>
 
         {/* Card de próximo agendamento (mockado) */}
@@ -163,12 +155,8 @@ export default function HomePage() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-purple-700">
-                  Próximo Agendamento
-                </CardTitle>
-                <CardDescription>
-                  Terça-feira, 15 de Novembro às 14:00
-                </CardDescription>
+                <CardTitle className="text-purple-700">Próximo Agendamento</CardTitle>
+                <CardDescription>Terça-feira, 15 de Novembro às 14:00</CardDescription>
               </div>
               <Calendar className="h-8 w-8 text-purple-600" />
             </div>
@@ -194,9 +182,7 @@ export default function HomePage() {
         {/* Banner promocional */}
         <Card className="mb-8 overflow-hidden bg-gradient-to-r from-pink-400 to-purple-400">
           <CardContent className="p-8 text-white">
-            <h3 className="text-2xl font-bold mb-2">
-              🎉 Oferta Especial de Lançamento!
-            </h3>
+            <h3 className="text-2xl font-bold mb-2">🎉 Oferta Especial de Lançamento!</h3>
             <p className="mb-4">
               Ganhe 20% de desconto na sua primeira reserva. Use o código: BELLEBOOK20
             </p>
@@ -210,9 +196,7 @@ export default function HomePage() {
       {/* Categorias */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <div className="mb-8">
-          <h3 className="text-2xl font-bold text-gray-800 mb-2">
-            Nossos Serviços
-          </h3>
+          <h3 className="text-2xl font-bold text-gray-800 mb-2">Nossos Serviços</h3>
           <p className="text-gray-600">
             Escolha a categoria e encontre o serviço perfeito para você
           </p>
@@ -232,24 +216,13 @@ export default function HomePage() {
                 </div>
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-bold text-lg text-gray-800">
-                      {category.name}
-                    </h4>
-                    <Badge className={category.color}>
-                      {category.services} serviços
-                    </Badge>
+                    <h4 className="font-bold text-lg text-gray-800">{category.name}</h4>
+                    <Badge className={category.color}>{category.services} serviços</Badge>
                   </div>
-                  <p className="text-sm text-gray-600">
-                    {category.description}
-                  </p>
+                  <p className="text-sm text-gray-600">{category.description}</p>
                   <div className="flex items-center mt-4 text-yellow-500">
                     {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`h-4 w-4 ${
-                          i < 4 ? 'fill-current' : 'fill-none'
-                        }`}
-                      />
+                      <Star key={i} className={`h-4 w-4 ${i < 4 ? 'fill-current' : 'fill-none'}`} />
                     ))}
                     <span className="text-sm text-gray-600 ml-2">4.8</span>
                   </div>

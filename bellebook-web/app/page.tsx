@@ -9,7 +9,7 @@ export default function Home() {
   useEffect(() => {
     // Verificar se há token de autenticação
     const token = localStorage.getItem('token');
-    
+
     if (token) {
       // Se autenticado, redirecionar para home
       router.push('/home');

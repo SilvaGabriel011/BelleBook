@@ -1,0 +1,25 @@
+# Compiled/generated files
+apps/api/lib/
+bellebook-backend/dist/
+bellebook-web/.next/
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build outputs
+build/
+dist/
+out/
+.next/
+
+# Prisma generated files
+**/prisma/migrations/
+
+# Environment files
+.env
+.env.*
+
+# Other
+coverage/
+.cache/

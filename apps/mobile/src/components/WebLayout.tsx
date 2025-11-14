@@ -28,12 +28,14 @@ const WebLayout: React.FC<WebLayoutProps> = ({
       maxWidth: containerMaxWidth,
       marginHorizontal: 'auto' as const,
       width: '100%',
-      ...(deviceType === 'desktop' && !noPadding && {
-        paddingHorizontal: spacing('xl'),
-      }),
-      ...(deviceType === 'tablet' && !noPadding && {
-        paddingHorizontal: spacing('lg'),
-      }),
+      ...(deviceType === 'desktop' &&
+        !noPadding && {
+          paddingHorizontal: spacing('xl'),
+        }),
+      ...(deviceType === 'tablet' &&
+        !noPadding && {
+          paddingHorizontal: spacing('lg'),
+        }),
     }),
   };
 
