@@ -12,12 +12,16 @@ import {
 } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
 import type { CreateBookingDto } from './bookings.service';
+import { PromoCodeService } from './promo-code.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('bookings')
 @UseGuards(JwtAuthGuard)
 export class BookingsController {
-  constructor(private readonly bookingsService: BookingsService) {}
+  constructor(
+    private readonly bookingsService: BookingsService,
+    private readonly promoCodeService: PromoCodeService,
+  ) {}
 
   @Get('slots')
   async getAvailableSlots(
@@ -58,5 +62,22 @@ export class BookingsController {
     @Request() req,
   ) {
     return this.bookingsService.rescheduleBooking(id, req.user.id, date, time);
+  }
+
+  @Post('validate-promo')
+  async validatePromoCode(
+    @Body('code') code: string,
+    @Body('totalAmount') totalAmount: number,
+  ) {
+    return this.promoCodeService.validatePromoCode({ code, totalAmount });
+  }
+
+  @Get('provider/:id/availability')
+  async getProviderAvailability(
+    @Param('id') providerId: string,
+    @Query('date') date: string,
+  ) {
+    // TODO: Implement provider availability check
+    return { available: true, slots: [] };
   }
 }

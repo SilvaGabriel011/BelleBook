@@ -1,0 +1,59 @@
+<div class="email-title">⏰ Lembrete: Seu agendamento está próximo!</div>
+
+<div class="email-content">
+  <p>Olá <strong>{{customerName}}</strong>,</p>
+  <p>Este é um lembrete amigável sobre seu agendamento que acontecerá em <strong>48 horas</strong>!</p>
+</div>
+
+<div class="info-box">
+  <div class="info-box-title">📅 Detalhes do Agendamento</div>
+  <table class="details-table">
+    <tr>
+      <td>Data e Hora</td>
+      <td>{{formattedDate}} às {{formattedTime}}</td>
+    </tr>
+    <tr>
+      <td>Serviço</td>
+      <td>{{serviceName}}</td>
+    </tr>
+    <tr>
+      <td>Profissional</td>
+      <td>{{providerName}}</td>
+    </tr>
+    {{#if address}}
+    <tr>
+      <td>Local</td>
+      <td>{{address}}</td>
+    </tr>
+    {{/if}}
+  </table>
+</div>
+
+<div class="info-box" style="background-color: #E8F5E9; border-left-color: #4CAF50;">
+  <div class="info-box-title" style="color: #2E7D32;">💚 Preparação para sua sessão</div>
+  <div class="info-box-content">
+    <ul style="padding-left: 20px; margin: 0;">
+      <li style="margin-bottom: 8px;">Chegue 10 minutos antes</li>
+      <li style="margin-bottom: 8px;">Traga documento com foto</li>
+      {{#if servicePreparation}}
+      <li style="margin-bottom: 8px;">{{servicePreparation}}</li>
+      {{/if}}
+    </ul>
+  </div>
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+  <a href="{{bookingUrl}}" class="button">Ver Meu Agendamento</a>
+</div>
+
+<div class="divider"></div>
+
+<div class="email-content" style="text-align: center;">
+  <p style="color: #666666;">Não poderá comparecer?</p>
+  <a href="{{bookingUrl}}" style="color: #FF6B9D; text-decoration: none; font-weight: 600;">
+    Reagendar ou Cancelar
+  </a>
+  <p style="color: #999999; font-size: 13px; margin-top: 10px;">
+    Lembre-se: cancelamentos devem ser feitos com 24h de antecedência
+  </p>
+</div>

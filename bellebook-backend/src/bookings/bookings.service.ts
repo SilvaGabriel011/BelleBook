@@ -8,11 +8,24 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Booking } from '@prisma/client';
 import { GoogleCalendarService } from '../google-calendar/google-calendar.service';
 
+export interface BookingServiceItem {
+  serviceId: string;
+  variantId?: string;
+  quantity: number;
+  price: number;
+}
+
 export interface CreateBookingDto {
   userId: string;
-  serviceId: string;
-  date: string;
-  time: string;
+  serviceId: string; // Main service for compatibility
+  providerId?: string;
+  services: BookingServiceItem[]; // Multiple services support
+  scheduledAt: Date;
+  duration: number;
+  totalAmount: number;
+  discount?: number;
+  promoCode?: string;
+  paymentMethod: string;
   notes?: string;
 }
 
@@ -105,15 +118,100 @@ export class BookingsService {
 
   // Criar novo agendamento
   async createBooking(data: CreateBookingDto): Promise<Booking> {
-    // Validar disponibilidade
-    const slots = await this.getAvailableSlots(data.serviceId, data.date);
-    const selectedSlot = slots.find((s) => s.time === data.time);
+    // Validação: agendamento deve ser com no mínimo 2h de antecedência
+    const now = new Date();
+    const scheduledTime = new Date(data.scheduledAt);
+    const hoursDiff = (scheduledTime.getTime() - now.getTime()) / (1000 * 60 * 60);
 
-    if (!selectedSlot || !selectedSlot.available) {
-      throw new BadRequestException('Horário não está disponível');
+    if (hoursDiff < 2) {
+      throw new BadRequestException(
+        'Agendamento deve ser feito com no mínimo 2 horas de antecedência'
+      );
     }
 
-    // Buscar informações do serviço
+    // Validação: máximo 5 serviços por agendamento
+    if (data.services.length > 5) {
+      throw new BadRequestException(
+        'Máximo de 5 serviços por agendamento'
+      );
+    }
+
+    // Validar horário comercial (8h - 20h)
+    const hours = scheduledTime.getHours();
+    if (hours < 8 || hours >= 20) {
+      throw new BadRequestException(
+        'Horário fora do horário comercial (8h - 20h)'
+      );
+    }
+
+    // Validar promo code se fornecido
+    if (data.promoCode) {
+      const promoCode = await this.prisma.promoCode.findUnique({
+        where: { code: data.promoCode },
+      });
+
+      if (!promoCode || !promoCode.isActive) {
+        throw new BadRequestException('Código promocional inválido');
+      }
+
+      const now = new Date();
+      if (now < promoCode.validFrom || now > promoCode.validUntil) {
+        throw new BadRequestException('Código promocional expirado');
+      }
+
+      if (promoCode.maxUses && promoCode.usedCount >= promoCode.maxUses) {
+        throw new BadRequestException(
+          'Código promocional atingiu o limite de uso'
+        );
+      }
+
+      if (promoCode.minAmount && data.totalAmount < promoCode.minAmount.toNumber()) {
+        throw new BadRequestException(
+          `Valor mínimo para este cupom é R$ ${promoCode.minAmount}`
+        );
+      }
+
+      // Incrementar contador de uso
+      await this.prisma.promoCode.update({
+        where: { code: data.promoCode },
+        data: { usedCount: { increment: 1 } },
+      });
+    }
+
+    // Verificar disponibilidade do provider se especificado
+    if (data.providerId) {
+      const provider = await this.prisma.user.findUnique({
+        where: { id: data.providerId },
+        include: { employeeProfile: true },
+      });
+
+      if (!provider || !provider.employeeProfile) {
+        throw new NotFoundException('Profissional não encontrado');
+      }
+
+      if (!provider.employeeProfile.isAvailable) {
+        throw new BadRequestException('Profissional não está disponível');
+      }
+
+      // Verificar se o provider já tem agendamento nesse horário
+      const conflictingBooking = await this.prisma.booking.findFirst({
+        where: {
+          providerId: data.providerId,
+          date: scheduledTime,
+          status: {
+            notIn: ['CANCELLED', 'COMPLETED'],
+          },
+        },
+      });
+
+      if (conflictingBooking) {
+        throw new BadRequestException(
+          'Profissional já possui agendamento neste horário'
+        );
+      }
+    }
+
+    // Buscar informações do serviço principal
     const service = await this.prisma.service.findUnique({
       where: { id: data.serviceId },
     });
@@ -127,10 +225,17 @@ export class BookingsService {
       data: {
         userId: data.userId,
         serviceId: data.serviceId,
-        date: new Date(data.date),
-        time: data.time,
+        providerId: data.providerId,
+        services: JSON.stringify(data.services),
+        date: scheduledTime,
+        time: scheduledTime.toTimeString().slice(0, 5),
+        duration: data.duration,
         status: 'PENDING',
-        totalPaid: (service.promoPrice || service.price).toNumber(),
+        paymentMethod: data.paymentMethod,
+        paymentStatus: data.paymentMethod === 'CASH' ? 'PENDING' : 'PAID',
+        totalPaid: data.totalAmount,
+        discount: data.discount || 0,
+        promoCode: data.promoCode,
         notes: data.notes,
       },
       include: {

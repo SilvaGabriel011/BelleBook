@@ -1,0 +1,70 @@
+<div class="email-title">⭐ Como foi sua experiência?</div>
+
+<div class="email-content">
+  <p>Olá <strong>{{customerName}}</strong>,</p>
+  <p>Esperamos que você tenha amado sua sessão de <strong>{{serviceName}}</strong> conosco!</p>
+  <p>Sua opinião é muito importante para nós e ajuda outras pessoas a conhecerem nosso trabalho. 💕</p>
+</div>
+
+<div class="info-box">
+  <div class="info-box-title">📅 Detalhes do Serviço</div>
+  <table class="details-table">
+    <tr>
+      <td>Serviço</td>
+      <td>{{serviceName}}</td>
+    </tr>
+    <tr>
+      <td>Profissional</td>
+      <td>{{providerName}}</td>
+    </tr>
+    <tr>
+      <td>Data</td>
+      <td>{{formattedDate}}</td>
+    </tr>
+  </table>
+</div>
+
+<div class="email-content" style="text-align: center;">
+  <h3 style="color: #FF6B9D; font-size: 18px; margin-bottom: 20px;">Como você avaliaria seu atendimento?</h3>
+  
+  <div style="margin: 25px 0;">
+    <a href="{{reviewUrl}}&rating=5" style="text-decoration: none; font-size: 32px; margin: 0 5px;">⭐</a>
+    <a href="{{reviewUrl}}&rating=5" style="text-decoration: none; font-size: 32px; margin: 0 5px;">⭐</a>
+    <a href="{{reviewUrl}}&rating=5" style="text-decoration: none; font-size: 32px; margin: 0 5px;">⭐</a>
+    <a href="{{reviewUrl}}&rating=5" style="text-decoration: none; font-size: 32px; margin: 0 5px;">⭐</a>
+    <a href="{{reviewUrl}}&rating=5" style="text-decoration: none; font-size: 32px; margin: 0 5px;">⭐</a>
+  </div>
+  
+  <p style="color: #666666; font-size: 14px; margin-bottom: 25px;">
+    Clique nas estrelas para avaliar
+  </p>
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+  <a href="{{reviewUrl}}" class="button">✍️ Deixar Avaliação Completa</a>
+</div>
+
+<div class="divider"></div>
+
+<div class="info-box" style="background-color: #FFF9E6; border-left-color: #FFB74D;">
+  <div class="info-box-title" style="color: #F57C00;">🎁 Ganhe Pontos!</div>
+  <div class="info-box-content">
+    <p><strong>Deixe uma avaliação e ganhe 50 pontos</strong> que podem ser usados em sua próxima sessão!</p>
+    <p style="font-size: 13px; margin-top: 8px; color: #666;">
+      Suas avaliações nos ajudam a melhorar cada vez mais. ✨
+    </p>
+  </div>
+</div>
+
+<div class="email-content" style="text-align: center; margin-top: 30px;">
+  <p style="color: #666666; font-size: 14px;">
+    Adorou sua experiência? Que tal agendar sua próxima sessão?
+  </p>
+  <a href="{{bookingUrl}}" style="color: #FF6B9D; text-decoration: none; font-weight: 600;">
+    Fazer Novo Agendamento →
+  </a>
+</div>
+
+<div class="email-content" style="text-align: center; color: #999999; font-size: 12px; margin-top: 30px;">
+  <p>Teve algum problema? Conte para nós: <a href="mailto:{{supportEmail}}" style="color: #FF6B9D;">{{supportEmail}}</a></p>
+</div>

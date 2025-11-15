@@ -37,6 +37,7 @@ model User {
   accountStatus   AccountStatus @default(ACTIVE)
   timezone        String?
   points          Int           @default(0)
+  pointsHistory   String?       // JSON: [{action, points, date, description}]
   googleTokens    String?       // Tokens OAuth do cliente
   googleTokensProvider String?  // Tokens OAuth do prestador
   lastLoginAt     DateTime?
@@ -84,7 +85,9 @@ model Service {
   price         Decimal
   promoPrice    Decimal?
   images        String    // JSON string com array de URLs
+  gender        String?   // FEMININO, MASCULINO, UNISEX
   isActive      Boolean   @default(true)
+  isPopular     Boolean   @default(false)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   
@@ -93,22 +96,112 @@ model Service {
   reviews       Review[]
   favoritedBy   User[]    @relation("UserFavorites")
   cartItems     CartItem[]
+  variants      ServiceVariant[]
   
   @@map("services")
+}
+
+// Variações de serviços (ex: Unha básica, Unha decorada, etc)
+model ServiceVariant {
+  id          String   @id @default(cuid())
+  serviceId   String
+  name        String
+  description String?
+  price       Decimal
+  duration    Int      // minutos
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  service     Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  
+  @@map("service_variants")
+}
+
+// Pacotes de serviços (múltiplas sessões com desconto)
+model ServicePackage {
+  id            String   @id @default(cuid())
+  name          String
+  description   String?
+  services      String   // JSON: [{serviceId, variantId?, quantity}]
+  packagePrice  Decimal
+  sessionsCount Int
+  validDays     Int?     // Validade do pacote em dias
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@map("service_packages")
+}
+
+// Códigos promocionais
+model PromoCode {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  type        String   // PERCENTAGE, FIXED
+  value       Decimal
+  minAmount   Decimal? // Valor mínimo da compra
+  maxUses     Int?     // Máximo de usos
+  usedCount   Int      @default(0)
+  validFrom   DateTime
+  validUntil  DateTime
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("promo_codes")
+}
+
+// Recompensas do programa de fidelidade
+model LoyaltyReward {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  points      Int      // Pontos necessários
+  type        String   // DISCOUNT, FREE_SERVICE, UPGRADE
+  value       Decimal  // Valor do desconto ou serviço
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("loyalty_rewards")
+}
+
+// Banners promocionais
+model PromoBanner {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  image       String   // URL da imagem
+  link        String?  // Link de destino
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  validFrom   DateTime?
+  validUntil  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("promo_banners")
 }
 
 // Agendamentos
 model Booking {
   id              String    @id @default(cuid())
   userId          String
-  serviceId       String
+  serviceId       String    // Serviço principal (para compatibilidade)
+  providerId      String?   // Profissional que prestará o serviço
+  services        String?   // JSON: [{serviceId, variantId?, quantity, price}]
   date            DateTime
   time            String    // Horário do agendamento (HH:mm)
+  duration        Int?      // Duração total em minutos
   status          String    @default("PENDING") // PENDING, CONFIRMED, COMPLETED, CANCELLED
   paymentStatus   String    @default("PENDING") // PENDING, PAID, REFUNDED
-  paymentId       String?
+  paymentMethod   String?   // CREDIT_CARD, DEBIT_CARD, PIX, CASH, LOYALTY_POINTS
+  paymentId       String?   // ID do payment intent do Stripe
   totalPaid       Decimal
-  notes           String?
+  discount        Decimal   @default(0)
+  promoCode       String?
+  notes           String?   // Notas do cliente
   googleEventId   String?   // ID do evento na agenda do cliente
   googleProviderEventId String? // ID do evento na agenda do prestador
   createdAt       DateTime  @default(now())

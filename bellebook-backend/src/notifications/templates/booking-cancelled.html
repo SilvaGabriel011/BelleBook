@@ -1,0 +1,58 @@
+<div class="email-title">❌ Agendamento Cancelado</div>
+
+<div class="email-content">
+  <p>Olá <strong>{{customerName}}</strong>,</p>
+  <p>Confirmamos o cancelamento do seu agendamento. Sentiremos sua falta!</p>
+</div>
+
+<div class="info-box" style="background-color: #FFEBEE; border-left-color: #E53935;">
+  <div class="info-box-title" style="color: #C62828;">📋 Agendamento Cancelado</div>
+  <table class="details-table">
+    <tr>
+      <td>Data e Hora</td>
+      <td>{{formattedDate}} às {{formattedTime}}</td>
+    </tr>
+    <tr>
+      <td>Serviço</td>
+      <td>{{serviceName}}</td>
+    </tr>
+    <tr>
+      <td>Cancelado em</td>
+      <td>{{cancelledAt}}</td>
+    </tr>
+    {{#if cancellationReason}}
+    <tr>
+      <td>Motivo</td>
+      <td>{{cancellationReason}}</td>
+    </tr>
+    {{/if}}
+  </table>
+</div>
+
+{{#if refundAmount}}
+<div class="info-box" style="background-color: #E8F5E9; border-left-color: #4CAF50;">
+  <div class="info-box-title" style="color: #2E7D32;">💰 Reembolso</div>
+  <div class="info-box-content">
+    <p>Um reembolso de <strong>R$ {{refundAmount}}</strong> será processado em até 5-7 dias úteis.</p>
+    <p style="font-size: 13px; margin-top: 10px; color: #666;">
+      O valor aparecerá na sua fatura com a descrição "BelleBook Reembolso".
+    </p>
+  </div>
+</div>
+{{/if}}
+
+<div class="divider"></div>
+
+<div class="email-content" style="text-align: center;">
+  <h3 style="color: #FF6B9D; font-size: 18px; margin-bottom: 12px;">💕 Volte sempre!</h3>
+  <p>Estamos sempre aqui para cuidar de você. Que tal agendar um novo horário?</p>
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+  <a href="{{bookingUrl}}" class="button">Fazer Novo Agendamento</a>
+</div>
+
+<div class="email-content" style="text-align: center; color: #999999; font-size: 14px;">
+  <p>Se você tiver alguma dúvida sobre este cancelamento,<br>
+  entre em contato conosco através do <a href="mailto:{{supportEmail}}" style="color: #FF6B9D;">{{supportEmail}}</a></p>
+</div>

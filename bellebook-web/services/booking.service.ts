@@ -6,11 +6,36 @@ export interface TimeSlot {
   reason?: string;
 }
 
+export interface BookingServiceItem {
+  serviceId: string;
+  variantId?: string;
+  quantity: number;
+  price: number;
+}
+
 export interface CreateBookingDto {
   serviceId: string;
-  date: string;
-  time: string;
+  providerId?: string;
+  services: BookingServiceItem[];
+  scheduledAt: Date;
+  duration: number;
+  totalAmount: number;
+  discount?: number;
+  promoCode?: string;
+  paymentMethod: string;
   notes?: string;
+}
+
+export interface ValidatePromoCodeRequest {
+  code: string;
+  totalAmount: number;
+}
+
+export interface PromoCodeResult {
+  valid: boolean;
+  discount: number;
+  discountType: string;
+  message?: string;
 }
 
 export interface Booking {
@@ -70,6 +95,18 @@ export const bookingService = {
     const { data } = await api.put<Booking>(`/bookings/${bookingId}/reschedule`, {
       date,
       time,
+    });
+    return data;
+  },
+
+  async validatePromoCode(request: ValidatePromoCodeRequest): Promise<PromoCodeResult> {
+    const { data } = await api.post<PromoCodeResult>('/bookings/validate-promo', request);
+    return data;
+  },
+
+  async getProviderAvailability(providerId: string, date: string): Promise<TimeSlot[]> {
+    const { data } = await api.get<TimeSlot[]>(`/bookings/provider/${providerId}/availability`, {
+      params: { date },
     });
     return data;
   },

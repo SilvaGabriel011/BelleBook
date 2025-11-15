@@ -1,0 +1,71 @@
+<div class="email-title">🎉 Agendamento Confirmado!</div>
+
+<div class="email-content">
+  <p>Olá <strong>{{customerName}}</strong>,</p>
+  <p>Seu agendamento foi confirmado com sucesso! Estamos ansiosos para cuidar de você.</p>
+</div>
+
+<div class="info-box">
+  <div class="info-box-title">📅 Detalhes do Agendamento</div>
+  <table class="details-table">
+    <tr>
+      <td>Data e Hora</td>
+      <td>{{formattedDate}} às {{formattedTime}}</td>
+    </tr>
+    <tr>
+      <td>Serviço</td>
+      <td>{{serviceName}}</td>
+    </tr>
+    <tr>
+      <td>Profissional</td>
+      <td>{{providerName}}</td>
+    </tr>
+    <tr>
+      <td>Duração</td>
+      <td>{{duration}} minutos</td>
+    </tr>
+    <tr>
+      <td>Valor</td>
+      <td>R$ {{price}}</td>
+    </tr>
+    {{#if address}}
+    <tr>
+      <td>Local</td>
+      <td>{{address}}</td>
+    </tr>
+    {{/if}}
+  </table>
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+  <a href="{{calendarLink}}" class="button">📅 Adicionar ao Calendário</a>
+</div>
+
+<div class="divider"></div>
+
+<div class="email-content">
+  <h3 style="color: #FF6B9D; font-size: 18px; margin-bottom: 12px;">✨ Preparação para sua sessão:</h3>
+  <ul style="padding-left: 20px; color: #666666;">
+    <li style="margin-bottom: 8px;">Chegue 10 minutos antes do horário agendado</li>
+    <li style="margin-bottom: 8px;">Traga um documento com foto</li>
+    {{#if servicePreparation}}
+    <li style="margin-bottom: 8px;">{{servicePreparation}}</li>
+    {{/if}}
+  </ul>
+</div>
+
+<div class="info-box" style="background-color: #FFF9E6; border-left-color: #FFC107;">
+  <div class="info-box-title" style="color: #F57C00;">⚠️ Política de Cancelamento</div>
+  <div class="info-box-content">
+    Cancelamentos devem ser feitos com até 24 horas de antecedência. Caso contrário, uma taxa de 50% poderá ser cobrada.
+  </div>
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+  <a href="{{bookingUrl}}" class="button button-secondary">Ver Detalhes do Agendamento</a>
+</div>
+
+<div class="email-content" style="text-align: center; color: #999999; font-size: 14px;">
+  <p>Precisa reagendar ou cancelar?<br>
+  <a href="{{bookingUrl}}" style="color: #FF6B9D; text-decoration: none;">Gerenciar meu agendamento</a></p>
+</div>

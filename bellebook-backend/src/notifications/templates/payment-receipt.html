@@ -1,0 +1,86 @@
+<div class="email-title">✅ Pagamento Confirmado!</div>
+
+<div class="email-content">
+  <p>Olá <strong>{{customerName}}</strong>,</p>
+  <p>Recebemos seu pagamento com sucesso! Obrigada por confiar na BelleBook.</p>
+</div>
+
+<div class="info-box" style="background-color: #E8F5E9; border-left-color: #4CAF50;">
+  <div class="info-box-title" style="color: #2E7D32;">💳 Detalhes do Pagamento</div>
+  <table class="details-table">
+    <tr>
+      <td>ID da Transação</td>
+      <td><code style="font-size: 13px;">{{transactionId}}</code></td>
+    </tr>
+    <tr>
+      <td>Data</td>
+      <td>{{paymentDate}}</td>
+    </tr>
+    <tr>
+      <td>Método</td>
+      <td>{{paymentMethod}}</td>
+    </tr>
+    {{#if last4}}
+    <tr>
+      <td>Cartão</td>
+      <td>•••• •••• •••• {{last4}}</td>
+    </tr>
+    {{/if}}
+    <tr>
+      <td>Status</td>
+      <td><span style="color: #4CAF50; font-weight: 700;">✓ APROVADO</span></td>
+    </tr>
+  </table>
+</div>
+
+<div class="info-box">
+  <div class="info-box-title">🧾 Resumo da Compra</div>
+  <table class="details-table">
+    {{#each items}}
+    <tr>
+      <td>{{this.name}}</td>
+      <td>R$ {{this.price}}</td>
+    </tr>
+    {{/each}}
+    {{#if discount}}
+    <tr style="color: #4CAF50;">
+      <td>Desconto</td>
+      <td>- R$ {{discount}}</td>
+    </tr>
+    {{/if}}
+    <tr style="font-size: 18px; font-weight: 700; border-top: 2px solid #FF6B9D;">
+      <td>Total Pago</td>
+      <td style="color: #FF6B9D;">R$ {{totalAmount}}</td>
+    </tr>
+  </table>
+</div>
+
+{{#if bookingConfirmed}}
+<div class="info-box" style="background-color: #FFF5F8; border-left-color: #FF6B9D;">
+  <div class="info-box-title">🎉 Agendamento Confirmado</div>
+  <div class="info-box-content">
+    <p>Seu agendamento para <strong>{{serviceName}}</strong> está confirmado!</p>
+    <p style="margin-top: 8px;"><strong>Data:</strong> {{formattedDate}} às {{formattedTime}}</p>
+  </div>
+</div>
+{{/if}}
+
+<div style="text-align: center; margin: 30px 0;">
+  <a href="{{receiptUrl}}" class="button">📄 Baixar Comprovante</a>
+</div>
+
+<div class="divider"></div>
+
+<div class="email-content" style="font-size: 14px; color: #666666;">
+  <h3 style="color: #333333; font-size: 16px; margin-bottom: 12px;">📋 Informações Importantes</h3>
+  <ul style="padding-left: 20px;">
+    <li style="margin-bottom: 8px;">Guarde este e-mail como comprovante</li>
+    <li style="margin-bottom: 8px;">O valor aparecerá na sua fatura como "BelleBook"</li>
+    <li style="margin-bottom: 8px;">Dúvidas? Entre em contato conosco</li>
+  </ul>
+</div>
+
+<div class="email-content" style="text-align: center; color: #999999; font-size: 13px; margin-top: 30px;">
+  <p>Precisa de ajuda com este pagamento?<br>
+  <a href="mailto:{{supportEmail}}" style="color: #FF6B9D; text-decoration: none;">{{supportEmail}}</a></p>
+</div>

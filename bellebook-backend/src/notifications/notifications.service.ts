@@ -1,224 +1,193 @@
 import { Injectable, Logger } from '@nestjs/common';
-
-export interface EmailTemplate {
-  subject: string;
-  html: string;
-  text: string;
-}
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
+import { SendGridService } from './services/sendgrid.service';
+import {
+  EmailTemplate,
+  BookingConfirmationData,
+  BookingReminderData,
+  BookingCancelledData,
+  PaymentReceiptData,
+  ReviewRequestData,
+  WelcomeData,
+  PasswordResetData,
+} from './types/email.types';
 
 @Injectable()
 export class NotificationsService {
   private readonly logger = new Logger(NotificationsService.name);
 
+  constructor(
+    private readonly sendGridService: SendGridService,
+    @InjectQueue('email') private readonly emailQueue: Queue,
+  ) {}
+
+  // ==================== BOOKING EMAILS ====================
+
   /**
-   * Envia notificação de solicitação de role criada
+   * Send booking confirmation email (immediate)
    */
-  async sendRoleRequestCreated(
-    userEmail: string,
-    userName: string,
-    requestedRole: string,
+  async sendBookingConfirmation(
+    data: BookingConfirmationData,
   ): Promise<void> {
-    const template = this.getRoleRequestCreatedTemplate(userName, requestedRole);
-    
-    this.logger.log(`Sending role request created email to ${userEmail}`);
-    // TODO: Integrate with SendGrid or other email service
-    // await this.sendEmail(userEmail, template);
-    
-    console.log('📧 Email (Solicitação Criada):', {
-      to: userEmail,
-      subject: template.subject,
-      content: template.text,
+    this.logger.log(`Sending booking confirmation to ${data.recipientEmail}`);
+
+    await this.emailQueue.add('send-template', {
+      template: EmailTemplate.BOOKING_CONFIRMATION,
+      data,
     });
   }
 
   /**
-   * Envia notificação de aprovação de solicitação
+   * Schedule booking reminder email (48h before booking)
    */
-  async sendRoleRequestApproved(
-    userEmail: string,
-    userName: string,
-    approvedRole: string,
+  async scheduleBookingReminder(
+    data: BookingReminderData,
+    scheduledTime: Date,
   ): Promise<void> {
-    const template = this.getRoleRequestApprovedTemplate(userName, approvedRole);
-    
-    this.logger.log(`Sending role request approved email to ${userEmail}`);
-    // TODO: Integrate with SendGrid or other email service
-    
-    console.log('📧 Email (Solicitação Aprovada):', {
-      to: userEmail,
-      subject: template.subject,
-      content: template.text,
+    const delay = scheduledTime.getTime() - Date.now();
+
+    if (delay < 0) {
+      this.logger.warn('Cannot schedule reminder for past date');
+      return;
+    }
+
+    this.logger.log(
+      `Scheduling booking reminder for ${data.recipientEmail} at ${scheduledTime}`,
+    );
+
+    await this.emailQueue.add('booking-reminder', data, {
+      delay,
+      jobId: `reminder-${data.recipientEmail}-${scheduledTime.getTime()}`,
     });
   }
 
   /**
-   * Envia notificação de rejeição de solicitação
+   * Send booking cancelled email (immediate)
    */
-  async sendRoleRequestRejected(
-    userEmail: string,
-    userName: string,
-    reason: string,
+  async sendBookingCancelled(
+    data: BookingCancelledData,
   ): Promise<void> {
-    const template = this.getRoleRequestRejectedTemplate(userName, reason);
-    
-    this.logger.log(`Sending role request rejected email to ${userEmail}`);
-    // TODO: Integrate with SendGrid or other email service
-    
-    console.log('📧 Email (Solicitação Rejeitada):', {
-      to: userEmail,
-      subject: template.subject,
-      content: template.text,
+    this.logger.log(`Sending booking cancellation to ${data.recipientEmail}`);
+
+    await this.emailQueue.add('send-template', {
+      template: EmailTemplate.BOOKING_CANCELLED,
+      data,
+    });
+  }
+
+  // ==================== PAYMENT EMAILS ====================
+
+  /**
+   * Send payment receipt email (immediate)
+   */
+  async sendPaymentReceipt(data: PaymentReceiptData): Promise<void> {
+    this.logger.log(`Sending payment receipt to ${data.recipientEmail}`);
+
+    await this.emailQueue.add('send-template', {
+      template: EmailTemplate.PAYMENT_RECEIPT,
+      data,
+    });
+  }
+
+  // ==================== REVIEW EMAILS ====================
+
+  /**
+   * Schedule review request email (48h after booking)
+   */
+  async scheduleReviewRequest(
+    data: ReviewRequestData,
+    scheduledTime: Date,
+  ): Promise<void> {
+    const delay = scheduledTime.getTime() - Date.now();
+
+    if (delay < 0) {
+      this.logger.warn('Cannot schedule review request for past date');
+      return;
+    }
+
+    this.logger.log(
+      `Scheduling review request for ${data.recipientEmail} at ${scheduledTime}`,
+    );
+
+    await this.emailQueue.add('review-request', data, {
+      delay,
+      jobId: `review-${data.recipientEmail}-${scheduledTime.getTime()}`,
+    });
+  }
+
+  // ==================== USER AUTHENTICATION EMAILS ====================
+
+  /**
+   * Send welcome email to new users (immediate)
+   */
+  async sendWelcomeEmail(data: WelcomeData): Promise<void> {
+    this.logger.log(`Sending welcome email to ${data.recipientEmail}`);
+
+    await this.emailQueue.add('send-template', {
+      template: EmailTemplate.WELCOME,
+      data,
     });
   }
 
   /**
-   * Notifica admins sobre nova solicitação pendente
+   * Send password reset email (immediate)
    */
-  async notifyAdminsNewRequest(
-    requestId: string,
-    userName: string,
-    requestedRole: string,
-  ): Promise<void> {
-    this.logger.log(`Notifying admins about new role request: ${requestId}`);
-    // TODO: Send push notification or email to all admins
-    
-    console.log('🔔 Notificação para Admins:', {
-      title: 'Nova Solicitação de Role',
-      message: `${userName} solicitou role ${requestedRole}`,
-      requestId,
-    });
+  async sendPasswordReset(data: PasswordResetData): Promise<void> {
+    this.logger.log(`Sending password reset to ${data.recipientEmail}`);
+
+    await this.emailQueue.add(
+      'send-template',
+      {
+        template: EmailTemplate.PASSWORD_RESET,
+        data,
+      },
+      {
+        priority: 1, // High priority for password resets
+      },
+    );
   }
 
-  // Template methods
-  private getRoleRequestCreatedTemplate(
-    userName: string,
-    requestedRole: string,
-  ): EmailTemplate {
-    const roleName = this.getRoleName(requestedRole);
-    
-    return {
-      subject: `Solicitação Recebida - Conta ${roleName}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #FF6B9D;">Solicitação Recebida! 💼</h2>
-          <p>Olá <strong>${userName}</strong>,</p>
-          <p>Recebemos sua solicitação para se tornar <strong>${roleName}</strong>.</p>
-          <p>Nossa equipe irá analisar sua solicitação em até <strong>48 horas</strong>.</p>
-          <p>Você receberá uma notificação assim que houver uma atualização.</p>
-          <br>
-          <p style="color: #666; font-size: 12px;">
-            Se você tiver alguma dúvida, entre em contato com nosso suporte.
-          </p>
-          <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-          <p style="color: #999; font-size: 11px;">BelleBook - Sua beleza, nossa prioridade</p>
-        </div>
-      `,
-      text: `
-Olá ${userName},
+  // ==================== QUEUE MANAGEMENT ====================
 
-Recebemos sua solicitação para se tornar ${roleName}.
+  /**
+   * Get queue statistics
+   */
+  async getQueueStats(): Promise<{
+    waiting: number;
+    active: number;
+    completed: number;
+    failed: number;
+    delayed: number;
+  }> {
+    const [waiting, active, completed, failed, delayed] = await Promise.all([
+      this.emailQueue.getWaitingCount(),
+      this.emailQueue.getActiveCount(),
+      this.emailQueue.getCompletedCount(),
+      this.emailQueue.getFailedCount(),
+      this.emailQueue.getDelayedCount(),
+    ]);
 
-Nossa equipe irá analisar sua solicitação em até 48 horas.
-Você receberá uma notificação assim que houver uma atualização.
-
-Se você tiver alguma dúvida, entre em contato com nosso suporte.
-
----
-BelleBook - Sua beleza, nossa prioridade
-      `.trim(),
-    };
+    return { waiting, active, completed, failed, delayed };
   }
 
-  private getRoleRequestApprovedTemplate(
-    userName: string,
-    approvedRole: string,
-  ): EmailTemplate {
-    const roleName = this.getRoleName(approvedRole);
-    
-    return {
-      subject: `🎉 Conta Aprovada!`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #4CAF50;">Parabéns! 🎉</h2>
-          <p>Olá <strong>${userName}</strong>,</p>
-          <p>Sua conta como <strong>${roleName}</strong> foi <strong style="color: #4CAF50;">aprovada</strong>!</p>
-          <p>Agora você tem acesso a todas as funcionalidades exclusivas do seu novo role.</p>
-          <a href="${process.env.FRONTEND_URL}/dashboard" 
-             style="display: inline-block; background-color: #FF6B9D; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin-top: 20px;">
-            Acessar Dashboard
-          </a>
-          <br><br>
-          <p style="color: #666; font-size: 14px;">
-            Explore suas novas permissões e comece a aproveitar!
-          </p>
-          <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-          <p style="color: #999; font-size: 11px;">BelleBook - Sua beleza, nossa prioridade</p>
-        </div>
-      `,
-      text: `
-Parabéns ${userName}!
-
-Sua conta como ${roleName} foi aprovada! 🎉
-
-Agora você tem acesso a todas as funcionalidades exclusivas do seu novo role.
-
-Acesse o dashboard: ${process.env.FRONTEND_URL}/dashboard
-
-Explore suas novas permissões e comece a aproveitar!
-
----
-BelleBook - Sua beleza, nossa prioridade
-      `.trim(),
-    };
+  /**
+   * Clean old completed jobs from queue
+   */
+  async cleanQueue(grace: number = 24 * 60 * 60 * 1000): Promise<void> {
+    await this.emailQueue.clean(grace, 'completed');
+    await this.emailQueue.clean(grace, 'failed');
+    this.logger.log(`Queue cleaned (grace period: ${grace}ms)`);
   }
 
-  private getRoleRequestRejectedTemplate(
-    userName: string,
-    reason: string,
-  ): EmailTemplate {
-    return {
-      subject: 'Atualização de Solicitação',
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #FF6B9D;">Atualização sobre sua Solicitação</h2>
-          <p>Olá <strong>${userName}</strong>,</p>
-          <p>Agradecemos seu interesse, mas infelizmente não pudemos aprovar sua solicitação neste momento.</p>
-          <div style="background-color: #f5f5f5; padding: 15px; border-radius: 6px; margin: 20px 0;">
-            <strong>Motivo:</strong><br>
-            ${reason}
-          </div>
-          <p>Você pode fazer uma nova solicitação no futuro, após atender aos requisitos necessários.</p>
-          <p style="color: #666; font-size: 14px;">
-            Se você tiver dúvidas, nossa equipe de suporte está à disposição.
-          </p>
-          <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-          <p style="color: #999; font-size: 11px;">BelleBook - Sua beleza, nossa prioridade</p>
-        </div>
-      `,
-      text: `
-Olá ${userName},
-
-Agradecemos seu interesse, mas infelizmente não pudemos aprovar sua solicitação neste momento.
-
-Motivo:
-${reason}
-
-Você pode fazer uma nova solicitação no futuro, após atender aos requisitos necessários.
-
-Se você tiver dúvidas, nossa equipe de suporte está à disposição.
-
----
-BelleBook - Sua beleza, nossa prioridade
-      `.trim(),
-    };
-  }
-
-  private getRoleName(role: string): string {
-    const roleNames: Record<string, string> = {
-      CUSTOMER: 'Cliente',
-      EMPLOYEE: 'Profissional',
-      ADMIN: 'Administrador',
-    };
-    return roleNames[role] || role;
+  /**
+   * Get SendGrid service status
+   */
+  getEmailServiceStatus(): {
+    configured: boolean;
+    fromEmail: string;
+    fromName: string;
+  } {
+    return this.sendGridService.getStatus();
   }
 }
