@@ -8,6 +8,9 @@ import { ServicesModule } from './services/services.module';
 import { BookingsModule } from './bookings/bookings.module';
 import { GoogleCalendarModule } from './google-calendar/google-calendar.module';
 import { AnalyticsModule } from './analytics/analytics.module';
+import { UsersModule } from './users/users.module';
+import { AdminModule } from './admin/admin.module';
+import { EmployeeModule } from './employee/employee.module';
 
 @Module({
   imports: [
@@ -20,6 +23,9 @@ import { AnalyticsModule } from './analytics/analytics.module';
     BookingsModule,
     GoogleCalendarModule,
     AnalyticsModule,
+    UsersModule,
+    AdminModule,
+    EmployeeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

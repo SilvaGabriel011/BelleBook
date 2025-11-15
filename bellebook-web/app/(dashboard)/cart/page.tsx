@@ -55,7 +55,7 @@ export default function CartPage() {
 
   const handleApplyCoupon = async () => {
     if (!couponInput.trim()) {
-      toast.error('Digite um código de cupom');
+      toast.error('Enter a coupon code');
       return;
     }
 
@@ -63,17 +63,17 @@ export default function CartPage() {
     const success = await applyCoupon(couponInput.trim());
 
     if (success) {
-      toast.success('Cupom aplicado com sucesso!');
+      toast.success('Coupon applied successfully!');
       setCouponInput('');
     } else {
-      toast.error('Cupom inválido ou expirado');
+      toast.error('Invalid or expired coupon');
     }
 
     setIsApplyingCoupon(false);
   };
 
   const handleCheckout = () => {
-    // Redirecionar para a página de agendamento
+    // Redirect to booking page
     router.push('/booking');
   };
 
@@ -94,7 +94,7 @@ export default function CartPage() {
               <Button variant="ghost" size="icon" onClick={() => router.back()}>
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <h1 className="text-2xl font-bold text-gray-800">Carrinho</h1>
+              <h1 className="text-2xl font-bold text-gray-800">Cart</h1>
             </div>
           </div>
         </header>
@@ -103,9 +103,9 @@ export default function CartPage() {
           <Card className="text-center py-12">
             <CardContent>
               <ShoppingBag className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-700 mb-2">Seu carrinho está vazio</h2>
-              <p className="text-gray-500 mb-6">Adicione serviços ao carrinho para continuar</p>
-              <Button onClick={handleContinueShopping}>Explorar Serviços</Button>
+              <h2 className="text-xl font-semibold text-gray-700 mb-2">Your cart is empty</h2>
+              <p className="text-gray-500 mb-6">Add services to cart to continue</p>
+              <Button onClick={handleContinueShopping}>Explore Services</Button>
             </CardContent>
           </Card>
         </main>
@@ -123,7 +123,7 @@ export default function CartPage() {
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <h1 className="text-2xl font-bold text-gray-800">
-                Carrinho ({items.length} {items.length === 1 ? 'item' : 'itens'})
+                Cart ({items.length} {items.length === 1 ? 'item' : 'items'})
               </h1>
             </div>
 
@@ -132,7 +132,7 @@ export default function CartPage() {
               onClick={clearCart}
               className="text-red-600 hover:text-red-700 hover:bg-red-50"
             >
-              Limpar Carrinho
+              Clear Cart
             </Button>
           </div>
         </div>
@@ -140,25 +140,25 @@ export default function CartPage() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Lista de Itens */}
+          {/* Items List */}
           <div className="lg:col-span-2 space-y-4">
             {items.map((item) => (
               <Card key={item.id}>
                 <CardContent className="p-6">
                   <div className="flex flex-col md:flex-row gap-4">
-                    {/* Imagem */}
+                    {/* Image */}
                     <div className="w-full md:w-32 h-32 bg-gradient-to-br from-pink-100 to-purple-100 rounded-lg flex items-center justify-center">
                       <span className="text-4xl">💆‍♀️</span>
                     </div>
 
-                    {/* Detalhes */}
+                    {/* Details */}
                     <div className="flex-1 space-y-3">
                       <div>
                         <h3 className="font-bold text-lg text-gray-800">{item.service.name}</h3>
                         <p className="text-sm text-gray-600">{item.service.category?.name}</p>
                       </div>
 
-                      {/* Duração e Preço */}
+                      {/* Duration and Price */}
                       <div className="flex items-center gap-4 text-sm">
                         <div className="flex items-center text-gray-500">
                           <Clock className="h-4 w-4 mr-1" />
@@ -169,10 +169,10 @@ export default function CartPage() {
                         </div>
                       </div>
 
-                      {/* Data e Horário */}
+                      {/* Date and Time */}
                       <div className="grid grid-cols-2 gap-2">
                         <div>
-                          <Label className="text-xs">Data</Label>
+                          <Label className="text-xs">Date</Label>
                           <Input
                             type="date"
                             value={item.selectedDate || ''}
@@ -184,7 +184,7 @@ export default function CartPage() {
                           />
                         </div>
                         <div>
-                          <Label className="text-xs">Horário</Label>
+                          <Label className="text-xs">Time</Label>
                           <Select
                             value={item.selectedTime || ''}
                             onValueChange={(value) =>
@@ -192,7 +192,7 @@ export default function CartPage() {
                             }
                           >
                             <SelectTrigger className="h-8 text-sm">
-                              <SelectValue placeholder="Selecione" />
+                              <SelectValue placeholder="Select" />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="09:00">09:00</SelectItem>
@@ -211,12 +211,12 @@ export default function CartPage() {
                         <Alert className="bg-yellow-50 border-yellow-200">
                           <AlertCircle className="h-4 w-4 text-yellow-600" />
                           <AlertDescription className="text-xs text-yellow-800">
-                            Selecione data e horário para este serviço
+                            Select date and time for this service
                           </AlertDescription>
                         </Alert>
                       )}
 
-                      {/* Quantidade e Remover */}
+                      {/* Quantity and Remove */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <Button
@@ -245,7 +245,7 @@ export default function CartPage() {
                           className="text-red-600 hover:text-red-700 hover:bg-red-50"
                         >
                           <Trash2 className="h-4 w-4 mr-1" />
-                          Remover
+                          Remove
                         </Button>
                       </div>
                     </div>
@@ -255,16 +255,16 @@ export default function CartPage() {
             ))}
           </div>
 
-          {/* Resumo do Pedido */}
+          {/* Order Summary */}
           <div className="lg:col-span-1">
             <Card className="sticky top-24">
               <CardHeader>
-                <CardTitle>Resumo do Pedido</CardTitle>
+                <CardTitle>Order Summary</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {/* Cupom */}
+                {/* Coupon */}
                 <div>
-                  <Label>Cupom de Desconto</Label>
+                  <Label>Discount Coupon</Label>
                   {coupon ? (
                     <div className="mt-2 p-3 bg-green-50 rounded-lg border border-green-200">
                       <div className="flex items-center justify-between">
@@ -281,14 +281,14 @@ export default function CartPage() {
                           onClick={removeCoupon}
                           className="text-red-600 hover:text-red-700"
                         >
-                          Remover
+                          Remove
                         </Button>
                       </div>
                     </div>
                   ) : (
                     <div className="mt-2 flex gap-2">
                       <Input
-                        placeholder="Digite o código"
+                        placeholder="Enter code"
                         value={couponInput}
                         onChange={(e) => setCouponInput(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && handleApplyCoupon()}
@@ -298,7 +298,7 @@ export default function CartPage() {
                         disabled={isApplyingCoupon}
                         variant="outline"
                       >
-                        Aplicar
+                        Apply
                       </Button>
                     </div>
                   )}
@@ -306,7 +306,7 @@ export default function CartPage() {
 
                 <Separator />
 
-                {/* Valores */}
+                {/* Prices */}
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Subtotal</span>
@@ -315,7 +315,7 @@ export default function CartPage() {
 
                   {discountValue > 0 && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-green-600">Desconto</span>
+                      <span className="text-green-600">Discount</span>
                       <span className="text-green-600">- {formatPrice(discountValue)}</span>
                     </div>
                   )}
@@ -327,28 +327,28 @@ export default function CartPage() {
                     <span className="text-pink-600">{formatPrice(total)}</span>
                   </div>
 
-                  <p className="text-xs text-gray-500">ou em até 3x de {formatPrice(total / 3)}</p>
+                  <p className="text-xs text-gray-500">or up to 3x of {formatPrice(total / 3)}</p>
                 </div>
 
                 <Separator />
 
-                {/* Botões */}
+                {/* Buttons */}
                 <div className="space-y-2">
                   <Button
                     onClick={handleCheckout}
                     className="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600"
                     size="lg"
                   >
-                    Finalizar Pedido
+                    Checkout
                   </Button>
                   <Button onClick={handleContinueShopping} variant="outline" className="w-full">
-                    Continuar Comprando
+                    Continue Shopping
                   </Button>
                 </div>
 
-                {/* Cupons disponíveis */}
+                {/* Available coupons */}
                 <div className="pt-4">
-                  <p className="text-xs text-gray-500 mb-2">💡 Cupons disponíveis:</p>
+                  <p className="text-xs text-gray-500 mb-2">💡 Available coupons:</p>
                   <div className="space-y-1">
                     <Badge variant="outline" className="text-xs">
                       PRIMEIRA10 - 10% off

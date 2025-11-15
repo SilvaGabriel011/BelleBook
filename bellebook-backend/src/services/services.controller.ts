@@ -1,11 +1,19 @@
 import {
   Controller,
   Get,
+  Post,
+  Put,
+  Delete,
   Param,
   Query,
+  Body,
   BadRequestException,
+  UseGuards,
 } from '@nestjs/common';
-import { ServicesService, ServiceFilters } from './services.service';
+import { ServicesService, ServiceFilters, CreateServiceDto, UpdateServiceDto } from './services.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @Controller('services')
 export class ServicesController {
@@ -55,5 +63,36 @@ export class ServicesController {
   @Get(':id')
   async getById(@Param('id') id: string) {
     return this.servicesService.findById(id);
+  }
+
+  @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  async create(@Body() createServiceDto: CreateServiceDto) {
+    return this.servicesService.create(createServiceDto);
+  }
+
+  @Put(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  async update(
+    @Param('id') id: string,
+    @Body() updateServiceDto: UpdateServiceDto,
+  ) {
+    return this.servicesService.update(id, updateServiceDto);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  async remove(@Param('id') id: string) {
+    return this.servicesService.remove(id);
+  }
+
+  @Put(':id/toggle-active')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  async toggleActive(@Param('id') id: string) {
+    return this.servicesService.toggleActive(id);
   }
 }

@@ -55,8 +55,8 @@ export default function ServiceDetailPage() {
       const data = await servicesService.getById(id as string);
       setService(data);
     } catch (error) {
-      console.error('Erro ao carregar serviço:', error);
-      toast.error('Não foi possível carregar o serviço');
+      console.error('Error loading service:', error);
+      toast.error('Could not load service');
     } finally {
       setLoading(false);
     }
@@ -70,11 +70,11 @@ export default function ServiceDetailPage() {
   const handleAddToCart = () => {
     if (!service) return;
 
-    // Adicionar ao carrinho usando a store
+    // Add to cart using store
     addToCart(service, 1, selectedDate?.toISOString().split('T')[0], selectedTime);
-    toast.success(`${service.name} foi adicionado ao seu carrinho`);
+    toast.success(`${service.name} was added to your cart`);
 
-    // Redirecionar para o carrinho
+    // Redirect to cart
     setTimeout(() => {
       router.push('/cart');
     }, 1500);
@@ -84,8 +84,8 @@ export default function ServiceDetailPage() {
     setIsFavorite(!isFavorite);
     toast.success(
       isFavorite
-        ? 'Serviço removido da sua lista de favoritos'
-        : 'Serviço adicionado à sua lista de favoritos'
+        ? 'Service removed from your favorites'
+        : 'Service added to your favorites'
     );
   };
 
@@ -97,19 +97,19 @@ export default function ServiceDetailPage() {
         url: window.location.href,
       });
     } else {
-      // Fallback: copiar link
+      // Fallback: copy link
       navigator.clipboard.writeText(window.location.href);
-      toast.success('Link copiado para sua área de transferência!');
+      toast.success('Link copied to clipboard!');
     }
   };
 
   const handleBookNow = () => {
     if (!selectedDate || !selectedTime) {
-      toast.error('Por favor, escolha uma data e horário para continuar');
+      toast.error('Please choose a date and time to continue');
       return;
     }
 
-    // TODO: Implementar agendamento direto
+    // TODO: Implement direct booking
     handleAddToCart();
   };
 
@@ -130,7 +130,7 @@ export default function ServiceDetailPage() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-pink-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="mt-4 text-gray-600">Carregando detalhes...</p>
+          <p className="mt-4 text-gray-600">Loading details...</p>
         </div>
       </div>
     );
@@ -141,8 +141,8 @@ export default function ServiceDetailPage() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
         <Card className="text-center p-8">
           <CardContent>
-            <p className="text-gray-500 mb-4">Serviço não encontrado</p>
-            <Button onClick={() => router.push('/home')}>Voltar para Home</Button>
+            <p className="text-gray-500 mb-4">Service not found</p>
+            <Button onClick={() => router.push('/home')}>Back to Home</Button>
           </CardContent>
         </Card>
       </div>
@@ -165,7 +165,7 @@ export default function ServiceDetailPage() {
               <Button variant="ghost" size="icon" onClick={() => router.back()}>
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <h1 className="text-xl font-bold text-gray-800">Detalhes do Serviço</h1>
+              <h1 className="text-xl font-bold text-gray-800">Service Details</h1>
             </div>
 
             <div className="flex space-x-2">
@@ -187,9 +187,9 @@ export default function ServiceDetailPage() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Coluna Principal */}
+          {/* Main Column */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Galeria de Imagens */}
+            {/* Image Gallery */}
             <Card className="overflow-hidden">
               <div className="relative h-96 bg-gradient-to-br from-pink-100 to-purple-100">
                 {service.images && service.images.length > 0 ? (
@@ -238,7 +238,7 @@ export default function ServiceDetailPage() {
               </div>
             </Card>
 
-            {/* Informações do Serviço */}
+            {/* Service Information */}
             <Card>
               <CardHeader>
                 <div className="flex items-start justify-between">
@@ -257,36 +257,36 @@ export default function ServiceDetailPage() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                   <div className="text-center p-3 bg-pink-50 rounded-lg">
                     <Clock className="h-6 w-6 text-pink-600 mx-auto mb-1" />
-                    <p className="text-sm text-gray-600">Duração</p>
+                    <p className="text-sm text-gray-600">Duration</p>
                     <p className="font-semibold">{service.duration} min</p>
                   </div>
                   <div className="text-center p-3 bg-purple-50 rounded-lg">
                     <Star className="h-6 w-6 text-purple-600 mx-auto mb-1" />
-                    <p className="text-sm text-gray-600">Avaliação</p>
+                    <p className="text-sm text-gray-600">Rating</p>
                     <p className="font-semibold">{service.averageRating || 'N/A'}</p>
                   </div>
                   <div className="text-center p-3 bg-blue-50 rounded-lg">
                     <Calendar className="h-6 w-6 text-blue-600 mx-auto mb-1" />
-                    <p className="text-sm text-gray-600">Agendamentos</p>
+                    <p className="text-sm text-gray-600">Bookings</p>
                     <p className="font-semibold">{service.bookingsCount || 0}</p>
                   </div>
                   <div className="text-center p-3 bg-green-50 rounded-lg">
                     <MapPin className="h-6 w-6 text-green-600 mx-auto mb-1" />
-                    <p className="text-sm text-gray-600">Local</p>
-                    <p className="font-semibold">Salão</p>
+                    <p className="text-sm text-gray-600">Location</p>
+                    <p className="font-semibold">Salon</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Tabs de Informações */}
+            {/* Information Tabs */}
             <Card>
               <CardContent className="pt-6">
                 <Tabs defaultValue="reviews">
                   <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="reviews">Avaliações</TabsTrigger>
-                    <TabsTrigger value="details">Detalhes</TabsTrigger>
-                    <TabsTrigger value="policies">Políticas</TabsTrigger>
+                    <TabsTrigger value="reviews">Reviews</TabsTrigger>
+                    <TabsTrigger value="details">Details</TabsTrigger>
+                    <TabsTrigger value="policies">Policies</TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="reviews" className="mt-6">
@@ -327,7 +327,7 @@ export default function ServiceDetailPage() {
                         ))
                       ) : (
                         <p className="text-center text-gray-500 py-8">
-                          Ainda não há avaliações para este serviço
+                          No reviews yet for this service
                         </p>
                       )}
                     </div>
@@ -336,21 +336,21 @@ export default function ServiceDetailPage() {
                   <TabsContent value="details" className="mt-6">
                     <div className="space-y-4">
                       <div>
-                        <h4 className="font-semibold mb-2">O que está incluído:</h4>
+                        <h4 className="font-semibold mb-2">What's included:</h4>
                         <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
-                          <li>Consulta inicial</li>
-                          <li>Aplicação do procedimento</li>
-                          <li>Produtos de qualidade premium</li>
-                          <li>Acompanhamento pós-procedimento</li>
+                          <li>Initial consultation</li>
+                          <li>Procedure application</li>
+                          <li>Premium quality products</li>
+                          <li>Post-procedure follow-up</li>
                         </ul>
                       </div>
                       <Separator />
                       <div>
-                        <h4 className="font-semibold mb-2">Preparação:</h4>
+                        <h4 className="font-semibold mb-2">Preparation:</h4>
                         <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
-                          <li>Chegar 10 minutos antes do horário</li>
-                          <li>Vir com a área limpa</li>
-                          <li>Evitar sol 24h antes</li>
+                          <li>Arrive 10 minutes before scheduled time</li>
+                          <li>Come with clean area</li>
+                          <li>Avoid sun 24h before</li>
                         </ul>
                       </div>
                     </div>
@@ -360,20 +360,20 @@ export default function ServiceDetailPage() {
                     <div className="space-y-4 text-sm text-gray-600">
                       <div>
                         <h4 className="font-semibold text-gray-800 mb-2">
-                          Política de Cancelamento
+                          Cancellation Policy
                         </h4>
                         <p>
-                          Cancelamentos devem ser feitos com no mínimo 24 horas de antecedência.
-                          Cancelamentos tardios ou não comparecimento podem resultar em cobrança de
-                          50% do valor do serviço.
+                          Cancellations must be made at least 24 hours in advance.
+                          Late cancellations or no-shows may result in a 50% charge
+                          of the service value.
                         </p>
                       </div>
                       <Separator />
                       <div>
-                        <h4 className="font-semibold text-gray-800 mb-2">Reagendamento</h4>
+                        <h4 className="font-semibold text-gray-800 mb-2">Rescheduling</h4>
                         <p>
-                          Você pode reagendar seu horário gratuitamente até 12 horas antes do
-                          agendamento.
+                          You can reschedule your appointment free of charge up to 12 hours
+                          before the booking.
                         </p>
                       </div>
                     </div>
@@ -383,14 +383,14 @@ export default function ServiceDetailPage() {
             </Card>
           </div>
 
-          {/* Coluna Lateral - Card de Ação */}
+          {/* Sidebar Column - Action Card */}
           <div className="lg:col-span-1">
             <Card className="sticky top-24">
               <CardHeader>
-                <CardTitle>Reserve Agora</CardTitle>
+                <CardTitle>Book Now</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {/* Preço */}
+                {/* Price */}
                 <div>
                   {service.promoPrice ? (
                     <>
@@ -403,7 +403,7 @@ export default function ServiceDetailPage() {
                         </span>
                       </div>
                       <p className="text-sm text-green-600 mt-1">
-                        Você economiza{' '}
+                        You save{' '}
                         {formatPrice(Number(service.price) - Number(service.promoPrice))}
                       </p>
                     </>
@@ -412,15 +412,15 @@ export default function ServiceDetailPage() {
                       {formatPrice(service.price)}
                     </span>
                   )}
-                  <p className="text-xs text-gray-500 mt-2">ou em até 3x sem juros</p>
+                  <p className="text-xs text-gray-500 mt-2">or up to 3x interest-free</p>
                 </div>
 
                 <Separator />
 
-                {/* Seleção de Data */}
+                {/* Date Selection */}
                 <div>
                   <label className="text-sm font-medium text-gray-700 mb-2 block">
-                    Escolha uma data:
+                    Choose a date:
                   </label>
                   <Input
                     type="date"
@@ -430,14 +430,14 @@ export default function ServiceDetailPage() {
                   />
                 </div>
 
-                {/* Seleção de Horário */}
+                {/* Time Selection */}
                 <div>
                   <label className="text-sm font-medium text-gray-700 mb-2 block">
-                    Escolha um horário:
+                    Choose a time:
                   </label>
                   <Select value={selectedTime} onValueChange={setSelectedTime}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Selecione" />
+                      <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="09:00">09:00</SelectItem>
@@ -451,7 +451,7 @@ export default function ServiceDetailPage() {
                   </Select>
                 </div>
 
-                {/* Botões */}
+                {/* Buttons */}
                 <div className="space-y-2">
                   <Button
                     onClick={handleBookNow}
@@ -459,7 +459,7 @@ export default function ServiceDetailPage() {
                     size="lg"
                   >
                     <Calendar className="mr-2 h-4 w-4" />
-                    Agendar Agora
+                    Book Now
                   </Button>
                   <Button
                     onClick={handleAddToCart}
@@ -468,15 +468,15 @@ export default function ServiceDetailPage() {
                     size="lg"
                   >
                     <ShoppingCart className="mr-2 h-4 w-4" />
-                    Adicionar ao Carrinho
+                    Add to Cart
                   </Button>
                 </div>
 
-                {/* Informações adicionais */}
+                {/* Additional info */}
                 <div className="text-xs text-gray-500 space-y-1 pt-2">
-                  <p>✓ Confirmação imediata</p>
-                  <p>✓ Cancelamento gratuito até 24h antes</p>
-                  <p>✓ Pagamento seguro</p>
+                  <p>✓ Immediate confirmation</p>
+                  <p>✓ Free cancellation up to 24h before</p>
+                  <p>✓ Secure payment</p>
                 </div>
               </CardContent>
             </Card>

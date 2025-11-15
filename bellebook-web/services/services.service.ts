@@ -45,6 +45,28 @@ export interface ServiceFilters {
   search?: string;
 }
 
+export interface CreateServiceDto {
+  name: string;
+  description: string;
+  categoryId: string;
+  price: number;
+  promoPrice?: number;
+  duration: number;
+  images: string[];
+  isActive?: boolean;
+}
+
+export interface UpdateServiceDto {
+  name?: string;
+  description?: string;
+  categoryId?: string;
+  price?: number;
+  promoPrice?: number;
+  duration?: number;
+  images?: string[];
+  isActive?: boolean;
+}
+
 export const servicesService = {
   async getAllCategories(): Promise<Category[]> {
     const { data } = await api.get<Category[]>('/services/categories');
@@ -72,6 +94,26 @@ export const servicesService = {
 
   async searchServices(query: string): Promise<Service[]> {
     const { data } = await api.get<Service[]>(`/services/search?q=${encodeURIComponent(query)}`);
+    return data;
+  },
+
+  // Admin methods
+  async createService(serviceDto: CreateServiceDto): Promise<Service> {
+    const { data } = await api.post<Service>('/services', serviceDto);
+    return data;
+  },
+
+  async updateService(id: string, serviceDto: UpdateServiceDto): Promise<Service> {
+    const { data } = await api.put<Service>(`/services/${id}`, serviceDto);
+    return data;
+  },
+
+  async deleteService(id: string): Promise<void> {
+    await api.delete(`/services/${id}`);
+  },
+
+  async toggleActiveService(id: string): Promise<Service> {
+    const { data } = await api.put<Service>(`/services/${id}/toggle-active`);
     return data;
   },
 };

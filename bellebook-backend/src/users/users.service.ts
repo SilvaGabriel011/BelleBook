@@ -22,10 +22,22 @@ export class UsersService {
     email: string;
     password: string;
     name: string;
-    phone?: string;
+    displayName?: string;
+    phone: string;
   }): Promise<User> {
     return this.prisma.user.create({
-      data,
+      data: {
+        ...data,
+        role: 'CUSTOMER', // Always start as CUSTOMER
+        accountStatus: 'ACTIVE',
+      },
+    });
+  }
+
+  async updateLastLogin(userId: string): Promise<void> {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { lastLoginAt: new Date() },
     });
   }
 }

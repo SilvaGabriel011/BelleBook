@@ -16,24 +16,27 @@ export class AuthService {
   ) {}
 
   async register(registerDto: RegisterDto) {
-    // Verificar se email já existe
+    // Check if email already exists
     const existingUser = await this.usersService.findByEmail(registerDto.email);
 
     if (existingUser) {
       throw new ConflictException('Email já está em uso');
     }
 
-    // Hash da senha
+    // Hash password
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
 
-    // Criar usuário
+    // Create user with CUSTOMER role and ACTIVE status
     const user = await this.usersService.create({
-      ...registerDto,
+      email: registerDto.email,
       password: hashedPassword,
+      name: registerDto.name,
+      displayName: registerDto.displayName || registerDto.name,
+      phone: registerDto.phone,
     });
 
-    // Gerar token
-    const token = this.generateToken(user.id, user.email);
+    // Generate token
+    const token = this.generateToken(user.id, user.email, user.role);
 
     return {
       access_token: token,
@@ -41,20 +44,24 @@ export class AuthService {
         id: user.id,
         email: user.email,
         name: user.name,
+        displayName: user.displayName,
+        phone: user.phone,
+        role: user.role,
+        accountStatus: user.accountStatus,
         points: user.points,
       },
     };
   }
 
   async login(loginDto: LoginDto) {
-    // Buscar usuário
+    // Find user
     const user = await this.usersService.findByEmail(loginDto.email);
 
     if (!user) {
       throw new UnauthorizedException('Credenciais inválidas');
     }
 
-    // Verificar senha
+    // Verify password
     const isPasswordValid = await bcrypt.compare(
       loginDto.password,
       user.password,
@@ -64,8 +71,11 @@ export class AuthService {
       throw new UnauthorizedException('Credenciais inválidas');
     }
 
-    // Gerar token
-    const token = this.generateToken(user.id, user.email);
+    // Update last login
+    await this.usersService.updateLastLogin(user.id);
+
+    // Generate token
+    const token = this.generateToken(user.id, user.email, user.role);
 
     return {
       access_token: token,
@@ -73,20 +83,24 @@ export class AuthService {
         id: user.id,
         email: user.email,
         name: user.name,
+        displayName: user.displayName,
+        phone: user.phone,
+        role: user.role,
+        accountStatus: user.accountStatus,
         points: user.points,
       },
     };
   }
 
-  private generateToken(userId: string, email: string): string {
-    const payload = { sub: userId, email };
+  private generateToken(userId: string, email: string, role: string): string {
+    const payload = { sub: userId, email, role };
     return this.jwtService.sign(payload);
   }
 
   async validateUser(userId: string) {
     const user = await this.usersService.findById(userId);
     if (!user) {
-      throw new UnauthorizedException('Usuário não encontrado');
+      throw new UnauthorizedException('User not found');
     }
     return user;
   }

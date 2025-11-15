@@ -24,8 +24,8 @@ import { useAuthStore } from '@/store/auth.store';
 import { ErrorHandler } from '@/lib/errorHandler';
 
 const loginSchema = z.object({
-  email: z.string().email('Email inválido').min(1, 'Email é obrigatório'),
-  password: z.string().min(6, 'Senha deve ter no mínimo 6 caracteres'),
+  email: z.string().email('Invalid email').min(1, 'Email is required'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -49,15 +49,15 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
 
-    console.log('🔐 Tentando fazer login com:', { email: data.email });
+    console.log('🔐 Attempting to login with:', { email: data.email });
 
     try {
       const response = await authService.login(data);
-      console.log('✅ Login bem-sucedido:', response.user);
+      console.log('✅ Login successful:', response.user);
       setUser(response.user);
       router.push('/home');
     } catch (err) {
-      console.error('❌ Erro ao fazer login:', err);
+      console.error('❌ Login error:', err);
       const apiError = ErrorHandler.handleApiError(err);
       setError(apiError.message);
     } finally {
@@ -68,7 +68,7 @@ export default function LoginPage() {
   const loginWithDemo = async (email: string) => {
     setValue('email', email);
     setValue('password', 'senha123');
-    // Submeter automaticamente
+    // Auto-submit
     await onSubmit({ email, password: 'senha123' });
   };
 
@@ -78,7 +78,7 @@ export default function LoginPage() {
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center text-pink-700">BelleBook</CardTitle>
           <CardDescription className="text-center text-gray-600">
-            Entre na sua conta para continuar
+            Sign in to your account to continue
           </CardDescription>
         </CardHeader>
 
@@ -109,7 +109,7 @@ export default function LoginPage() {
 
             <div className="space-y-2">
               <Label htmlFor="password" className="text-gray-700">
-                Senha
+                Password
               </Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -132,10 +132,10 @@ export default function LoginPage() {
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Entrando...
+                  Signing in...
                 </>
               ) : (
-                'Entrar'
+                'Sign In'
               )}
             </Button>
           </form>
@@ -146,14 +146,14 @@ export default function LoginPage() {
                 <span className="w-full border-t border-gray-200" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-2 text-gray-500">Ou</span>
+                <span className="bg-white px-2 text-gray-500">Or</span>
               </div>
             </div>
 
-            {/* Contas Demo */}
+            {/* Demo Accounts */}
             <div className="mt-6 space-y-3">
               <p className="text-xs text-center text-gray-600 font-medium">
-                🎭 Contas Demo para Testes
+                🎭 Demo Accounts for Testing
               </p>
 
               <div className="grid grid-cols-2 gap-2">
@@ -178,7 +178,7 @@ export default function LoginPage() {
                   className="border-blue-200 hover:bg-blue-50 hover:border-blue-300 text-xs"
                 >
                   <User className="h-3 w-3 mr-1" />
-                  Cliente
+                  Customer
                 </Button>
 
                 <Button
@@ -190,7 +190,7 @@ export default function LoginPage() {
                   className="border-green-200 hover:bg-green-50 hover:border-green-300 text-xs"
                 >
                   <Briefcase className="h-3 w-3 mr-1" />
-                  Funcionária
+                  Employee
                 </Button>
 
                 <Button
@@ -207,7 +207,7 @@ export default function LoginPage() {
               </div>
 
               <p className="text-[10px] text-center text-gray-400">
-                Todas as contas usam a senha:{' '}
+                All accounts use the password:{' '}
                 <code className="bg-gray-100 px-1 rounded">senha123</code>
               </p>
             </div>
@@ -215,7 +215,7 @@ export default function LoginPage() {
             <div className="mt-4">
               <Link href="/register" passHref>
                 <Button variant="outline" className="w-full border-pink-200 hover:bg-pink-50">
-                  Criar nova conta
+                  Create new account
                 </Button>
               </Link>
             </div>
@@ -224,13 +224,13 @@ export default function LoginPage() {
 
         <CardFooter>
           <p className="text-xs text-center text-gray-500 w-full">
-            Ao continuar, você concorda com nossos{' '}
+            By continuing, you agree to our{' '}
             <Link href="/terms" className="text-pink-600 hover:underline">
-              Termos de Uso
+              Terms of Service
             </Link>{' '}
-            e{' '}
+            and{' '}
             <Link href="/privacy" className="text-pink-600 hover:underline">
-              Política de Privacidade
+              Privacy Policy
             </Link>
           </p>
         </CardFooter>

@@ -1,13 +1,6 @@
 import { create } from 'zustand';
 import { authService } from '@/services/auth.service';
-
-interface User {
-  id: string;
-  email: string;
-  name: string;
-  points: number;
-  role?: string;
-}
+import { User } from '@/types/auth.types';
 
 interface AuthState {
   user: User | null;

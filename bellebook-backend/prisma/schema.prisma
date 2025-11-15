@@ -7,28 +7,53 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Enumeração de Roles
+enum UserRole {
+  CUSTOMER
+  EMPLOYEE
+  ADMIN
+}
+
+// Status da Conta
+enum AccountStatus {
+  ACTIVE
+  PENDING_APPROVAL
+  SUSPENDED
+  REJECTED
+}
+
 // Usuárias da plataforma
 model User {
-  id              String    @id @default(cuid())
-  email           String    @unique
+  id              String        @id @default(cuid())
+  email           String        @unique
   password        String
   name            String
+  displayName     String?
   phone           String?
   avatar          String?
   birthDate       DateTime?
-  googleId        String?   @unique
-  role            String    @default("CLIENT") // CLIENT, ADMIN, EMPLOYEE
-  points          Int       @default(0)
-  googleTokens    String? // Tokens OAuth do cliente
-  googleTokensProvider String? // Tokens OAuth do prestador
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  googleId        String?       @unique
+  role            UserRole      @default(CUSTOMER)
+  accountStatus   AccountStatus @default(ACTIVE)
+  timezone        String?
+  points          Int           @default(0)
+  googleTokens    String?       // Tokens OAuth do cliente
+  googleTokensProvider String?  // Tokens OAuth do prestador
+  lastLoginAt     DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
   
   bookings        Booking[]
   reviews         Review[]
-  favorites       Service[] @relation("UserFavorites")
+  favorites       Service[]     @relation("UserFavorites")
   cart            CartItem[]
   notifications   Notification[]
+  employeeProfile EmployeeProfile?
+  adminProfile    AdminProfile?
+  roleRequests    RoleRequest[]
+  approvedRequests RoleRequest[] @relation("ApprovedBy")
+  auditLogs       AuditLog[]    @relation("AdminActions")
+  sentMessages    ChatMessage[] @relation("SentMessages")
   
   @@map("users")
 }
@@ -156,4 +181,115 @@ model Reminder {
   booking   Booking   @relation(fields: [bookingId], references: [id])
   
   @@map("reminders")
+}
+
+// Perfil de Employee (profissional)
+model EmployeeProfile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  specialties     String   // JSON array de especialidades: ["unha", "sobrancelha"]
+  bio             String?
+  workSchedule    String   // JSON com horários de trabalho estruturados
+  rating          Float    @default(0)
+  totalServices   Int      @default(0)
+  isAvailable     Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("employee_profiles")
+}
+
+// Perfil de Admin
+model AdminProfile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  permissions     String   // JSON array de permissões específicas
+  department      String?  // Ex: "Operações", "Financeiro", "TI"
+  isSuperAdmin    Boolean  @default(false) // Top-level admin
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("admin_profiles")
+}
+
+// Solicitações de mudança de role
+model RoleRequest {
+  id              String        @id @default(cuid())
+  userId          String
+  requestedRole   UserRole
+  currentRole     UserRole
+  status          String        @default("PENDING") // PENDING, APPROVED, REJECTED
+  requestReason   String        // Justificativa do usuário
+  adminNotes      String?       // Notas do admin que analisou
+  
+  approvedById    String?
+  approvedAt      DateTime?
+  
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  approvedBy      User?         @relation("ApprovedBy", fields: [approvedById], references: [id])
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  @@map("role_requests")
+}
+
+// Audit Log - Rastreamento de ações administrativas
+model AuditLog {
+  id          String   @id @default(cuid())
+  adminId     String
+  action      String   // APPROVE_ROLE_REQUEST, SUSPEND_USER, CANCEL_BOOKING, etc
+  resource    String   // User, Booking, Service, etc
+  resourceId  String
+  changes     String?  // JSON com detalhes das mudanças
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+  
+  admin       User     @relation("AdminActions", fields: [adminId], references: [id])
+  
+  @@index([adminId])
+  @@index([resource, resourceId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// Conversas de Chat
+model ChatConversation {
+  id              String        @id @default(cuid())
+  participantIds  String        // JSON array de IDs dos participantes
+  lastMessageAt   DateTime      @default(now())
+  relatedBookingId String?
+  tags            String?       // JSON array: ['urgent', 'complaint', 'rescheduling']
+  status          String        @default("ACTIVE") // ACTIVE, ARCHIVED, CLOSED
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  messages        ChatMessage[]
+  
+  @@map("chat_conversations")
+}
+
+// Mensagens de Chat
+model ChatMessage {
+  id              String           @id @default(cuid())
+  conversationId  String
+  senderId        String
+  content         String
+  attachments     String?          // JSON array de URLs
+  isRead          Boolean          @default(false)
+  readAt          DateTime?
+  createdAt       DateTime         @default(now())
+  
+  conversation    ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender          User             @relation("SentMessages", fields: [senderId], references: [id])
+  
+  @@index([conversationId])
+  @@index([senderId])
+  @@index([createdAt])
+  @@map("chat_messages")
 }

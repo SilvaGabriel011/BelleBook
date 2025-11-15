@@ -20,12 +20,12 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { CartBadge } from '@/components/CartBadge';
 
-// Dados mockados das categorias (depois vem do backend)
+// Mock category data (will come from backend later)
 const categories = [
   {
     id: '1',
-    name: 'Sobrancelha',
-    description: 'Design e micropigmentação',
+    name: 'Eyebrows',
+    description: 'Design and microblading',
     icon: Eye,
     image: '/images/sobrancelha.jpg',
     color: 'bg-pink-100 text-pink-700',
@@ -33,8 +33,8 @@ const categories = [
   },
   {
     id: '2',
-    name: 'Unha',
-    description: 'Manicure, pedicure e nail art',
+    name: 'Nails',
+    description: 'Manicure, pedicure and nail art',
     icon: Palette,
     image: '/images/unha.jpg',
     color: 'bg-purple-100 text-purple-700',
@@ -42,8 +42,8 @@ const categories = [
   },
   {
     id: '3',
-    name: 'Cabelo',
-    description: 'Corte, cor e tratamentos',
+    name: 'Hair',
+    description: 'Cut, color and treatments',
     icon: Scissors,
     image: '/images/cabelo.jpg',
     color: 'bg-blue-100 text-blue-700',
@@ -51,8 +51,8 @@ const categories = [
   },
   {
     id: '4',
-    name: 'Depilação',
-    description: 'Laser e cera',
+    name: 'Waxing',
+    description: 'Laser and wax',
     icon: Sparkles,
     image: '/images/depilacao.jpg',
     color: 'bg-green-100 text-green-700',
@@ -81,7 +81,7 @@ export default function HomePage() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-pink-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="mt-4 text-gray-600">Carregando...</p>
+          <p className="mt-4 text-gray-600">Loading...</p>
         </div>
       </div>
     );
@@ -103,17 +103,17 @@ export default function HomePage() {
             </div>
 
             <div className="flex items-center space-x-4">
-              {/* Pontos de fidelidade */}
+              {/* Loyalty points */}
               <Card className="border-purple-200 bg-purple-50">
                 <CardContent className="p-3 flex items-center space-x-2">
                   <Gift className="h-5 w-5 text-purple-600" />
                   <span className="text-sm font-semibold text-purple-700">
-                    {user?.points || 0} pontos
+                    {user?.points || 0} points
                   </span>
                 </CardContent>
               </Card>
 
-              {/* Menu do usuário */}
+              {/* User menu */}
               <div className="flex items-center space-x-3">
                 <Button variant="ghost" size="icon" className="text-gray-600 hover:text-gray-800">
                   <Search className="h-5 w-5" />
@@ -141,22 +141,22 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Saudação e próximo agendamento */}
+      {/* Greeting and next appointment */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-gray-800 mb-2">
-            Olá, {user?.name?.split(' ')[0]}! 👋
+            Hello, {user?.name?.split(' ')[0]}! 👋
           </h2>
-          <p className="text-gray-600">Que tal agendar um momento especial para você hoje?</p>
+          <p className="text-gray-600">How about booking a special moment for yourself today?</p>
         </div>
 
-        {/* Card de próximo agendamento (mockado) */}
+        {/* Next appointment card (mocked) */}
         <Card className="mb-8 border-2 border-purple-200 bg-gradient-to-r from-purple-50 to-pink-50">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-purple-700">Próximo Agendamento</CardTitle>
-                <CardDescription>Terça-feira, 15 de Novembro às 14:00</CardDescription>
+                <CardTitle className="text-purple-700">Next Appointment</CardTitle>
+                <CardDescription>Tuesday, November 15th at 2:00 PM</CardDescription>
               </div>
               <Calendar className="h-8 w-8 text-purple-600" />
             </div>
@@ -164,41 +164,41 @@ export default function HomePage() {
           <CardContent>
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-semibold text-gray-700">Design de Sobrancelha</p>
-                <p className="text-sm text-gray-500">com Maria Silva</p>
+                <p className="font-semibold text-gray-700">Eyebrow Design</p>
+                <p className="text-sm text-gray-500">with Maria Silva</p>
               </div>
               <div className="flex space-x-2">
                 <Button variant="outline" size="sm" className="border-purple-300 text-purple-700">
-                  Reagendar
+                  Reschedule
                 </Button>
                 <Button size="sm" className="bg-purple-600 hover:bg-purple-700">
-                  Ver detalhes
+                  View details
                 </Button>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Banner promocional */}
+        {/* Promotional banner */}
         <Card className="mb-8 overflow-hidden bg-gradient-to-r from-pink-400 to-purple-400">
           <CardContent className="p-8 text-white">
-            <h3 className="text-2xl font-bold mb-2">🎉 Oferta Especial de Lançamento!</h3>
+            <h3 className="text-2xl font-bold mb-2">🎉 Special Launch Offer!</h3>
             <p className="mb-4">
-              Ganhe 20% de desconto na sua primeira reserva. Use o código: BELLEBOOK20
+              Get 20% off your first booking. Use code: BELLEBOOK20
             </p>
             <Button className="bg-white text-purple-600 hover:bg-gray-100">
-              Aproveitar Oferta
+              Grab Offer
             </Button>
           </CardContent>
         </Card>
       </section>
 
-      {/* Categorias */}
+      {/* Categories */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <div className="mb-8">
-          <h3 className="text-2xl font-bold text-gray-800 mb-2">Nossos Serviços</h3>
+          <h3 className="text-2xl font-bold text-gray-800 mb-2">Our Services</h3>
           <p className="text-gray-600">
-            Escolha a categoria e encontre o serviço perfeito para você
+            Choose a category and find the perfect service for you
           </p>
         </div>
 
@@ -217,7 +217,7 @@ export default function HomePage() {
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-bold text-lg text-gray-800">{category.name}</h4>
-                    <Badge className={category.color}>{category.services} serviços</Badge>
+                    <Badge className={category.color}>{category.services} services</Badge>
                   </div>
                   <p className="text-sm text-gray-600">{category.description}</p>
                   <div className="flex items-center mt-4 text-yellow-500">
@@ -233,11 +233,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer simples */}
+      {/* Simple footer */}
       <footer className="bg-white border-t border-gray-200 mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="text-center text-gray-500 text-sm">
-            © 2024 BelleBook. Todos os direitos reservados.
+            © 2024 BelleBook. All rights reserved.
           </div>
         </div>
       </footer>

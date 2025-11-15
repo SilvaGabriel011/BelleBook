@@ -33,6 +33,22 @@ async function main() {
     },
   });
 
+  // Create admin profile
+  await prisma.adminProfile.create({
+    data: {
+      userId: adminUser.id,
+      permissions: JSON.stringify([
+        'VIEW_USERS', 'EDIT_USERS', 'DELETE_USERS', 'SUSPEND_USERS',
+        'VIEW_EMPLOYEES', 'APPROVE_EMPLOYEES', 'EDIT_EMPLOYEES',
+        'VIEW_ALL_BOOKINGS', 'EDIT_BOOKINGS', 'CANCEL_BOOKINGS',
+        'MANAGE_SERVICES', 'VIEW_ALL_CHATS', 'VIEW_ANALYTICS',
+        'EXPORT_REPORTS', 'MANAGE_SETTINGS', 'MANAGE_ADMINS',
+      ]),
+      department: 'TI',
+      isSuperAdmin: true,
+    },
+  });
+
   // 2. Cliente Demo
   const clientUser = await prisma.user.create({
     data: {
@@ -40,7 +56,7 @@ async function main() {
       password: hashedPassword,
       name: 'Maria Cliente',
       phone: '11999999992',
-      role: 'CLIENT',
+      role: 'CUSTOMER',
       points: 150,
       birthDate: new Date('1995-05-15'),
     },
@@ -65,7 +81,7 @@ async function main() {
       password: hashedPassword,
       name: 'Juliana VIP',
       phone: '11999999994',
-      role: 'CLIENT',
+      role: 'CUSTOMER',
       points: 500,
       birthDate: new Date('1990-10-20'),
     },
@@ -414,7 +430,7 @@ async function main() {
   console.log('👤 CLIENTE:');
   console.log('   Email: cliente@bellebook.com');
   console.log('   Senha: senha123');
-  console.log('   Role: CLIENT');
+  console.log('   Role: CUSTOMER');
   console.log('   Pontos: 150');
   console.log('');
   console.log('💼 FUNCIONÁRIA:');
@@ -426,7 +442,7 @@ async function main() {
   console.log('⭐ CLIENTE VIP:');
   console.log('   Email: vip@bellebook.com');
   console.log('   Senha: senha123');
-  console.log('   Role: CLIENT');
+  console.log('   Role: CUSTOMER');
   console.log('   Pontos: 500');
   console.log('');
   console.log('═══════════════════════════════════════════════════════');

@@ -24,10 +24,17 @@ import { useAuthStore } from '@/store/auth.store';
 
 const registerSchema = z
   .object({
-    name: z.string().min(3, 'Nome deve ter no mínimo 3 caracteres'),
+    name: z.string().min(3, 'Nome deve ter pelo menos 3 caracteres'),
+    displayName: z.string().optional(),
     email: z.string().email('Email inválido').min(1, 'Email é obrigatório'),
-    phone: z.string().optional(),
-    password: z.string().min(6, 'Senha deve ter no mínimo 6 caracteres'),
+    phone: z
+      .string()
+      .min(1, 'Telefone é obrigatório')
+      .regex(
+        /^\+?[1-9]\d{1,14}$/,
+        'Formato inválido. Use: +5511999999999 ou 11999999999'
+      ),
+    password: z.string().min(6, 'Senha deve ter pelo menos 6 caracteres'),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -60,9 +67,15 @@ export default function RegisterPage() {
       const { confirmPassword, ...registerData } = data;
       const response = await authService.register(registerData);
       setUser(response.user);
-      router.push('/home');
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao criar conta');
+      // Redirect to role selection after successful registration
+      router.push('/role-selection');
+    } catch (err) {
+      const errorMessage =
+        err && typeof err === 'object' && 'response' in err
+          ? ((err as { response?: { data?: { message?: string } } }).response?.data?.message ||
+            'Erro ao criar conta')
+          : 'Erro ao criar conta';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -88,14 +101,14 @@ export default function RegisterPage() {
 
             <div className="space-y-2">
               <Label htmlFor="name" className="text-gray-700">
-                Nome Completo
+                Full Name
               </Label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
                   id="name"
                   type="text"
-                  placeholder="Maria Silva"
+                  placeholder="Jane Doe"
                   className="pl-10 border-pink-200 focus:border-pink-400 focus:ring-pink-400"
                   {...register('name')}
                 />
@@ -121,15 +134,34 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="displayName" className="text-gray-700">
+                Nome de Exibição (Opcional)
+              </Label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  id="displayName"
+                  type="text"
+                  placeholder="Como gostaria de ser chamada"
+                  className="pl-10 border-pink-200 focus:border-pink-400 focus:ring-pink-400"
+                  {...register('displayName')}
+                />
+              </div>
+              {errors.displayName && (
+                <p className="text-sm text-red-500">{errors.displayName.message}</p>
+              )}
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="phone" className="text-gray-700">
-                Telefone (Opcional)
+                Telefone (Obrigatório)
               </Label>
               <div className="relative">
                 <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
                   id="phone"
                   type="tel"
-                  placeholder="(11) 99999-9999"
+                  placeholder="+5511999999999 ou 11999999999"
                   className="pl-10 border-pink-200 focus:border-pink-400 focus:ring-pink-400"
                   {...register('phone')}
                 />
@@ -139,7 +171,7 @@ export default function RegisterPage() {
 
             <div className="space-y-2">
               <Label htmlFor="password" className="text-gray-700">
-                Senha
+                Password
               </Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -156,7 +188,7 @@ export default function RegisterPage() {
 
             <div className="space-y-2">
               <Label htmlFor="confirmPassword" className="text-gray-700">
-                Confirmar Senha
+                Confirm Password
               </Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -181,10 +213,10 @@ export default function RegisterPage() {
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Criando conta...
+                  Creating account...
                 </>
               ) : (
-                'Criar conta'
+                'Create account'
               )}
             </Button>
           </form>
@@ -195,14 +227,14 @@ export default function RegisterPage() {
                 <span className="w-full border-t border-gray-200" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-2 text-gray-500">Já tem conta?</span>
+                <span className="bg-white px-2 text-gray-500">Already have an account?</span>
               </div>
             </div>
 
             <div className="mt-6">
               <Link href="/login" passHref>
                 <Button variant="outline" className="w-full border-pink-200 hover:bg-pink-50">
-                  Fazer login
+                  Sign in
                 </Button>
               </Link>
             </div>
@@ -211,13 +243,13 @@ export default function RegisterPage() {
 
         <CardFooter>
           <p className="text-xs text-center text-gray-500 w-full">
-            Ao criar sua conta, você concorda com nossos{' '}
+            By creating your account, you agree to our{' '}
             <Link href="/terms" className="text-pink-600 hover:underline">
-              Termos de Uso
+              Terms of Service
             </Link>{' '}
-            e{' '}
+            and{' '}
             <Link href="/privacy" className="text-pink-600 hover:underline">
-              Política de Privacidade
+              Privacy Policy
             </Link>
           </p>
         </CardFooter>

@@ -1,26 +1,5 @@
 import api from '@/lib/api';
-
-export interface LoginDto {
-  email: string;
-  password: string;
-}
-
-export interface RegisterDto {
-  email: string;
-  password: string;
-  name: string;
-  phone?: string;
-}
-
-export interface AuthResponse {
-  access_token: string;
-  user: {
-    id: string;
-    email: string;
-    name: string;
-    points: number;
-  };
-}
+import { LoginDto, RegisterDto, AuthResponse } from '@/types/auth.types';
 
 export const authService = {
   async login(credentials: LoginDto): Promise<AuthResponse> {

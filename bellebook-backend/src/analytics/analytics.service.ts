@@ -161,7 +161,7 @@ export class AnalyticsService {
   private async getNewClients(timeRange: TimeRange): Promise<number> {
     return this.prisma.user.count({
       where: {
-        role: 'CLIENT',
+        role: 'CUSTOMER',
         createdAt: {
           gte: timeRange.start,
           lte: timeRange.end,
@@ -453,13 +453,13 @@ export class AnalyticsService {
     const [totalClients, activeClients, topClients] = await Promise.all([
       // Total de clientes
       this.prisma.user.count({
-        where: { role: 'CLIENT' },
+        where: { role: 'CUSTOMER' },
       }),
 
       // Clientes ativos (com agendamentos nos últimos 30 dias)
       this.prisma.user.count({
         where: {
-          role: 'CLIENT',
+          role: 'CUSTOMER',
           bookings: {
             some: {
               createdAt: {
@@ -472,7 +472,7 @@ export class AnalyticsService {
 
       // Top clientes (por número de agendamentos)
       this.prisma.user.findMany({
-        where: { role: 'CLIENT' },
+        where: { role: 'CUSTOMER' },
         select: {
           id: true,
           name: true,
@@ -543,7 +543,7 @@ export class AnalyticsService {
       // Novos clientes
       this.prisma.user.count({
         where: {
-          role: 'CLIENT',
+          role: 'CUSTOMER',
           createdAt: {
             gte: startDate,
             lte: endDate,

@@ -39,7 +39,7 @@ export default function BookingPage() {
   const [loadingSlots, setLoadingSlots] = useState(false);
   const [currentBookingIndex, setCurrentBookingIndex] = useState(0);
 
-  // Pegar o item atual do carrinho
+  // Get current cart item
   const currentItem = items[currentBookingIndex];
 
   useEffect(() => {
@@ -52,8 +52,8 @@ export default function BookingPage() {
         const slots = await bookingService.getAvailableSlots(currentItem.service.id, dateStr);
         setTimeSlots(slots);
       } catch (error) {
-        console.error('Erro ao carregar horários:', error);
-        toast.error('Erro ao carregar horários disponíveis');
+        console.error('Error loading time slots:', error);
+        toast.error('Error loading available time slots');
       } finally {
         setLoadingSlots(false);
       }
@@ -69,7 +69,7 @@ export default function BookingPage() {
 
   const handleConfirmBooking = async () => {
     if (!currentItem || !selectedDate || !selectedTime) {
-      toast.error('Por favor, selecione data e horário');
+      toast.error('Please select date and time');
       return;
     }
 
@@ -85,10 +85,10 @@ export default function BookingPage() {
       });
 
       toast.success(
-        `Agendamento confirmado para ${format(selectedDate, 'dd/MM/yyyy')} às ${selectedTime}`
+        `Booking confirmed for ${format(selectedDate, 'dd/MM/yyyy')} at ${selectedTime}`
       );
 
-      // Se houver mais itens no carrinho, ir para o próximo
+      // If there are more items in cart, go to next
       if (currentBookingIndex < items.length - 1) {
         setCurrentBookingIndex(currentBookingIndex + 1);
         setSelectedDate(null);
@@ -96,13 +96,13 @@ export default function BookingPage() {
         setTimeSlots([]);
         setNotes('');
       } else {
-        // Todos os agendamentos foram feitos
+        // All bookings completed
         clearCart();
         router.push('/bookings');
       }
     } catch (error) {
-      console.error('Erro ao criar agendamento:', error);
-      toast.error('Erro ao confirmar agendamento');
+      console.error('Error creating booking:', error);
+      toast.error('Error confirming booking');
     } finally {
       setLoading(false);
     }
@@ -131,7 +131,7 @@ export default function BookingPage() {
               <Button variant="ghost" size="icon" onClick={() => router.back()}>
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <h1 className="text-2xl font-bold text-gray-800">Agendamento</h1>
+              <h1 className="text-2xl font-bold text-gray-800">Booking</h1>
             </div>
           </div>
         </header>
@@ -141,12 +141,12 @@ export default function BookingPage() {
             <CardContent>
               <CalendarIcon className="h-16 w-16 text-gray-300 mx-auto mb-4" />
               <h2 className="text-xl font-semibold text-gray-700 mb-2">
-                Nenhum serviço para agendar
+                No services to book
               </h2>
               <p className="text-gray-500 mb-6">
-                Adicione serviços ao carrinho para fazer o agendamento
+                Add services to cart to make a booking
               </p>
-              <Button onClick={() => router.push('/home')}>Explorar Serviços</Button>
+              <Button onClick={() => router.push('/home')}>Explore Services</Button>
             </CardContent>
           </Card>
         </main>
@@ -164,13 +164,13 @@ export default function BookingPage() {
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <h1 className="text-2xl font-bold text-gray-800">
-                Agendamento ({currentBookingIndex + 1} de {items.length})
+                Booking ({currentBookingIndex + 1} of {items.length})
               </h1>
             </div>
 
             <Badge variant="secondary" className="text-sm">
               {items.length - currentBookingIndex}{' '}
-              {items.length - currentBookingIndex === 1 ? 'restante' : 'restantes'}
+              {items.length - currentBookingIndex === 1 ? 'remaining' : 'remaining'}
             </Badge>
           </div>
         </div>
@@ -178,13 +178,13 @@ export default function BookingPage() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Coluna Principal - Calendário e Horários */}
+          {/* Main Column - Calendar and Times */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Card do Serviço Atual */}
+            {/* Current Service Card */}
             {currentItem && (
               <Card>
                 <CardHeader>
-                  <CardTitle>Agendando Serviço</CardTitle>
+                  <CardTitle>Booking Service</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-start space-x-4">
@@ -206,11 +206,11 @@ export default function BookingPage() {
               </Card>
             )}
 
-            {/* Calendário */}
+            {/* Calendar */}
             <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle>Escolha uma Data</CardTitle>
+                  <CardTitle>Choose a Date</CardTitle>
                   <div className="flex items-center gap-2">
                     <Button variant="ghost" size="icon" onClick={handlePreviousMonth}>
                       <ChevronLeft className="h-4 w-4" />
@@ -226,7 +226,7 @@ export default function BookingPage() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-7 gap-1 text-center mb-2">
-                  {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map((day) => (
+                  {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
                     <div key={day} className="text-xs font-medium text-gray-600 py-2">
                       {day}
                     </div>
@@ -262,14 +262,14 @@ export default function BookingPage() {
               </CardContent>
             </Card>
 
-            {/* Horários */}
+            {/* Time Slots */}
             {selectedDate && (
               <Card>
                 <CardHeader>
-                  <CardTitle>Escolha um Horário</CardTitle>
+                  <CardTitle>Choose a Time</CardTitle>
                   <CardDescription>
-                    Horários disponíveis para{' '}
-                    {format(selectedDate, "dd 'de' MMMM", { locale: ptBR })}
+                    Available times for{' '}
+                    {format(selectedDate, 'MMMM dd', { locale: ptBR })}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -281,7 +281,7 @@ export default function BookingPage() {
                     <Alert>
                       <AlertCircle className="h-4 w-4" />
                       <AlertDescription>
-                        Nenhum horário disponível nesta data. Por favor, escolha outra data.
+                        No times available on this date. Please choose another date.
                       </AlertDescription>
                     </Alert>
                   ) : (
@@ -308,14 +308,14 @@ export default function BookingPage() {
               </Card>
             )}
 
-            {/* Observações */}
+            {/* Notes */}
             <Card>
               <CardHeader>
-                <CardTitle>Observações (Opcional)</CardTitle>
+                <CardTitle>Notes (Optional)</CardTitle>
               </CardHeader>
               <CardContent>
                 <Textarea
-                  placeholder="Alguma observação especial para este agendamento?"
+                  placeholder="Any special notes for this booking?"
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   rows={3}
@@ -324,23 +324,23 @@ export default function BookingPage() {
             </Card>
           </div>
 
-          {/* Resumo Lateral */}
+          {/* Summary Sidebar */}
           <div className="lg:col-span-1">
             <Card className="sticky top-24">
               <CardHeader>
-                <CardTitle>Resumo do Agendamento</CardTitle>
+                <CardTitle>Booking Summary</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {/* Serviço */}
+                {/* Service */}
                 <div>
-                  <Label className="text-xs text-gray-500">Serviço</Label>
+                  <Label className="text-xs text-gray-500">Service</Label>
                   <p className="font-medium">{currentItem?.service.name}</p>
                 </div>
 
-                {/* Data e Hora */}
+                {/* Date and Time */}
                 {selectedDate && (
                   <div>
-                    <Label className="text-xs text-gray-500">Data</Label>
+                    <Label className="text-xs text-gray-500">Date</Label>
                     <p className="font-medium">
                       {format(selectedDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
                     </p>
@@ -349,16 +349,16 @@ export default function BookingPage() {
 
                 {selectedTime && (
                   <div>
-                    <Label className="text-xs text-gray-500">Horário</Label>
+                    <Label className="text-xs text-gray-500">Time</Label>
                     <p className="font-medium">{selectedTime}</p>
                   </div>
                 )}
 
                 <Separator />
 
-                {/* Valor */}
+                {/* Price */}
                 <div>
-                  <Label className="text-xs text-gray-500">Valor</Label>
+                  <Label className="text-xs text-gray-500">Price</Label>
                   <p className="text-2xl font-bold text-pink-600">
                     {currentItem &&
                       formatPrice(currentItem.service.promoPrice || currentItem.service.price)}
@@ -370,17 +370,17 @@ export default function BookingPage() {
                   <Alert className="bg-green-50 border-green-200">
                     <CheckCircle className="h-4 w-4 text-green-600" />
                     <AlertDescription className="text-green-800">
-                      Pronto para confirmar agendamento
+                      Ready to confirm booking
                     </AlertDescription>
                   </Alert>
                 ) : (
                   <Alert>
                     <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>Selecione data e horário para continuar</AlertDescription>
+                    <AlertDescription>Select date and time to continue</AlertDescription>
                   </Alert>
                 )}
 
-                {/* Botões */}
+                {/* Buttons */}
                 <div className="space-y-2">
                   <Button
                     onClick={handleConfirmBooking}
@@ -391,12 +391,12 @@ export default function BookingPage() {
                     {loading ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Confirmando...
+                        Confirming...
                       </>
                     ) : currentBookingIndex < items.length - 1 ? (
-                      'Confirmar e Próximo'
+                      'Confirm and Next'
                     ) : (
-                      'Confirmar Agendamento'
+                      'Confirm Booking'
                     )}
                   </Button>
 
@@ -412,16 +412,16 @@ export default function BookingPage() {
                       }}
                       className="w-full"
                     >
-                      Pular este serviço
+                      Skip this service
                     </Button>
                   )}
                 </div>
 
                 {/* Info */}
                 <div className="text-xs text-gray-500 space-y-1 pt-2">
-                  <p>✓ Confirmação imediata</p>
-                  <p>✓ Lembretes automáticos</p>
-                  <p>✓ Cancelamento até 24h antes</p>
+                  <p>✓ Immediate confirmation</p>
+                  <p>✓ Automatic reminders</p>
+                  <p>✓ Cancellation up to 24h before</p>
                 </div>
               </CardContent>
             </Card>

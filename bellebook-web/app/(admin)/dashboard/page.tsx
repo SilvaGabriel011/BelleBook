@@ -45,7 +45,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
 
-// Cores para gráficos
+// Chart colors
 const COLORS = ['#FF6B9D', '#C44569', '#A8DADC', '#FFB5A7', '#E4C1F9'];
 
 export default function AdminDashboard() {
@@ -63,7 +63,7 @@ export default function AdminDashboard() {
 
   const checkAccess = () => {
     if (!isAuthenticated || (user?.role !== 'ADMIN' && user?.role !== 'PROVIDER')) {
-      toast.error('Acesso negado. Apenas administradores.');
+      toast.error('Access denied. Administrators only.');
       router.push('/home');
     }
   };
@@ -74,8 +74,8 @@ export default function AdminDashboard() {
       const data = await analyticsService.getDashboardMetrics(period);
       setMetrics(data);
     } catch (error) {
-      console.error('Erro ao carregar dashboard:', error);
-      toast.error('Erro ao carregar métricas');
+      console.error('Error loading dashboard:', error);
+      toast.error('Error loading metrics');
     } finally {
       setLoading(false);
     }
@@ -90,7 +90,7 @@ export default function AdminDashboard() {
   };
 
   const exportReport = async () => {
-    toast.success('Relatório exportado com sucesso!');
+    toast.success('Report exported successfully!');
   };
 
   if (loading) {
@@ -98,7 +98,7 @@ export default function AdminDashboard() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-pink-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="mt-4 text-gray-600">Carregando dashboard...</p>
+          <p className="mt-4 text-gray-600">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -113,8 +113,8 @@ export default function AdminDashboard() {
         <div className="px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Dashboard Admin</h1>
-              <p className="text-sm text-gray-500 mt-1">Bem-vinda, {user?.name} 👋</p>
+              <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+              <p className="text-sm text-gray-500 mt-1">Welcome, {user?.name} 👋</p>
             </div>
 
             <div className="flex items-center gap-4">
@@ -123,15 +123,15 @@ export default function AdminDashboard() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="day">Hoje</SelectItem>
-                  <SelectItem value="week">Esta Semana</SelectItem>
-                  <SelectItem value="month">Este Mês</SelectItem>
+                  <SelectItem value="day">Today</SelectItem>
+                  <SelectItem value="week">This Week</SelectItem>
+                  <SelectItem value="month">This Month</SelectItem>
                 </SelectContent>
               </Select>
 
               <Button onClick={exportReport} variant="outline">
                 <Download className="h-4 w-4 mr-2" />
-                Exportar
+                Export
               </Button>
             </div>
           </div>
@@ -139,12 +139,12 @@ export default function AdminDashboard() {
       </header>
 
       <main className="px-4 sm:px-6 lg:px-8 py-8">
-        {/* Métricas Principais */}
+        {/* Main Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-          {/* Total Agendamentos */}
+          {/* Total Bookings */}
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Agendamentos</CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-600">Bookings</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
@@ -152,7 +152,7 @@ export default function AdminDashboard() {
                   <p className="text-2xl font-bold">{metrics.totalBookings}</p>
                   <p className="text-xs text-green-600 flex items-center mt-1">
                     <TrendingUp className="h-3 w-3 mr-1" />
-                    +12% vs anterior
+                    +12% vs previous
                   </p>
                 </div>
                 <Calendar className="h-8 w-8 text-pink-500" />
@@ -160,10 +160,10 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
 
-          {/* Receita Total */}
+          {/* Total Revenue */}
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Receita Total</CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-600">Total Revenue</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
@@ -171,7 +171,7 @@ export default function AdminDashboard() {
                   <p className="text-2xl font-bold">{formatCurrency(metrics.totalRevenue)}</p>
                   <p className="text-xs text-green-600 flex items-center mt-1">
                     <TrendingUp className="h-3 w-3 mr-1" />
-                    +8% vs anterior
+                    +8% vs previous
                   </p>
                 </div>
                 <DollarSign className="h-8 w-8 text-green-500" />
@@ -179,10 +179,10 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
 
-          {/* Novos Clientes */}
+          {/* New Clients */}
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Novos Clientes</CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-600">New Clients</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
@@ -190,7 +190,7 @@ export default function AdminDashboard() {
                   <p className="text-2xl font-bold">{metrics.newClients}</p>
                   <p className="text-xs text-green-600 flex items-center mt-1">
                     <TrendingUp className="h-3 w-3 mr-1" />
-                    +5 esta semana
+                    +5 this week
                   </p>
                 </div>
                 <Users className="h-8 w-8 text-blue-500" />
@@ -198,17 +198,17 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
 
-          {/* Serviços Completados */}
+          {/* Completed Services */}
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Completados</CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-600">Completed</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-2xl font-bold">{metrics.completedServices}</p>
                   <p className="text-xs text-gray-500 mt-1">
-                    {formatPercentage((metrics.completedServices / metrics.totalBookings) * 100)} do
+                    {formatPercentage((metrics.completedServices / metrics.totalBookings) * 100)} of
                     total
                   </p>
                 </div>
@@ -217,10 +217,10 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
 
-          {/* Avaliação Média */}
+          {/* Average Rating */}
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Avaliação Média</CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-600">Average Rating</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
@@ -229,7 +229,7 @@ export default function AdminDashboard() {
                     {metrics.averageRating.toFixed(1)}
                     <Star className="h-5 w-5 ml-1 text-yellow-500 fill-current" />
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">Excelente</p>
+                  <p className="text-xs text-gray-500 mt-1">Excellent</p>
                 </div>
                 <Star className="h-8 w-8 text-yellow-500" />
               </div>
@@ -237,22 +237,22 @@ export default function AdminDashboard() {
           </Card>
         </div>
 
-        {/* Gráficos e Tabelas */}
+        {/* Charts and Tables */}
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview">Visão Geral</TabsTrigger>
-            <TabsTrigger value="services">Serviços</TabsTrigger>
-            <TabsTrigger value="bookings">Agendamentos</TabsTrigger>
-            <TabsTrigger value="clients">Clientes</TabsTrigger>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="services">Services</TabsTrigger>
+            <TabsTrigger value="bookings">Bookings</TabsTrigger>
+            <TabsTrigger value="clients">Clients</TabsTrigger>
           </TabsList>
 
-          {/* Visão Geral */}
+          {/* Overview */}
           <TabsContent value="overview" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Gráfico de Receita por Dia */}
+              {/* Revenue by Day Chart */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Receita por Dia</CardTitle>
+                  <CardTitle>Revenue by Day</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ResponsiveContainer width="100%" height={300}>
@@ -275,17 +275,17 @@ export default function AdminDashboard() {
                         dataKey="revenue"
                         stroke="#FF6B9D"
                         strokeWidth={2}
-                        name="Receita"
+                        name="Revenue"
                       />
                     </LineChart>
                   </ResponsiveContainer>
                 </CardContent>
               </Card>
 
-              {/* Gráfico de Status dos Agendamentos */}
+              {/* Booking Status Chart */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Status dos Agendamentos</CardTitle>
+                  <CardTitle>Booking Status</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ResponsiveContainer width="100%" height={300}>
@@ -312,11 +312,11 @@ export default function AdminDashboard() {
             </div>
           </TabsContent>
 
-          {/* Serviços */}
+          {/* Services */}
           <TabsContent value="services" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Top Serviços Mais Agendados</CardTitle>
+                <CardTitle>Top Most Booked Services</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -335,7 +335,7 @@ export default function AdminDashboard() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="font-bold">{service.count} agendamentos</p>
+                        <p className="font-bold">{service.count} bookings</p>
                         <p className="text-sm text-gray-500">{formatCurrency(service.revenue)}</p>
                       </div>
                     </div>
@@ -345,11 +345,11 @@ export default function AdminDashboard() {
             </Card>
           </TabsContent>
 
-          {/* Agendamentos */}
+          {/* Bookings */}
           <TabsContent value="bookings" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Próximos Agendamentos</CardTitle>
+                <CardTitle>Upcoming Bookings</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -361,10 +361,10 @@ export default function AdminDashboard() {
                       <div>
                         <p className="font-medium">{booking.service?.name}</p>
                         <p className="text-sm text-gray-600">
-                          Cliente: {booking.user?.name} | {booking.user?.phone}
+                          Client: {booking.user?.name} | {booking.user?.phone}
                         </p>
                         <p className="text-xs text-gray-500 mt-1">
-                          {format(new Date(booking.date), "dd 'de' MMMM", { locale: ptBR })} às{' '}
+                          {format(new Date(booking.date), "dd 'de' MMMM", { locale: ptBR })} at{' '}
                           {booking.time}
                         </p>
                       </div>
@@ -384,7 +384,7 @@ export default function AdminDashboard() {
 
                   {metrics.upcomingBookings.length === 0 && (
                     <Alert>
-                      <AlertDescription>Nenhum agendamento próximo</AlertDescription>
+                      <AlertDescription>No upcoming bookings</AlertDescription>
                     </Alert>
                   )}
                 </div>
@@ -392,13 +392,13 @@ export default function AdminDashboard() {
             </Card>
           </TabsContent>
 
-          {/* Clientes */}
+          {/* Clients */}
           <TabsContent value="clients" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Avaliações Recentes */}
+              {/* Recent Reviews */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Avaliações Recentes</CardTitle>
+                  <CardTitle>Recent Reviews</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
@@ -438,37 +438,37 @@ export default function AdminDashboard() {
                 </CardContent>
               </Card>
 
-              {/* Estatísticas de Clientes */}
+              {/* Client Statistics */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Estatísticas de Clientes</CardTitle>
+                  <CardTitle>Client Statistics</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600">Taxa de Retorno</span>
+                      <span className="text-gray-600">Return Rate</span>
                       <span className="font-bold text-green-600">78%</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600">Satisfação Geral</span>
+                      <span className="text-gray-600">Overall Satisfaction</span>
                       <span className="font-bold text-yellow-600">4.8/5.0</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600">Ticket Médio</span>
+                      <span className="text-gray-600">Average Ticket</span>
                       <span className="font-bold">R$ 125,00</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600">Frequência Média</span>
-                      <span className="font-bold">2.5x/mês</span>
+                      <span className="text-gray-600">Average Frequency</span>
+                      <span className="font-bold">2.5x/month</span>
                     </div>
 
                     <Separator className="my-4" />
 
                     <div className="space-y-2">
-                      <p className="text-sm font-medium text-gray-600">Origem dos Clientes</p>
+                      <p className="text-sm font-medium text-gray-600">Client Source</p>
                       <div className="space-y-2">
                         <div className="flex justify-between items-center">
-                          <span className="text-sm">Indicação</span>
+                          <span className="text-sm">Referral</span>
                           <span className="text-sm font-medium">45%</span>
                         </div>
                         <div className="flex justify-between items-center">
@@ -480,7 +480,7 @@ export default function AdminDashboard() {
                           <span className="text-sm font-medium">15%</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-sm">Outros</span>
+                          <span className="text-sm">Others</span>
                           <span className="text-sm font-medium">10%</span>
                         </div>
                       </div>
@@ -492,26 +492,26 @@ export default function AdminDashboard() {
           </TabsContent>
         </Tabs>
 
-        {/* Ações Rápidas */}
+        {/* Quick Actions */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
           <Button
             className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600"
             onClick={() => router.push('/admin/reports')}
           >
             <FileText className="h-4 w-4 mr-2" />
-            Gerar Relatório
+            Generate Report
           </Button>
           <Button variant="outline" onClick={() => router.push('/admin/services')}>
             <Activity className="h-4 w-4 mr-2" />
-            Gerenciar Serviços
+            Manage Services
           </Button>
           <Button variant="outline" onClick={() => router.push('/admin/bookings')}>
             <Calendar className="h-4 w-4 mr-2" />
-            Ver Agenda
+            View Schedule
           </Button>
           <Button variant="outline" onClick={() => router.push('/admin/clients')}>
             <Users className="h-4 w-4 mr-2" />
-            Gerenciar Clientes
+            Manage Clients
           </Button>
         </div>
       </main>

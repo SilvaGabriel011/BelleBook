@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 
@@ -7,6 +7,28 @@ export interface ServiceFilters {
   minPrice?: number;
   maxPrice?: number;
   search?: string;
+}
+
+export interface CreateServiceDto {
+  name: string;
+  description: string;
+  categoryId: string;
+  price: number;
+  promoPrice?: number;
+  duration: number;
+  images: string[];
+  isActive?: boolean;
+}
+
+export interface UpdateServiceDto {
+  name?: string;
+  description?: string;
+  categoryId?: string;
+  price?: number;
+  promoPrice?: number;
+  duration?: number;
+  images?: string[];
+  isActive?: boolean;
 }
 
 @Injectable()
@@ -170,5 +192,131 @@ export class ServicesService {
       ...service,
       images: JSON.parse(service.images || '[]'),
     }));
+  }
+
+  async create(createServiceDto: CreateServiceDto) {
+    const { images, price, promoPrice, ...rest } = createServiceDto;
+    
+    // Verificar se a categoria existe
+    const category = await this.prisma.category.findUnique({
+      where: { id: createServiceDto.categoryId },
+    });
+
+    if (!category) {
+      throw new NotFoundException('Categoria não encontrada');
+    }
+
+    const service = await this.prisma.service.create({
+      data: {
+        ...rest,
+        price: price.toString(),
+        promoPrice: promoPrice ? promoPrice.toString() : null,
+        images: JSON.stringify(images || []),
+      },
+      include: {
+        category: true,
+      },
+    });
+
+    return {
+      ...service,
+      images: JSON.parse(service.images || '[]'),
+    };
+  }
+
+  async update(id: string, updateServiceDto: UpdateServiceDto) {
+    const service = await this.prisma.service.findUnique({
+      where: { id },
+    });
+
+    if (!service) {
+      throw new NotFoundException('Serviço não encontrado');
+    }
+
+    // Se categoryId for fornecido, verificar se existe
+    if (updateServiceDto.categoryId) {
+      const category = await this.prisma.category.findUnique({
+        where: { id: updateServiceDto.categoryId },
+      });
+
+      if (!category) {
+        throw new NotFoundException('Categoria não encontrada');
+      }
+    }
+
+    const { images, price, promoPrice, ...rest } = updateServiceDto;
+
+    const updated = await this.prisma.service.update({
+      where: { id },
+      data: {
+        ...rest,
+        ...(price !== undefined && { price: price.toString() }),
+        ...(promoPrice !== undefined && { promoPrice: promoPrice ? promoPrice.toString() : null }),
+        ...(images && { images: JSON.stringify(images) }),
+      },
+      include: {
+        category: true,
+      },
+    });
+
+    return {
+      ...updated,
+      images: JSON.parse(updated.images || '[]'),
+    };
+  }
+
+  async remove(id: string) {
+    const service = await this.prisma.service.findUnique({
+      where: { id },
+      include: {
+        bookings: true,
+      },
+    });
+
+    if (!service) {
+      throw new NotFoundException('Serviço não encontrado');
+    }
+
+    // Verificar se há agendamentos ativos
+    const activeBookings = service.bookings.filter(
+      (booking) => booking.status === 'PENDING' || booking.status === 'CONFIRMED',
+    );
+
+    if (activeBookings.length > 0) {
+      throw new BadRequestException(
+        'Não é possível excluir serviço com agendamentos ativos. Desative-o ao invés disso.',
+      );
+    }
+
+    await this.prisma.service.delete({
+      where: { id },
+    });
+
+    return { message: 'Serviço excluído com sucesso' };
+  }
+
+  async toggleActive(id: string) {
+    const service = await this.prisma.service.findUnique({
+      where: { id },
+    });
+
+    if (!service) {
+      throw new NotFoundException('Serviço não encontrado');
+    }
+
+    const updated = await this.prisma.service.update({
+      where: { id },
+      data: {
+        isActive: !service.isActive,
+      },
+      include: {
+        category: true,
+      },
+    });
+
+    return {
+      ...updated,
+      images: JSON.parse(updated.images || '[]'),
+    };
   }
 }
