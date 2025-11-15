@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ServiceCard } from '@/components/customer/ServiceCard';
 import { useServiceStore } from '@/store/service.store';
-import { getServices, getCategories } from '@/services/service.api';
+import { getServices } from '@/services/service.api';
 import { useDebounce } from '@/hooks/use-debounce';
 
 export default function ServicesPage() {

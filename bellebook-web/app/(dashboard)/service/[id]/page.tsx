@@ -336,7 +336,7 @@ export default function ServiceDetailPage() {
                   <TabsContent value="details" className="mt-6">
                     <div className="space-y-4">
                       <div>
-                        <h4 className="font-semibold mb-2">What's included:</h4>
+                        <h4 className="font-semibold mb-2">What&apos;s included:</h4>
                         <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
                           <li>Initial consultation</li>
                           <li>Procedure application</li>
