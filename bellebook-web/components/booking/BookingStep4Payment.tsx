@@ -88,11 +88,26 @@ export function BookingStep4Payment() {
   if (showStripeForm) {
     return (
       <div className="w-full max-w-2xl mx-auto">
-        <PaymentWrapper
-          amount={totalAmount}
-          onSuccess={handlePaymentSuccess}
-          onCancel={() => setShowStripeForm(false)}
-        />
+        <Card className="p-6">
+          <div className="mb-4">
+            <Button
+              variant="ghost"
+              onClick={() => setShowStripeForm(false)}
+              className="mb-4"
+            >
+              ← Voltar para métodos de pagamento
+            </Button>
+          </div>
+          <PaymentWrapper
+            bookingId="temp-booking-id"
+            amount={totalAmount}
+            onSuccess={handlePaymentSuccess}
+            onError={(error) => {
+              console.error('Payment error:', error);
+              setShowStripeForm(false);
+            }}
+          />
+        </Card>
       </div>
     );
   }

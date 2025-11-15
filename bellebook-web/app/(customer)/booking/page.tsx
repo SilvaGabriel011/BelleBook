@@ -6,7 +6,7 @@ import { ArrowLeft } from 'lucide-react';
 import { useBookingStore } from '@/store/booking.store';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ProgressIndicator } from '@/components/booking/ProgressIndicator';
+import ProgressIndicator from '@/components/booking/ProgressIndicator';
 import { BookingStep1Cart } from '@/components/booking/BookingStep1Cart';
 import { BookingStep2Schedule } from '@/components/booking/BookingStep2Schedule';
 import { BookingStep3Info } from '@/components/booking/BookingStep3Info';

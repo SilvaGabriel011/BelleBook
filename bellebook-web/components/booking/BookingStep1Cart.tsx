@@ -112,9 +112,9 @@ export function BookingStep1Cart() {
             <div key={item.id} className="flex gap-4 p-4 border rounded-lg">
               {/* Service Image */}
               <div className="relative w-24 h-24 flex-shrink-0 rounded-md overflow-hidden bg-muted">
-                {item.service.imageUrl ? (
+                {item.service.images && item.service.images.length > 0 ? (
                   <Image
-                    src={item.service.imageUrl}
+                    src={item.service.images[0]}
                     alt={item.service.name}
                     fill
                     className="object-cover"
