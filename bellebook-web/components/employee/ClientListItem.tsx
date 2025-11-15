@@ -14,7 +14,7 @@ interface ClientListItemProps {
     phone: string | null;
     email: string;
     totalBookings: number;
-    lastBooking: Date | null;
+    lastBooking: Date | string | null;
     favoriteServices: string[];
     totalSpent: number;
   };
@@ -23,10 +23,7 @@ interface ClientListItemProps {
 
 export function ClientListItem({ client, onClick }: ClientListItemProps) {
   return (
-    <Card
-      className="cursor-pointer hover:shadow-md transition-shadow"
-      onClick={onClick}
-    >
+    <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={onClick}>
       <CardContent className="p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">

@@ -27,7 +27,7 @@ async function main() {
   console.log('✅ Admin user created:', adminUser.email);
 
   // Create or update admin profile
-  const adminProfile = await prisma.adminProfile.upsert({
+  await prisma.adminProfile.upsert({
     where: { userId: adminUser.id },
     update: {},
     create: {

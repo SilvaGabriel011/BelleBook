@@ -178,13 +178,15 @@ export class AdminBookingsService {
   }
 
   async getBookingStats() {
-    const [total, pending, confirmed, completed, cancelled] = await Promise.all([
-      this.prisma.booking.count(),
-      this.prisma.booking.count({ where: { status: 'PENDING' } }),
-      this.prisma.booking.count({ where: { status: 'CONFIRMED' } }),
-      this.prisma.booking.count({ where: { status: 'COMPLETED' } }),
-      this.prisma.booking.count({ where: { status: 'CANCELLED' } }),
-    ]);
+    const [total, pending, confirmed, completed, cancelled] = await Promise.all(
+      [
+        this.prisma.booking.count(),
+        this.prisma.booking.count({ where: { status: 'PENDING' } }),
+        this.prisma.booking.count({ where: { status: 'CONFIRMED' } }),
+        this.prisma.booking.count({ where: { status: 'COMPLETED' } }),
+        this.prisma.booking.count({ where: { status: 'CANCELLED' } }),
+      ],
+    );
 
     return {
       total,

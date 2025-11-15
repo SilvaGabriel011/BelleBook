@@ -121,26 +121,25 @@ export class BookingsService {
     // Validação: agendamento deve ser com no mínimo 2h de antecedência
     const now = new Date();
     const scheduledTime = new Date(data.scheduledAt);
-    const hoursDiff = (scheduledTime.getTime() - now.getTime()) / (1000 * 60 * 60);
+    const hoursDiff =
+      (scheduledTime.getTime() - now.getTime()) / (1000 * 60 * 60);
 
     if (hoursDiff < 2) {
       throw new BadRequestException(
-        'Agendamento deve ser feito com no mínimo 2 horas de antecedência'
+        'Agendamento deve ser feito com no mínimo 2 horas de antecedência',
       );
     }
 
     // Validação: máximo 5 serviços por agendamento
     if (data.services.length > 5) {
-      throw new BadRequestException(
-        'Máximo de 5 serviços por agendamento'
-      );
+      throw new BadRequestException('Máximo de 5 serviços por agendamento');
     }
 
     // Validar horário comercial (8h - 20h)
     const hours = scheduledTime.getHours();
     if (hours < 8 || hours >= 20) {
       throw new BadRequestException(
-        'Horário fora do horário comercial (8h - 20h)'
+        'Horário fora do horário comercial (8h - 20h)',
       );
     }
 
@@ -161,13 +160,16 @@ export class BookingsService {
 
       if (promoCode.maxUses && promoCode.usedCount >= promoCode.maxUses) {
         throw new BadRequestException(
-          'Código promocional atingiu o limite de uso'
+          'Código promocional atingiu o limite de uso',
         );
       }
 
-      if (promoCode.minAmount && data.totalAmount < promoCode.minAmount.toNumber()) {
+      if (
+        promoCode.minAmount &&
+        data.totalAmount < promoCode.minAmount.toNumber()
+      ) {
         throw new BadRequestException(
-          `Valor mínimo para este cupom é R$ ${promoCode.minAmount}`
+          `Valor mínimo para este cupom é R$ ${promoCode.minAmount}`,
         );
       }
 
@@ -206,7 +208,7 @@ export class BookingsService {
 
       if (conflictingBooking) {
         throw new BadRequestException(
-          'Profissional já possui agendamento neste horário'
+          'Profissional já possui agendamento neste horário',
         );
       }
     }

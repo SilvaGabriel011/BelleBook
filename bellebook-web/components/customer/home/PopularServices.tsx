@@ -115,9 +115,7 @@ export default function PopularServices({ services = [] }: PopularServicesProps)
                 <h3 className="font-bold text-lg mb-2 group-hover:text-pink-600 transition-colors">
                   {service.name}
                 </h3>
-                <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                  {service.description}
-                </p>
+                <p className="text-sm text-gray-600 mb-3 line-clamp-2">{service.description}</p>
 
                 {/* Rating */}
                 <div className="flex items-center gap-2 mb-3">
@@ -125,9 +123,7 @@ export default function PopularServices({ services = [] }: PopularServicesProps)
                     <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                     <span className="font-semibold text-sm">{service.rating}</span>
                   </div>
-                  <span className="text-xs text-gray-500">
-                    ({service.reviewsCount} avaliações)
-                  </span>
+                  <span className="text-xs text-gray-500">({service.reviewsCount} avaliações)</span>
                 </div>
 
                 {/* Duration */}
@@ -160,10 +156,7 @@ export default function PopularServices({ services = [] }: PopularServicesProps)
                       </div>
                     )}
                   </div>
-                  <Button
-                    size="sm"
-                    className="bg-pink-500 hover:bg-pink-600"
-                  >
+                  <Button size="sm" className="bg-pink-500 hover:bg-pink-600">
                     Agendar
                   </Button>
                 </div>

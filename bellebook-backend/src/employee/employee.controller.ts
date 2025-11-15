@@ -6,7 +6,6 @@ import {
   Body,
   Param,
   Query,
-  UseGuards,
   Request,
 } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
@@ -81,7 +80,7 @@ export class EmployeeController {
   }
 
   @Post('schedule/block')
-  async blockTime(@Request() req, @Body() blockTimeDto: BlockTimeDto) {
+  async blockTime(@Request() _req, @Body() _blockTimeDto: BlockTimeDto) {
     // Implement block time logic
     return { success: true, message: 'Time blocked successfully' };
   }

@@ -74,8 +74,8 @@ export class BookingsController {
 
   @Get('provider/:id/availability')
   async getProviderAvailability(
-    @Param('id') providerId: string,
-    @Query('date') date: string,
+    @Param('id') _providerId: string,
+    @Query('date') _date: string,
   ) {
     // TODO: Implement provider availability check
     return { available: true, slots: [] };

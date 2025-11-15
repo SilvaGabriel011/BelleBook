@@ -98,10 +98,7 @@ export function DataTable<T extends Record<string, any>>({
                 } transition-colors`}
               >
                 {columns.map((column) => (
-                  <td
-                    key={String(column.key)}
-                    className="px-6 py-4 text-sm text-gray-900"
-                  >
+                  <td key={String(column.key)} className="px-6 py-4 text-sm text-gray-900">
                     {column.render
                       ? column.render(row[column.key as keyof T], row)
                       : String(row[column.key as keyof T] || '-')}

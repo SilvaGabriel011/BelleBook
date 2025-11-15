@@ -1,4 +1,13 @@
-import { Controller, Get, Patch, Param, Query, Body, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Patch,
+  Param,
+  Query,
+  Body,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { AdminBookingsService } from '../services/admin-bookings.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../auth/guards/roles.guard';
@@ -25,7 +34,10 @@ export class AdminBookingsController {
     @Query('startDate') startDate: string,
     @Query('endDate') endDate: string,
   ) {
-    return this.bookingsService.getBookingsForCalendar(new Date(startDate), new Date(endDate));
+    return this.bookingsService.getBookingsForCalendar(
+      new Date(startDate),
+      new Date(endDate),
+    );
   }
 
   @Get(':id')
@@ -34,7 +46,11 @@ export class AdminBookingsController {
   }
 
   @Patch(':id/cancel')
-  async cancelBooking(@Param('id') id: string, @Body() body: { reason: string }, @Req() req: any) {
+  async cancelBooking(
+    @Param('id') id: string,
+    @Body() body: { reason: string },
+    @Req() req: any,
+  ) {
     return this.bookingsService.cancelBooking(
       id,
       req.user.id,

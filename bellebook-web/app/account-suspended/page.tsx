@@ -47,9 +47,7 @@ export default function AccountSuspendedPage() {
                 <p className="text-sm text-blue-700 mt-1">
                   Se você acredita que isso é um erro, entre em contato com nosso suporte:
                 </p>
-                <p className="text-sm font-medium text-blue-900 mt-2">
-                  suporte@bellebook.com
-                </p>
+                <p className="text-sm font-medium text-blue-900 mt-2">suporte@bellebook.com</p>
               </div>
             </div>
           </div>

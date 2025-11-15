@@ -33,8 +33,8 @@ export default function PendingApprovalPage() {
       } catch (err) {
         const errorMessage =
           err && typeof err === 'object' && 'response' in err
-            ? ((err as { response?: { data?: { message?: string } } }).response?.data?.message ||
-              'Erro ao carregar solicitação')
+            ? (err as { response?: { data?: { message?: string } } }).response?.data?.message ||
+              'Erro ao carregar solicitação'
             : 'Erro ao carregar solicitação';
         setError(errorMessage);
       } finally {
@@ -152,8 +152,8 @@ export default function PendingApprovalPage() {
             </div>
             <CardTitle className="text-3xl text-gray-900">Solicitação em Análise</CardTitle>
             <CardDescription className="text-base mt-2">
-              Sua solicitação para {getRoleDisplayName(request.requestedRole)} está sendo
-              analisada por nossa equipe
+              Sua solicitação para {getRoleDisplayName(request.requestedRole)} está sendo analisada
+              por nossa equipe
             </CardDescription>
           </CardHeader>
 
@@ -209,9 +209,7 @@ export default function PendingApprovalPage() {
                 <div className="flex-1 pt-2">
                   <h3 className="font-semibold text-gray-500">Decisão Final</h3>
                   <p className="text-sm text-gray-400">Pendente</p>
-                  <p className="text-sm text-gray-400 mt-1">
-                    Você receberá um email com a decisão
-                  </p>
+                  <p className="text-sm text-gray-400 mt-1">Você receberá um email com a decisão</p>
                 </div>
               </div>
             </div>
@@ -253,11 +251,7 @@ export default function PendingApprovalPage() {
                 <LogOut className="mr-2 h-4 w-4" />
                 Sair
               </Button>
-              <Button
-                onClick={() => window.location.reload()}
-                variant="outline"
-                className="flex-1"
-              >
+              <Button onClick={() => window.location.reload()} variant="outline" className="flex-1">
                 <Loader2 className="mr-2 h-4 w-4" />
                 Atualizar Status
               </Button>

@@ -27,9 +27,7 @@ export class NotificationsService {
   /**
    * Send booking confirmation email (immediate)
    */
-  async sendBookingConfirmation(
-    data: BookingConfirmationData,
-  ): Promise<void> {
+  async sendBookingConfirmation(data: BookingConfirmationData): Promise<void> {
     this.logger.log(`Sending booking confirmation to ${data.recipientEmail}`);
 
     await this.emailQueue.add('send-template', {
@@ -65,9 +63,7 @@ export class NotificationsService {
   /**
    * Send booking cancelled email (immediate)
    */
-  async sendBookingCancelled(
-    data: BookingCancelledData,
-  ): Promise<void> {
+  async sendBookingCancelled(data: BookingCancelledData): Promise<void> {
     this.logger.log(`Sending booking cancellation to ${data.recipientEmail}`);
 
     await this.emailQueue.add('send-template', {
@@ -175,8 +171,8 @@ export class NotificationsService {
    * Clean old completed jobs from queue
    */
   async cleanQueue(grace: number = 24 * 60 * 60 * 1000): Promise<void> {
-    await this.emailQueue.clean(grace, 'completed');
-    await this.emailQueue.clean(grace, 'failed');
+    await this.emailQueue.clean(grace, 1000, 'completed');
+    await this.emailQueue.clean(grace, 1000, 'failed');
     this.logger.log(`Queue cleaned (grace period: ${grace}ms)`);
   }
 
@@ -189,5 +185,51 @@ export class NotificationsService {
     fromName: string;
   } {
     return this.sendGridService.getStatus();
+  }
+
+  // ==================== ROLE REQUEST EMAILS ====================
+
+  /**
+   * Send role request created email to user
+   */
+  async sendRoleRequestCreated(
+    _email: string,
+    _name: string,
+    _requestedRole: string,
+  ): Promise<void> {
+    this.logger.log(`Sending role request created email to ${_email}`);
+  }
+
+  /**
+   * Notify admins about new role request
+   */
+  async notifyAdminsNewRequest(
+    requestId: string,
+    _userName: string,
+    _requestedRole: string,
+  ): Promise<void> {
+    this.logger.log(`Notifying admins about new role request ${requestId}`);
+  }
+
+  /**
+   * Send role request approved email to user
+   */
+  async sendRoleRequestApproved(
+    _email: string,
+    _name: string,
+    _approvedRole: string,
+  ): Promise<void> {
+    this.logger.log(`Sending role request approved email to ${_email}`);
+  }
+
+  /**
+   * Send role request rejected email to user
+   */
+  async sendRoleRequestRejected(
+    _email: string,
+    _name: string,
+    _reason: string,
+  ): Promise<void> {
+    this.logger.log(`Sending role request rejected email to ${_email}`);
   }
 }

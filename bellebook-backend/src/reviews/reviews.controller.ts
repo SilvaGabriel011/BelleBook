@@ -34,7 +34,10 @@ export class ReviewsController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  async createReview(@Body() data: Omit<CreateReviewDto, 'userId'>, @Request() req) {
+  async createReview(
+    @Body() data: Omit<CreateReviewDto, 'userId'>,
+    @Request() req,
+  ) {
     return this.reviewsService.create({
       ...data,
       userId: req.user.id,

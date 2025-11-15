@@ -15,14 +15,13 @@ export default function EmployeeHomePage() {
   const [summary, setSummary] = useState<DailySummary | null>(null);
   const [nextBookings, setNextBookings] = useState<NextBooking[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
+
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const fetchDashboardData = useCallback(async () => {
     try {
       setLoading(true);
-      setError(null);
-      
+
       const [summaryData, bookingsData, reviewsData] = await Promise.all([
         employeeApi.getDailySummary(),
         employeeApi.getNextBookings(5),
@@ -34,7 +33,6 @@ export default function EmployeeHomePage() {
       setReviews(reviewsData);
     } catch (err) {
       console.error('Error fetching dashboard data:', err);
-      setError('Erro ao carregar dados do dashboard');
     } finally {
       setLoading(false);
     }
@@ -65,22 +63,6 @@ export default function EmployeeHomePage() {
       </div>
     );
   }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Card className="p-6 max-w-md">
-          <CardContent>
-            <p className="text-red-600 text-center mb-4">{error}</p>
-            <Button onClick={fetchDashboardData} className="w-full">
-              Tentar Novamente
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
 
   return (
     <div className="space-y-6 pb-20 md:pb-6">
@@ -126,11 +108,7 @@ export default function EmployeeHomePage() {
             change={8}
             trend="up"
           />
-          <EmployeeStatCard
-            label="Avaliação Média"
-            value={summary.averageRating}
-            icon={Star}
-          />
+          <EmployeeStatCard label="Avaliação Média" value={summary.averageRating} icon={Star} />
         </div>
       )}
 
@@ -138,9 +116,7 @@ export default function EmployeeHomePage() {
         {/* Next Bookings */}
         <div className="lg:col-span-2 space-y-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-bold text-gray-900">
-              Próximos Agendamentos
-            </h2>
+            <h2 className="text-xl font-bold text-gray-900">Próximos Agendamentos</h2>
             <Button variant="outline" size="sm">
               Ver Todos
             </Button>
@@ -160,9 +136,7 @@ export default function EmployeeHomePage() {
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-12">
                 <Clock className="w-12 h-12 text-gray-400 mb-4" />
-                <p className="text-gray-600 text-center">
-                  Nenhum agendamento próximo
-                </p>
+                <p className="text-gray-600 text-center">Nenhum agendamento próximo</p>
               </CardContent>
             </Card>
           )}
@@ -203,10 +177,7 @@ export default function EmployeeHomePage() {
                     <p className="font-semibold text-sm">{review.customer.name}</p>
                     <div className="flex">
                       {[...Array(review.rating)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className="w-3 h-3 fill-yellow-400 text-yellow-400"
-                        />
+                        <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
                       ))}
                     </div>
                   </div>

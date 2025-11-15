@@ -5,17 +5,20 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2, Scissors, Shield, ArrowLeft, FileText, Briefcase, Award, Heart } from 'lucide-react';
+import {
+  Loader2,
+  Scissors,
+  Shield,
+  ArrowLeft,
+  FileText,
+  Briefcase,
+  Award,
+  Heart,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Select,
   SelectContent,
@@ -81,8 +84,8 @@ function RoleRequestContent() {
     } catch (err) {
       const errorMessage =
         err && typeof err === 'object' && 'response' in err
-          ? ((err as { response?: { data?: { message?: string } } }).response?.data?.message ||
-            'Erro ao criar solicitação')
+          ? (err as { response?: { data?: { message?: string } } }).response?.data?.message ||
+            'Erro ao criar solicitação'
           : 'Erro ao criar solicitação';
       setError(errorMessage);
     } finally {
@@ -110,11 +113,7 @@ function RoleRequestContent() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 p-4 md:p-8">
       <div className="max-w-3xl mx-auto">
-        <Button
-          variant="ghost"
-          onClick={() => router.back()}
-          className="mb-6 hover:bg-white/50"
-        >
+        <Button variant="ghost" onClick={() => router.back()} className="mb-6 hover:bg-white/50">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Voltar
         </Button>
@@ -131,16 +130,14 @@ function RoleRequestContent() {
               </div>
               <div>
                 <CardTitle className="text-3xl">{config.title}</CardTitle>
-                <CardDescription className="text-base mt-2">
-                  {config.description}
-                </CardDescription>
+                <CardDescription className="text-base mt-2">{config.description}</CardDescription>
               </div>
             </div>
 
             <Alert className="bg-amber-50 border-amber-200">
               <AlertDescription className="text-amber-800">
-                <strong>Tempo de análise:</strong> Sua solicitação será analisada em até 48
-                horas úteis. Você receberá um email com a decisão.
+                <strong>Tempo de análise:</strong> Sua solicitação será analisada em até 48 horas
+                úteis. Você receberá um email com a decisão.
               </AlertDescription>
             </Alert>
           </CardHeader>
@@ -176,7 +173,10 @@ function RoleRequestContent() {
               {isEmployee && (
                 <>
                   <div className="space-y-2">
-                    <Label htmlFor="experience" className="text-base font-semibold flex items-center gap-2">
+                    <Label
+                      htmlFor="experience"
+                      className="text-base font-semibold flex items-center gap-2"
+                    >
                       <Briefcase className="h-5 w-5" />
                       Experiência Profissional *
                     </Label>
@@ -193,7 +193,10 @@ function RoleRequestContent() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="certifications" className="text-base font-semibold flex items-center gap-2">
+                    <Label
+                      htmlFor="certifications"
+                      className="text-base font-semibold flex items-center gap-2"
+                    >
                       <Award className="h-5 w-5" />
                       Certificações (Opcional)
                     </Label>
@@ -204,12 +207,17 @@ function RoleRequestContent() {
                       {...register('certifications' as never)}
                     />
                     {errors && 'certifications' in errors && errors.certifications && (
-                      <p className="text-sm text-red-500">{String(errors.certifications.message)}</p>
+                      <p className="text-sm text-red-500">
+                        {String(errors.certifications.message)}
+                      </p>
                     )}
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="motivation" className="text-base font-semibold flex items-center gap-2">
+                    <Label
+                      htmlFor="motivation"
+                      className="text-base font-semibold flex items-center gap-2"
+                    >
                       <Heart className="h-5 w-5" />
                       Motivação (Opcional)
                     </Label>
@@ -230,9 +238,7 @@ function RoleRequestContent() {
                     Departamento (Opcional)
                   </Label>
                   <Select
-                    onValueChange={(value) =>
-                      setValue('department' as never, value as never)
-                    }
+                    onValueChange={(value) => setValue('department' as never, value as never)}
                   >
                     <SelectTrigger className="border-gray-300 focus:border-blue-400">
                       <SelectValue placeholder="Selecione um departamento" />
@@ -269,9 +275,7 @@ function RoleRequestContent() {
                 </Button>
               </div>
 
-              <p className="text-xs text-center text-gray-500">
-                * Campos obrigatórios
-              </p>
+              <p className="text-xs text-center text-gray-500">* Campos obrigatórios</p>
             </form>
           </CardContent>
         </Card>
@@ -282,7 +286,9 @@ function RoleRequestContent() {
 
 export default function RoleRequestPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Carregando...</div>}>
+    <Suspense
+      fallback={<div className="min-h-screen flex items-center justify-center">Carregando...</div>}
+    >
       <RoleRequestContent />
     </Suspense>
   );

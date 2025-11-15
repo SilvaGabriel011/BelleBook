@@ -21,9 +21,7 @@ interface PromoBannerProps {
 
 export default function PromoBanner({ banners = [] }: PromoBannerProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
-    Autoplay({ delay: 5000 }),
-  ]);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 5000 })]);
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
@@ -85,9 +83,7 @@ export default function PromoBanner({ banners = [] }: PromoBannerProps) {
                       {banner.title}
                     </h2>
                     {banner.description && (
-                      <p className="text-lg md:text-xl text-pink-100">
-                        {banner.description}
-                      </p>
+                      <p className="text-lg md:text-xl text-pink-100">{banner.description}</p>
                     )}
                     <Button
                       size="lg"
@@ -132,9 +128,7 @@ export default function PromoBanner({ banners = [] }: PromoBannerProps) {
               <button
                 key={index}
                 className={`h-2 rounded-full transition-all ${
-                  index === selectedIndex
-                    ? 'w-8 bg-pink-500'
-                    : 'w-2 bg-gray-300'
+                  index === selectedIndex ? 'w-8 bg-pink-500' : 'w-2 bg-gray-300'
                 }`}
                 onClick={() => emblaApi?.scrollTo(index)}
                 aria-label={`Go to slide ${index + 1}`}

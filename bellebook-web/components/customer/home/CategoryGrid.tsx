@@ -103,13 +103,8 @@ export default function CategoryGrid() {
                 <div className="mb-3 transform group-hover:scale-110 transition-transform">
                   {category.icon}
                 </div>
-                <h3 className="text-lg font-bold text-center mb-2">
-                  {category.name}
-                </h3>
-                <Badge
-                  variant="secondary"
-                  className="bg-white/20 text-white border-white/30"
-                >
+                <h3 className="text-lg font-bold text-center mb-2">{category.name}</h3>
+                <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
                   {category.count} serviços
                 </Badge>
               </div>

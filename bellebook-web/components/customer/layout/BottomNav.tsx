@@ -55,9 +55,7 @@ export default function BottomNav() {
               href={item.href}
               className={cn(
                 'flex flex-col items-center justify-center flex-1 h-full relative transition-colors',
-                item.active
-                  ? 'text-pink-600'
-                  : 'text-gray-600 hover:text-pink-500'
+                item.active ? 'text-pink-600' : 'text-gray-600 hover:text-pink-500'
               )}
             >
               <div className="relative">

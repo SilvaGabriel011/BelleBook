@@ -2,14 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  Plus,
-  Pencil,
-  Trash2,
-  Eye,
-  EyeOff,
-  Search,
-} from 'lucide-react';
+import { Plus, Pencil, Trash2, Eye, EyeOff, Search } from 'lucide-react';
 import Image from 'next/image';
 import { toast } from 'sonner';
 import { servicesService, Service, Category } from '@/services/services.service';
@@ -77,7 +70,7 @@ export default function ServicesManagement() {
   const loadData = async () => {
     try {
       setLoading(true);
-      
+
       // Load categories
       const cats = await servicesService.getAllCategories();
       setCategories(cats);
@@ -96,12 +89,12 @@ export default function ServicesManagement() {
     try {
       const allServices: Service[] = [];
       const cats = await servicesService.getAllCategories();
-      
+
       for (const cat of cats) {
         const catServices = await servicesService.getByCategory(cat.id);
         allServices.push(...catServices);
       }
-      
+
       setServices(allServices);
     } catch (error) {
       console.error('Error loading services:', error);
@@ -145,9 +138,7 @@ export default function ServicesManagement() {
     try {
       await servicesService.toggleActiveService(service.id);
       await loadData();
-      toast.success(
-        service.isActive ? 'Service deactivated!' : 'Service activated!'
-      );
+      toast.success(service.isActive ? 'Service deactivated!' : 'Service activated!');
     } catch (error) {
       console.error('Error toggling status:', error);
       toast.error('Error toggling service status');
@@ -168,8 +159,8 @@ export default function ServicesManagement() {
       toast.success('Service deleted!');
     } catch (error) {
       console.error('Error deleting service:', error);
-      const errorMessage = 
-        (error as { response?: { data?: { message?: string } } })?.response?.data?.message || 
+      const errorMessage =
+        (error as { response?: { data?: { message?: string } } })?.response?.data?.message ||
         'Error deleting service';
       toast.error(errorMessage);
     }
@@ -196,12 +187,8 @@ export default function ServicesManagement() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Services Management
-          </h1>
-          <p className="text-gray-600">
-            Add, edit or remove services from catalog
-          </p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Services Management</h1>
+          <p className="text-gray-600">Add, edit or remove services from catalog</p>
         </div>
 
         {/* Toolbar */}
@@ -237,10 +224,7 @@ export default function ServicesManagement() {
               </Select>
 
               {/* Add Button */}
-              <Button
-                onClick={handleCreateService}
-                className="bg-pink-500 hover:bg-pink-600"
-              >
+              <Button onClick={handleCreateService} className="bg-pink-500 hover:bg-pink-600">
                 <Plus className="w-4 h-4 mr-2" />
                 New Service
               </Button>
@@ -308,9 +292,7 @@ export default function ServicesManagement() {
                               </div>
                             </>
                           ) : (
-                            <div className="font-semibold">
-                              {formatPrice(service.price)}
-                            </div>
+                            <div className="font-semibold">{formatPrice(service.price)}</div>
                           )}
                         </div>
                       </TableCell>
@@ -318,11 +300,7 @@ export default function ServicesManagement() {
                       <TableCell>
                         <Badge
                           variant={service.isActive ? 'default' : 'secondary'}
-                          className={
-                            service.isActive
-                              ? 'bg-green-500'
-                              : 'bg-gray-400'
-                          }
+                          className={service.isActive ? 'bg-green-500' : 'bg-gray-400'}
                         >
                           {service.isActive ? 'Active' : 'Inactive'}
                         </Badge>
@@ -333,11 +311,7 @@ export default function ServicesManagement() {
                             variant="ghost"
                             size="sm"
                             onClick={() => handleToggleActive(service)}
-                            title={
-                              service.isActive
-                                ? 'Deactivate service'
-                                : 'Activate service'
-                            }
+                            title={service.isActive ? 'Deactivate service' : 'Activate service'}
                           >
                             {service.isActive ? (
                               <EyeOff className="w-4 h-4" />
@@ -392,24 +366,17 @@ export default function ServicesManagement() {
           <DialogHeader>
             <DialogTitle>Confirm Deletion</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete the service{' '}
-              <strong>{deletingService?.name}</strong>?
+              Are you sure you want to delete the service <strong>{deletingService?.name}</strong>?
               <br />
               <br />
               This action cannot be undone. The service will be permanently removed.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setDeletingService(null)}
-            >
+            <Button variant="outline" onClick={() => setDeletingService(null)}>
               Cancel
             </Button>
-            <Button
-              variant="destructive"
-              onClick={handleDeleteConfirm}
-            >
+            <Button variant="destructive" onClick={handleDeleteConfirm}>
               Delete
             </Button>
           </DialogFooter>

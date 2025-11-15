@@ -83,9 +83,7 @@ export default function ServiceDetailPage() {
   const handleFavorite = () => {
     setIsFavorite(!isFavorite);
     toast.success(
-      isFavorite
-        ? 'Service removed from your favorites'
-        : 'Service added to your favorites'
+      isFavorite ? 'Service removed from your favorites' : 'Service added to your favorites'
     );
   };
 
@@ -336,7 +334,7 @@ export default function ServiceDetailPage() {
                   <TabsContent value="details" className="mt-6">
                     <div className="space-y-4">
                       <div>
-                        <h4 className="font-semibold mb-2">What's included:</h4>
+                        <h4 className="font-semibold mb-2">What&apos;s included:</h4>
                         <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
                           <li>Initial consultation</li>
                           <li>Procedure application</li>
@@ -359,21 +357,18 @@ export default function ServiceDetailPage() {
                   <TabsContent value="policies" className="mt-6">
                     <div className="space-y-4 text-sm text-gray-600">
                       <div>
-                        <h4 className="font-semibold text-gray-800 mb-2">
-                          Cancellation Policy
-                        </h4>
+                        <h4 className="font-semibold text-gray-800 mb-2">Cancellation Policy</h4>
                         <p>
-                          Cancellations must be made at least 24 hours in advance.
-                          Late cancellations or no-shows may result in a 50% charge
-                          of the service value.
+                          Cancellations must be made at least 24 hours in advance. Late
+                          cancellations or no-shows may result in a 50% charge of the service value.
                         </p>
                       </div>
                       <Separator />
                       <div>
                         <h4 className="font-semibold text-gray-800 mb-2">Rescheduling</h4>
                         <p>
-                          You can reschedule your appointment free of charge up to 12 hours
-                          before the booking.
+                          You can reschedule your appointment free of charge up to 12 hours before
+                          the booking.
                         </p>
                       </div>
                     </div>
@@ -403,8 +398,7 @@ export default function ServiceDetailPage() {
                         </span>
                       </div>
                       <p className="text-sm text-green-600 mt-1">
-                        You save{' '}
-                        {formatPrice(Number(service.price) - Number(service.promoPrice))}
+                        You save {formatPrice(Number(service.price) - Number(service.promoPrice))}
                       </p>
                     </>
                   ) : (

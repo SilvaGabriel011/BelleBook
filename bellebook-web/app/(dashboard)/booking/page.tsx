@@ -76,11 +76,22 @@ export default function BookingPage() {
     setLoading(true);
     try {
       const dateStr = format(selectedDate, 'yyyy-MM-dd');
+      const scheduledAtDate = new Date(`${dateStr}T${selectedTime}:00`);
+      const servicePrice = Number(currentItem.service.promoPrice || currentItem.service.price);
 
       await bookingService.createBooking({
         serviceId: currentItem.service.id,
-        date: dateStr,
-        time: selectedTime,
+        services: [
+          {
+            serviceId: currentItem.service.id,
+            quantity: currentItem.quantity,
+            price: servicePrice,
+          },
+        ],
+        scheduledAt: scheduledAtDate,
+        duration: currentItem.service.duration,
+        totalAmount: servicePrice * currentItem.quantity,
+        paymentMethod: 'pay_on_site',
         notes: notes || undefined,
       });
 
@@ -140,12 +151,8 @@ export default function BookingPage() {
           <Card className="text-center py-12">
             <CardContent>
               <CalendarIcon className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-700 mb-2">
-                No services to book
-              </h2>
-              <p className="text-gray-500 mb-6">
-                Add services to cart to make a booking
-              </p>
+              <h2 className="text-xl font-semibold text-gray-700 mb-2">No services to book</h2>
+              <p className="text-gray-500 mb-6">Add services to cart to make a booking</p>
               <Button onClick={() => router.push('/home')}>Explore Services</Button>
             </CardContent>
           </Card>
@@ -268,8 +275,7 @@ export default function BookingPage() {
                 <CardHeader>
                   <CardTitle>Choose a Time</CardTitle>
                   <CardDescription>
-                    Available times for{' '}
-                    {format(selectedDate, 'MMMM dd', { locale: ptBR })}
+                    Available times for {format(selectedDate, 'MMMM dd', { locale: ptBR })}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>

@@ -10,7 +10,8 @@ import {
   BadRequestException,
   UseGuards,
 } from '@nestjs/common';
-import { ServicesService, ServiceFilters, CreateServiceDto, UpdateServiceDto } from './services.service';
+import { ServicesService, ServiceFilters } from './services.service';
+import * as ServiceDtos from './services.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -129,7 +130,7 @@ export class ServicesController {
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
-  async create(@Body() createServiceDto: CreateServiceDto) {
+  async create(@Body() createServiceDto: ServiceDtos.CreateServiceDto) {
     return this.servicesService.create(createServiceDto);
   }
 
@@ -138,7 +139,7 @@ export class ServicesController {
   @Roles('ADMIN')
   async update(
     @Param('id') id: string,
-    @Body() updateServiceDto: UpdateServiceDto,
+    @Body() updateServiceDto: ServiceDtos.UpdateServiceDto,
   ) {
     return this.servicesService.update(id, updateServiceDto);
   }

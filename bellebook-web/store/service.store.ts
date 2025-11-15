@@ -122,19 +122,19 @@ export const useServiceStore = create<ServiceStore>((set, get) => ({
 
   // Actions
   setServices: (services) => set({ services, error: null }),
-  
+
   setPopularServices: (popularServices) => set({ popularServices }),
-  
+
   setPackages: (packages) => set({ packages }),
-  
+
   setSelectedService: (service) => set({ selectedService: service }),
-  
+
   setFilters: (newFilters) =>
     set((state) => ({
       filters: { ...state.filters, ...newFilters },
       pagination: { ...state.pagination, page: 1 }, // Reset to page 1 when filters change
     })),
-  
+
   resetFilters: () =>
     set({
       filters: initialFilters,
@@ -145,13 +145,13 @@ export const useServiceStore = create<ServiceStore>((set, get) => ({
         totalPages: 0,
       },
     }),
-  
+
   setPagination: (meta) => set({ pagination: meta }),
-  
+
   setLoading: (loading) => set({ isLoading: loading }),
-  
+
   setError: (error) => set({ error, isLoading: false }),
-  
+
   setViewMode: (mode) => set({ viewMode: mode }),
 
   // Getters
@@ -169,8 +169,8 @@ export const useServiceStore = create<ServiceStore>((set, get) => ({
       );
     }
 
-    if (filters.gender && filters.gender !== '') {
-      filtered = filtered.filter((service) => service.gender === filters.gender);
+    if (filters.gender) {
+      filtered = filtered.filter((service) => !service.gender || service.gender === filters.gender);
     }
 
     if (filters.minPrice !== undefined) {

@@ -37,10 +37,8 @@ export class LoyaltyService {
       where: { id: userId },
     });
 
-    const history = user?.pointsHistory
-      ? JSON.parse(user.pointsHistory)
-      : [];
-    
+    const history = user?.pointsHistory ? JSON.parse(user.pointsHistory) : [];
+
     history.push({
       action,
       points,

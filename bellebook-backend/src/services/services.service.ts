@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 
@@ -77,8 +81,8 @@ export class ServicesService {
     // Search filter
     if (search) {
       where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } },
+        { name: { contains: search } },
+        { description: { contains: search } },
       ];
     }
 
@@ -150,14 +154,9 @@ export class ServicesService {
     const services = await this.prisma.service.findMany({
       where: {
         isActive: true,
-        OR: [
-          { isPopular: true },
-        ],
+        OR: [{ isPopular: true }],
       },
-      orderBy: [
-        { isPopular: 'desc' },
-        { bookings: { _count: 'desc' } },
-      ],
+      orderBy: [{ isPopular: 'desc' }, { bookings: { _count: 'desc' } }],
       take: limit,
       include: {
         category: true,
@@ -242,7 +241,8 @@ export class ServicesService {
 
     // Calculate average rating
     const avgRating = service.reviews.length
-      ? service.reviews.reduce((sum, r) => sum + r.rating, 0) / service.reviews.length
+      ? service.reviews.reduce((sum, r) => sum + r.rating, 0) /
+        service.reviews.length
       : 0;
 
     // Format reviews
@@ -441,7 +441,7 @@ export class ServicesService {
 
   async create(createServiceDto: CreateServiceDto) {
     const { images, price, promoPrice, ...rest } = createServiceDto;
-    
+
     // Verificar se a categoria existe
     const category = await this.prisma.category.findUnique({
       where: { id: createServiceDto.categoryId },
@@ -496,7 +496,9 @@ export class ServicesService {
       data: {
         ...rest,
         ...(price !== undefined && { price: price.toString() }),
-        ...(promoPrice !== undefined && { promoPrice: promoPrice ? promoPrice.toString() : null }),
+        ...(promoPrice !== undefined && {
+          promoPrice: promoPrice ? promoPrice.toString() : null,
+        }),
         ...(images && { images: JSON.stringify(images) }),
       },
       include: {
@@ -524,7 +526,8 @@ export class ServicesService {
 
     // Verificar se há agendamentos ativos
     const activeBookings = service.bookings.filter(
-      (booking) => booking.status === 'PENDING' || booking.status === 'CONFIRMED',
+      (booking) =>
+        booking.status === 'PENDING' || booking.status === 'CONFIRMED',
     );
 
     if (activeBookings.length > 0) {

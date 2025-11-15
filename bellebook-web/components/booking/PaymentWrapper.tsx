@@ -15,12 +15,7 @@ interface PaymentWrapperProps {
   onError?: (error: string) => void;
 }
 
-export function PaymentWrapper({
-  bookingId,
-  amount,
-  onSuccess,
-  onError,
-}: PaymentWrapperProps) {
+export function PaymentWrapper({ bookingId, amount, onSuccess, onError }: PaymentWrapperProps) {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -122,12 +117,7 @@ export function PaymentWrapper({
         locale: 'pt-BR',
       }}
     >
-      <PaymentForm
-        amount={amount}
-        bookingId={bookingId}
-        onSuccess={onSuccess}
-        onError={onError}
-      />
+      <PaymentForm amount={amount} bookingId={bookingId} onSuccess={onSuccess} onError={onError} />
     </Elements>
   );
 }

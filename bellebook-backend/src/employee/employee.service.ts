@@ -1,9 +1,20 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { DailySummaryDto, EmployeePerformanceDto, ServiceStatsDto, ClientStatsDto } from './dto/employee-stats.dto';
+import {
+  DailySummaryDto,
+  EmployeePerformanceDto,
+  ServiceStatsDto,
+  ClientStatsDto,
+} from './dto/employee-stats.dto';
 import { NextBookingDto } from './dto/next-booking.dto';
 import { ClientCardDto, ClientDetailsDto } from './dto/client.dto';
-import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, subMonths } from 'date-fns';
+import {
+  startOfDay,
+  endOfDay,
+  startOfWeek,
+  startOfMonth,
+  subMonths,
+} from 'date-fns';
 
 @Injectable()
 export class EmployeeService {
@@ -29,7 +40,9 @@ export class EmployeeService {
       },
     });
 
-    const completedToday = bookingsToday.filter(b => b.status === 'COMPLETED').length;
+    const completedToday = bookingsToday.filter(
+      (b) => b.status === 'COMPLETED',
+    ).length;
     const totalBookings = bookingsToday.length;
     const remainingToday = totalBookings - completedToday;
 
@@ -51,7 +64,10 @@ export class EmployeeService {
     };
   }
 
-  async getNextBookings(employeeId: string, limit: number = 5): Promise<NextBookingDto[]> {
+  async getNextBookings(
+    employeeId: string,
+    limit: number = 5,
+  ): Promise<NextBookingDto[]> {
     const now = new Date();
 
     const bookings = await this.prisma.booking.findMany({
@@ -73,7 +89,7 @@ export class EmployeeService {
       },
     });
 
-    return bookings.map(booking => ({
+    return bookings.map((booking) => ({
       id: booking.id,
       customer: {
         id: booking.user.id,
@@ -118,7 +134,7 @@ export class EmployeeService {
 
     for (const booking of bookings) {
       const userId = booking.user.id;
-      
+
       if (!clientsMap.has(userId)) {
         clientsMap.set(userId, {
           id: userId,
@@ -139,41 +155,51 @@ export class EmployeeService {
     }
 
     // Transform to ClientCardDto
-    const clients: ClientCardDto[] = Array.from(clientsMap.values()).map(client => {
-      const totalSpent = client.bookings.reduce((sum: number, b: any) => sum + Number(b.totalPaid), 0);
-      const lastBooking = client.bookings[0]?.date || null;
-      
-      return {
-        id: client.id,
-        name: client.name,
-        avatar: client.avatar,
-        phone: client.phone,
-        email: client.email,
-        totalBookings: client.bookings.length,
-        lastBooking,
-        favoriteServices: client.services.slice(0, 3),
-        averageFrequency: null, // Would calculate from booking dates
-        totalSpent,
-      };
-    });
+    const clients: ClientCardDto[] = Array.from(clientsMap.values()).map(
+      (client) => {
+        const totalSpent = client.bookings.reduce(
+          (sum: number, b: any) => sum + Number(b.totalPaid),
+          0,
+        );
+        const lastBooking = client.bookings[0]?.date || null;
+
+        return {
+          id: client.id,
+          name: client.name,
+          avatar: client.avatar,
+          phone: client.phone,
+          email: client.email,
+          totalBookings: client.bookings.length,
+          lastBooking,
+          favoriteServices: client.services.slice(0, 3),
+          averageFrequency: null, // Would calculate from booking dates
+          totalSpent,
+        };
+      },
+    );
 
     // Apply filters
     let filtered = clients;
     if (search) {
       const searchLower = search.toLowerCase();
-      filtered = filtered.filter(c => 
-        c.name.toLowerCase().includes(searchLower) || 
-        c.email.toLowerCase().includes(searchLower) ||
-        c.phone?.toLowerCase().includes(searchLower)
+      filtered = filtered.filter(
+        (c) =>
+          c.name.toLowerCase().includes(searchLower) ||
+          c.email.toLowerCase().includes(searchLower) ||
+          c.phone?.toLowerCase().includes(searchLower),
       );
     }
 
     if (filter === 'inactive') {
       const threeMonthsAgo = subMonths(new Date(), 3);
-      filtered = filtered.filter(c => c.lastBooking && c.lastBooking < threeMonthsAgo);
+      filtered = filtered.filter(
+        (c) => c.lastBooking && c.lastBooking < threeMonthsAgo,
+      );
     } else if (filter === 'active') {
       const threeMonthsAgo = subMonths(new Date(), 3);
-      filtered = filtered.filter(c => c.lastBooking && c.lastBooking >= threeMonthsAgo);
+      filtered = filtered.filter(
+        (c) => c.lastBooking && c.lastBooking >= threeMonthsAgo,
+      );
     }
 
     // Apply sorting
@@ -182,7 +208,8 @@ export class EmployeeService {
         return a.name.localeCompare(b.name);
       } else if (orderBy === 'totalBookings') {
         return b.totalBookings - a.totalBookings;
-      } else { // lastBooking
+      } else {
+        // lastBooking
         if (!a.lastBooking) return 1;
         if (!b.lastBooking) return -1;
         return b.lastBooking.getTime() - a.lastBooking.getTime();
@@ -192,7 +219,10 @@ export class EmployeeService {
     return filtered;
   }
 
-  async getClientDetails(employeeId: string, clientId: string): Promise<ClientDetailsDto> {
+  async getClientDetails(
+    employeeId: string,
+    clientId: string,
+  ): Promise<ClientDetailsDto> {
     const user = await this.prisma.user.findUnique({
       where: { id: clientId },
       include: {
@@ -212,11 +242,14 @@ export class EmployeeService {
     }
 
     const now = new Date();
-    const pastBookings = user.bookings.filter(b => b.date < now);
-    const upcomingBookings = user.bookings.filter(b => b.date >= now);
+    const pastBookings = user.bookings.filter((b) => b.date < now);
+    const upcomingBookings = user.bookings.filter((b) => b.date >= now);
 
-    const totalSpent = user.bookings.reduce((sum, b) => sum + Number(b.totalPaid), 0);
-    const services = [...new Set(user.bookings.map(b => b.service.name))];
+    const totalSpent = user.bookings.reduce(
+      (sum, b) => sum + Number(b.totalPaid),
+      0,
+    );
+    const services = [...new Set(user.bookings.map((b) => b.service.name))];
 
     return {
       id: user.id,
@@ -229,14 +262,14 @@ export class EmployeeService {
       favoriteServices: services.slice(0, 3),
       averageFrequency: null,
       totalSpent,
-      bookingHistory: pastBookings.map(b => ({
+      bookingHistory: pastBookings.map((b) => ({
         id: b.id,
         serviceName: b.service.name,
         date: b.date,
         status: b.status,
         totalPaid: Number(b.totalPaid),
       })),
-      upcomingBookings: upcomingBookings.map(b => ({
+      upcomingBookings: upcomingBookings.map((b) => ({
         id: b.id,
         serviceName: b.service.name,
         scheduledAt: b.date,
@@ -281,22 +314,31 @@ export class EmployeeService {
     });
 
     const totalBookings = bookings.length;
-    const completedBookings = bookings.filter(b => b.status === 'COMPLETED').length;
-    const cancelledBookings = bookings.filter(b => b.status === 'CANCELLED').length;
+    const completedBookings = bookings.filter(
+      (b) => b.status === 'COMPLETED',
+    ).length;
+    const cancelledBookings = bookings.filter(
+      (b) => b.status === 'CANCELLED',
+    ).length;
     const totalRevenue = bookings
-      .filter(b => b.status === 'COMPLETED')
+      .filter((b) => b.status === 'COMPLETED')
       .reduce((sum, b) => sum + Number(b.totalPaid), 0);
-    
-    const averageTicket = completedBookings > 0 ? totalRevenue / completedBookings : 0;
-    
-    const reviews = bookings.filter(b => b.review).map(b => b.review!);
-    const averageRating = reviews.length > 0
-      ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
-      : 0;
+
+    const averageTicket =
+      completedBookings > 0 ? totalRevenue / completedBookings : 0;
+
+    const reviews = bookings.filter((b) => b.review).map((b) => b.review!);
+    const averageRating =
+      reviews.length > 0
+        ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+        : 0;
 
     // Service stats
-    const serviceMap = new Map<string, { count: number; revenue: number; name: string }>();
-    for (const booking of bookings.filter(b => b.status === 'COMPLETED')) {
+    const serviceMap = new Map<
+      string,
+      { count: number; revenue: number; name: string }
+    >();
+    for (const booking of bookings.filter((b) => b.status === 'COMPLETED')) {
       const existing = serviceMap.get(booking.serviceId) || {
         count: 0,
         revenue: 0,
@@ -319,15 +361,17 @@ export class EmployeeService {
 
     // Revenue by date (simplified - group by day)
     const revenueByDate = bookings
-      .filter(b => b.status === 'COMPLETED')
-      .reduce((acc, b) => {
-        const dateStr = b.date.toISOString().split('T')[0];
-        acc[dateStr] = (acc[dateStr] || 0) + Number(b.totalPaid);
-        return acc;
-      }, {} as Record<string, number>);
+      .filter((b) => b.status === 'COMPLETED')
+      .reduce(
+        (acc, b) => {
+          const dateStr = b.date.toISOString().split('T')[0];
+          acc[dateStr] = (acc[dateStr] || 0) + Number(b.totalPaid);
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
 
     // Client stats
-    const uniqueClients = new Set(bookings.map(b => b.userId));
     const clientStats: ClientStatsDto = {
       newClients: 0, // Would need to track first booking
       recurringClients: 0,
@@ -340,7 +384,8 @@ export class EmployeeService {
         totalBookings,
         completedBookings,
         cancelledBookings,
-        noShowRate: totalBookings > 0 ? (cancelledBookings / totalBookings) * 100 : 0,
+        noShowRate:
+          totalBookings > 0 ? (cancelledBookings / totalBookings) * 100 : 0,
         totalRevenue,
         averageTicket,
         averageRating,
@@ -356,7 +401,10 @@ export class EmployeeService {
     };
   }
 
-  async updateAvailability(employeeId: string, isAvailable: boolean): Promise<void> {
+  async updateAvailability(
+    employeeId: string,
+    isAvailable: boolean,
+  ): Promise<void> {
     await this.prisma.employeeProfile.update({
       where: { userId: employeeId },
       data: { isAvailable },
@@ -376,7 +424,7 @@ export class EmployeeService {
       },
     });
 
-    return reviews.map(review => ({
+    return reviews.map((review) => ({
       id: review.id,
       customer: {
         name: review.user.name,

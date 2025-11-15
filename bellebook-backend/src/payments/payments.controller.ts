@@ -8,17 +8,13 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
-  RawBodyRequest,
   Headers,
 } from '@nestjs/common';
+import type { RawBodyRequest } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { StripeService } from './stripe.service';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import {
-  CreatePaymentIntentDto,
-  ConfirmPaymentDto,
-  RefundPaymentDto,
-} from './dto/create-payment-intent.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import * as PaymentDtos from './dto/create-payment-intent.dto';
 import { Request } from 'express';
 
 @Controller('payments')
@@ -30,13 +26,13 @@ export class PaymentsController {
 
   @Post('create-intent')
   @UseGuards(JwtAuthGuard)
-  async createPaymentIntent(@Body() dto: CreatePaymentIntentDto) {
+  async createPaymentIntent(@Body() dto: PaymentDtos.CreatePaymentIntentDto) {
     return this.paymentsService.createPaymentIntent(dto);
   }
 
   @Post('confirm')
   @UseGuards(JwtAuthGuard)
-  async confirmPayment(@Body() dto: ConfirmPaymentDto) {
+  async confirmPayment(@Body() dto: PaymentDtos.ConfirmPaymentDto) {
     return this.paymentsService.confirmPayment(dto);
   }
 
@@ -48,7 +44,7 @@ export class PaymentsController {
 
   @Post('refund')
   @UseGuards(JwtAuthGuard)
-  async refundPayment(@Body() dto: RefundPaymentDto) {
+  async refundPayment(@Body() dto: PaymentDtos.RefundPaymentDto) {
     return this.paymentsService.refundPayment(dto);
   }
 
@@ -77,7 +73,7 @@ export class PaymentsController {
     try {
       // Get raw body for signature verification
       const rawBody = req.rawBody;
-      
+
       if (!rawBody) {
         return { error: 'Missing raw body' };
       }

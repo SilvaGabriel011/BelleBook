@@ -48,12 +48,12 @@ export class RoleRequestController {
   @Get(':id')
   async getRequestById(@Param('id') id: string, @CurrentUser() user: any) {
     const request = await this.roleRequestService.getRequestById(id);
-    
+
     // Usuários normais só podem ver suas próprias solicitações
     if (user.role !== UserRole.ADMIN && request.userId !== user.id) {
       throw new Error('Não autorizado');
     }
-    
+
     return request;
   }
 

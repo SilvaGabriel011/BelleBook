@@ -61,7 +61,11 @@ export class AdminChatService {
     }));
   }
 
-  async getConversationMessages(conversationId: string, skip?: number, take?: number) {
+  async getConversationMessages(
+    conversationId: string,
+    skip?: number,
+    take?: number,
+  ) {
     const conversation = await this.prisma.chatConversation.findUnique({
       where: { id: conversationId },
       include: {
@@ -97,7 +101,12 @@ export class AdminChatService {
     };
   }
 
-  async sendMessage(conversationId: string, senderId: string, content: string, attachments?: string[]) {
+  async sendMessage(
+    conversationId: string,
+    senderId: string,
+    content: string,
+    attachments?: string[],
+  ) {
     const conversation = await this.prisma.chatConversation.findUnique({
       where: { id: conversationId },
     });
@@ -158,7 +167,11 @@ export class AdminChatService {
     return { unreadCount: count };
   }
 
-  async createConversation(participantIds: string[], relatedBookingId?: string, tags?: string[]) {
+  async createConversation(
+    participantIds: string[],
+    relatedBookingId?: string,
+    tags?: string[],
+  ) {
     const conversation = await this.prisma.chatConversation.create({
       data: {
         participantIds: JSON.stringify(participantIds),

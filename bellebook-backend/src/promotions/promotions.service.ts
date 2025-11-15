@@ -33,10 +33,7 @@ export class PromotionsService {
         isActive: true,
         OR: [
           {
-            AND: [
-              { validFrom: { lte: now } },
-              { validUntil: { gte: now } },
-            ],
+            AND: [{ validFrom: { lte: now } }, { validUntil: { gte: now } }],
           },
           {
             validFrom: null,
@@ -90,6 +87,10 @@ export class PromotionsService {
     const banner = await this.prisma.promoBanner.findUnique({
       where: { id },
     });
+
+    if (!banner) {
+      throw new Error('Banner not found');
+    }
 
     return this.prisma.promoBanner.update({
       where: { id },

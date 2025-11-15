@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import type { Service } from '@/store/service.store';
 import { useCartStore } from '@/store/cart.store';
+import type { Service as CartService } from '@/services/services.service';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -30,15 +31,24 @@ export function ServiceCard({
 
   const price = Number(service.promoPrice || service.price);
   const originalPrice = service.promoPrice ? Number(service.price) : null;
-  const discount = originalPrice
-    ? Math.round(((originalPrice - price) / originalPrice) * 100)
-    : 0;
+  const discount = originalPrice ? Math.round(((originalPrice - price) / originalPrice) * 100) : 0;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setIsAddingToCart(true);
-    addToCart(service);
+    const cartService: CartService = {
+      ...service,
+      category: service.category
+        ? {
+            ...service.category,
+            order: 0,
+            isActive: true,
+            servicesCount: 0,
+          }
+        : undefined,
+    };
+    addToCart(cartService);
     setTimeout(() => setIsAddingToCart(false), 1000);
   };
 
@@ -70,18 +80,14 @@ export function ServiceCard({
                   <span className="text-6xl">💅</span>
                 </div>
               )}
-              
+
               {/* Badges */}
               <div className="absolute left-2 top-2 flex flex-col gap-1">
                 {service.isPopular && (
-                  <Badge className="bg-orange-500 hover:bg-orange-600">
-                    Popular
-                  </Badge>
+                  <Badge className="bg-orange-500 hover:bg-orange-600">Popular</Badge>
                 )}
                 {discount > 0 && (
-                  <Badge className="bg-red-500 hover:bg-red-600">
-                    -{discount}%
-                  </Badge>
+                  <Badge className="bg-red-500 hover:bg-red-600">-{discount}%</Badge>
                 )}
               </div>
 
@@ -131,9 +137,7 @@ export function ServiceCard({
                       R$ {originalPrice.toFixed(2)}
                     </p>
                   )}
-                  <p className="text-2xl font-bold text-blue-600">
-                    R$ {price.toFixed(2)}
-                  </p>
+                  <p className="text-2xl font-bold text-blue-600">R$ {price.toFixed(2)}</p>
                 </div>
                 <Button
                   onClick={handleAddToCart}

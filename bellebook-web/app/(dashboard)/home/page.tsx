@@ -183,12 +183,8 @@ export default function HomePage() {
         <Card className="mb-8 overflow-hidden bg-gradient-to-r from-pink-400 to-purple-400">
           <CardContent className="p-8 text-white">
             <h3 className="text-2xl font-bold mb-2">🎉 Special Launch Offer!</h3>
-            <p className="mb-4">
-              Get 20% off your first booking. Use code: BELLEBOOK20
-            </p>
-            <Button className="bg-white text-purple-600 hover:bg-gray-100">
-              Grab Offer
-            </Button>
+            <p className="mb-4">Get 20% off your first booking. Use code: BELLEBOOK20</p>
+            <Button className="bg-white text-purple-600 hover:bg-gray-100">Grab Offer</Button>
           </CardContent>
         </Card>
       </section>
@@ -197,9 +193,7 @@ export default function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <div className="mb-8">
           <h3 className="text-2xl font-bold text-gray-800 mb-2">Our Services</h3>
-          <p className="text-gray-600">
-            Choose a category and find the perfect service for you
-          </p>
+          <p className="text-gray-600">Choose a category and find the perfect service for you</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

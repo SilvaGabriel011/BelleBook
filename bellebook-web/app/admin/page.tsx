@@ -3,7 +3,15 @@
 import { useEffect, useState } from 'react';
 import { Users, Calendar, DollarSign, Clock } from 'lucide-react';
 import { StatCard } from '@/components/admin/StatCard';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts';
 import { adminApi } from '@/services/admin-api';
 
 interface KPI {
@@ -19,17 +27,20 @@ interface DashboardData {
   pendingRequests: KPI;
 }
 
+interface ChartDataPoint {
+  date: string;
+  count: number;
+}
+
 export default function AdminOverviewPage() {
   const [data, setData] = useState<DashboardData | null>(null);
-  const [chartData, setChartData] = useState<any[]>([]);
+  const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadData() {
       try {
         setLoading(true);
-        setError(null);
 
         // Load KPIs and chart data in parallel
         const [overviewRes, chartRes] = await Promise.all([
@@ -39,9 +50,8 @@ export default function AdminOverviewPage() {
 
         setData(overviewRes.data);
         setChartData(chartRes.data);
-      } catch (err: any) {
+      } catch (err) {
         console.error('Error loading dashboard data:', err);
-        setError(err.response?.data?.message || 'Erro ao carregar dados');
         // Fallback to mock data for development
         setData({
           activeUsers: { value: 1234, change: 12.5, trend: 'up' },
@@ -221,7 +231,10 @@ export default function AdminOverviewPage() {
               type: 'booking',
             },
           ].map((activity, index) => (
-            <div key={index} className="flex items-center gap-4 py-3 border-b border-gray-100 last:border-0">
+            <div
+              key={index}
+              className="flex items-center gap-4 py-3 border-b border-gray-100 last:border-0"
+            >
               <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 font-semibold">
                 {activity.user[0]}
               </div>

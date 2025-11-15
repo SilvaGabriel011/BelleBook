@@ -8,7 +8,8 @@ import {
   Body,
   UseGuards,
 } from '@nestjs/common';
-import { PromotionsService, CreatePromoBannerDto, UpdatePromoBannerDto } from './promotions.service';
+import { PromotionsService } from './promotions.service';
+import * as PromotionDtos from './promotions.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -39,14 +40,17 @@ export class PromotionsController {
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
-  async createBanner(@Body() data: CreatePromoBannerDto) {
+  async createBanner(@Body() data: PromotionDtos.CreatePromoBannerDto) {
     return this.promotionsService.create(data);
   }
 
   @Put(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
-  async updateBanner(@Param('id') id: string, @Body() data: UpdatePromoBannerDto) {
+  async updateBanner(
+    @Param('id') id: string,
+    @Body() data: PromotionDtos.UpdatePromoBannerDto,
+  ) {
     return this.promotionsService.update(id, data);
   }
 

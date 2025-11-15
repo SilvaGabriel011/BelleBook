@@ -3,8 +3,10 @@ import { UserRole } from '@prisma/client';
 
 export class CreateRoleRequestDto {
   @IsEnum(UserRole)
-  @IsIn([UserRole.EMPLOYEE, UserRole.ADMIN], { message: 'Apenas EMPLOYEE ou ADMIN podem ser solicitados' })
-  requestedRole: UserRole.EMPLOYEE | UserRole.ADMIN;
+  @IsIn(['EMPLOYEE', 'ADMIN'], {
+    message: 'Apenas EMPLOYEE ou ADMIN podem ser solicitados',
+  })
+  requestedRole: 'EMPLOYEE' | 'ADMIN';
 
   @IsString()
   @MinLength(50, { message: 'Justificativa deve ter no mínimo 50 caracteres' })
@@ -13,7 +15,9 @@ export class CreateRoleRequestDto {
   // Campos específicos para Employee
   @IsString()
   @IsOptional()
-  @MinLength(100, { message: 'Experiência profissional deve ter no mínimo 100 caracteres' })
+  @MinLength(100, {
+    message: 'Experiência profissional deve ter no mínimo 100 caracteres',
+  })
   experience?: string;
 
   @IsString()

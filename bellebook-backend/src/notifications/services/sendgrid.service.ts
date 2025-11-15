@@ -96,7 +96,8 @@ export class SendGridService implements OnModuleInit {
         },
         subject: options.subject,
         html: options.html,
-        text: options.text || this.templateService.generatePlainText(options.html),
+        text:
+          options.text || this.templateService.generatePlainText(options.html),
         replyTo: options.replyTo,
         attachments: options.attachments,
       };
@@ -116,7 +117,7 @@ export class SendGridService implements OnModuleInit {
       return true;
     } catch (error) {
       this.logger.error(`Failed to send email to ${options.to}:`, error);
-      
+
       // Log SendGrid specific errors
       if (error.response) {
         this.logger.error('SendGrid Error Response:', {
@@ -124,12 +125,12 @@ export class SendGridService implements OnModuleInit {
           body: error.response.body,
         });
       }
-      
+
       // Don't throw in production to prevent blocking operations
       if (this.configService.get('NODE_ENV') === 'production') {
         return false;
       }
-      
+
       throw error;
     }
   }

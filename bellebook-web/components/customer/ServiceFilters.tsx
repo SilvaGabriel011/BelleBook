@@ -31,7 +31,7 @@ interface ServiceFiltersProps {
 
 export function ServiceFilters({ categories, isMobile = false }: ServiceFiltersProps) {
   const { filters, setFilters, resetFilters, hasActiveFilters } = useServiceStore();
-  
+
   const [priceRange, setPriceRange] = useState<[number, number]>([
     filters.minPrice || 0,
     filters.maxPrice || 500,
@@ -138,7 +138,11 @@ export function ServiceFilters({ categories, isMobile = false }: ServiceFiltersP
       {/* Gender Filter */}
       <div className="space-y-3">
         <Label className="text-base font-semibold">Gênero</Label>
-        <RadioGroup value={filters.gender || ''} onValueChange={handleGenderChange} className="space-y-2">
+        <RadioGroup
+          value={filters.gender || ''}
+          onValueChange={handleGenderChange}
+          className="space-y-2"
+        >
           <div className="flex items-center space-x-2 rounded-md p-2 transition-colors hover:bg-gray-50">
             <RadioGroupItem value="" id="gender-all" />
             <Label htmlFor="gender-all" className="flex-1 cursor-pointer font-normal">
