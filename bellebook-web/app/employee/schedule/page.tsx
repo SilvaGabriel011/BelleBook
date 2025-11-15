@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Calendar as CalendarIcon, Clock, Plus } from 'lucide-react';
+import { Clock, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -14,7 +14,6 @@ import {
 
 export default function SchedulePage() {
   const [view, setView] = useState<'day' | 'week' | 'month'>('week');
-  const [currentDate, setCurrentDate] = useState(new Date());
 
   // Mock events
   const events = [

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Send, Search, Phone, Video, MoreVertical, MessageSquare } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';

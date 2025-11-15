@@ -62,7 +62,7 @@ export default function AdminDashboard() {
   }, [period]);
 
   const checkAccess = () => {
-    if (!isAuthenticated || (user?.role !== 'ADMIN' && user?.role !== 'PROVIDER')) {
+    if (!isAuthenticated || user?.role !== 'ADMIN') {
       toast.error('Access denied. Administrators only.');
       router.push('/home');
     }
@@ -118,7 +118,7 @@ export default function AdminDashboard() {
             </div>
 
             <div className="flex items-center gap-4">
-              <Select value={period} onValueChange={(v: any) => setPeriod(v)}>
+              <Select value={period} onValueChange={(v: string) => setPeriod(v as 'day' | 'week' | 'month')}>
                 <SelectTrigger className="w-40">
                   <SelectValue />
                 </SelectTrigger>
@@ -291,11 +291,10 @@ export default function AdminDashboard() {
                   <ResponsiveContainer width="100%" height={300}>
                     <PieChart>
                       <Pie
-                        data={metrics.bookingsByStatus as any}
+                        data={metrics.bookingsByStatus as never[]}
                         cx="50%"
                         cy="50%"
                         labelLine={false}
-                        label={(entry: any) => `${entry.status}: ${entry.count}`}
                         outerRadius={100}
                         fill="#8884d8"
                         dataKey="count"

@@ -76,11 +76,20 @@ export default function BookingPage() {
     setLoading(true);
     try {
       const dateStr = format(selectedDate, 'yyyy-MM-dd');
+      const scheduledAtDate = new Date(`${dateStr}T${selectedTime}:00`);
+      const servicePrice = Number(currentItem.service.promoPrice || currentItem.service.price);
 
       await bookingService.createBooking({
         serviceId: currentItem.service.id,
-        date: dateStr,
-        time: selectedTime,
+        services: [{
+          serviceId: currentItem.service.id,
+          quantity: currentItem.quantity,
+          price: servicePrice,
+        }],
+        scheduledAt: scheduledAtDate,
+        duration: currentItem.service.duration,
+        totalAmount: servicePrice * currentItem.quantity,
+        paymentMethod: 'pay_on_site',
         notes: notes || undefined,
       });
 

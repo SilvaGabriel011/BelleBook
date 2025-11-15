@@ -22,7 +22,7 @@ interface BookingCardProps {
       name: string;
       duration: number;
     };
-    scheduledAt: Date;
+    scheduledAt: Date | string;
     status: string;
     notes: string | null;
   };

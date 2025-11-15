@@ -15,13 +15,12 @@ export default function EmployeeHomePage() {
   const [summary, setSummary] = useState<DailySummary | null>(null);
   const [nextBookings, setNextBookings] = useState<NextBooking[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
+
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const fetchDashboardData = useCallback(async () => {
     try {
       setLoading(true);
-      setError(null);
       
       const [summaryData, bookingsData, reviewsData] = await Promise.all([
         employeeApi.getDailySummary(),
@@ -34,7 +33,6 @@ export default function EmployeeHomePage() {
       setReviews(reviewsData);
     } catch (err) {
       console.error('Error fetching dashboard data:', err);
-      setError('Erro ao carregar dados do dashboard');
     } finally {
       setLoading(false);
     }
@@ -65,22 +63,6 @@ export default function EmployeeHomePage() {
       </div>
     );
   }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Card className="p-6 max-w-md">
-          <CardContent>
-            <p className="text-red-600 text-center mb-4">{error}</p>
-            <Button onClick={fetchDashboardData} className="w-full">
-              Tentar Novamente
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
 
   return (
     <div className="space-y-6 pb-20 md:pb-6">

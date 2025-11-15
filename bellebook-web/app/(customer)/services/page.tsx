@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Search, Grid3x3, List, Loader2 } from 'lucide-react';
+import { Search, Grid3x3, List } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -24,22 +24,8 @@ export default function ServicesPage() {
     setViewMode,
   } = useServiceStore();
 
-  const [categories, setCategories] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState(filters.search || '');
   const debouncedSearch = useDebounce(searchQuery, 300);
-
-  // Fetch categories on mount
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const data = await getCategories();
-        setCategories(data);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
-    };
-    fetchCategories();
-  }, []);
 
   // Fetch services when filters change
   useEffect(() => {

@@ -14,7 +14,7 @@ interface ClientListItemProps {
     phone: string | null;
     email: string;
     totalBookings: number;
-    lastBooking: Date | null;
+    lastBooking: Date | string | null;
     favoriteServices: string[];
     totalSpent: number;
   };

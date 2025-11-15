@@ -169,8 +169,8 @@ export const useServiceStore = create<ServiceStore>((set, get) => ({
       );
     }
 
-    if (filters.gender && filters.gender !== '') {
-      filtered = filtered.filter((service) => service.gender === filters.gender);
+    if (filters.gender) {
+      filtered = filtered.filter((service) => !service.gender || service.gender === filters.gender);
     }
 
     if (filters.minPrice !== undefined) {

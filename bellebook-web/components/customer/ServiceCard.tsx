@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import type { Service } from '@/store/service.store';
 import { useCartStore } from '@/store/cart.store';
+import type { Service as CartService } from '@/services/services.service';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -38,7 +39,16 @@ export function ServiceCard({
     e.preventDefault();
     e.stopPropagation();
     setIsAddingToCart(true);
-    addToCart(service);
+    const cartService: CartService = {
+      ...service,
+      category: service.category ? {
+        ...service.category,
+        order: 0,
+        isActive: true,
+        servicesCount: 0,
+      } : undefined,
+    };
+    addToCart(cartService);
     setTimeout(() => setIsAddingToCart(false), 1000);
   };
 

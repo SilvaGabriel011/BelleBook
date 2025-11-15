@@ -93,7 +93,7 @@ export default function ClientsPage() {
               />
             </div>
 
-            <Select value={orderBy} onValueChange={setOrderBy}>
+            <Select value={orderBy} onValueChange={(value) => setOrderBy(value as 'lastBooking' | 'totalBookings' | 'name')}>
               <SelectTrigger>
                 <SelectValue placeholder="Ordenar por" />
               </SelectTrigger>
@@ -105,7 +105,7 @@ export default function ClientsPage() {
               </SelectContent>
             </Select>
 
-            <Select value={filter} onValueChange={setFilter}>
+            <Select value={filter} onValueChange={(value) => setFilter(value as 'active' | 'inactive' | 'all')}>
               <SelectTrigger>
                 <SelectValue placeholder="Filtrar" />
               </SelectTrigger>

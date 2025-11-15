@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { DailySummaryDto, EmployeePerformanceDto, ServiceStatsDto, ClientStatsDto } from './dto/employee-stats.dto';
 import { NextBookingDto } from './dto/next-booking.dto';
 import { ClientCardDto, ClientDetailsDto } from './dto/client.dto';
-import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, subMonths } from 'date-fns';
+import { startOfDay, endOfDay, startOfWeek, startOfMonth, subMonths } from 'date-fns';
 
 @Injectable()
 export class EmployeeService {
@@ -327,7 +327,6 @@ export class EmployeeService {
       }, {} as Record<string, number>);
 
     // Client stats
-    const uniqueClients = new Set(bookings.map(b => b.userId));
     const clientStats: ClientStatsDto = {
       newClients: 0, // Would need to track first booking
       recurringClients: 0,
