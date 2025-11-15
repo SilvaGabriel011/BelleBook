@@ -13,13 +13,7 @@ import { BookingStep3Info } from '@/components/booking/BookingStep3Info';
 import { BookingStep4Payment } from '@/components/booking/BookingStep4Payment';
 import { BookingStep5Confirmation } from '@/components/booking/BookingStep5Confirmation';
 
-const STEP_TITLES = [
-  'Carrinho',
-  'Data e Horário',
-  'Informações',
-  'Pagamento',
-  'Confirmação',
-];
+const STEP_TITLES = ['Carrinho', 'Data e Horário', 'Informações', 'Pagamento', 'Confirmação'];
 
 export default function BookingPage() {
   const router = useRouter();
@@ -28,16 +22,19 @@ export default function BookingPage() {
   useEffect(() => {
     const saveState = () => {
       const state = useBookingStore.getState();
-      localStorage.setItem('bookingState', JSON.stringify({
-        currentStep: state.currentStep,
-        services: state.services,
-        providerId: state.providerId,
-        providerName: state.providerName,
-        scheduledAt: state.scheduledAt,
-        customerInfo: state.customerInfo,
-        paymentMethod: state.paymentMethod,
-        promoCode: state.promoCode,
-      }));
+      localStorage.setItem(
+        'bookingState',
+        JSON.stringify({
+          currentStep: state.currentStep,
+          services: state.services,
+          providerId: state.providerId,
+          providerName: state.providerName,
+          scheduledAt: state.scheduledAt,
+          customerInfo: state.customerInfo,
+          paymentMethod: state.paymentMethod,
+          promoCode: state.promoCode,
+        })
+      );
     };
 
     const unsubscribe = useBookingStore.subscribe(saveState);
@@ -68,7 +65,7 @@ export default function BookingPage() {
     };
 
     window.addEventListener('popstate', handlePopState);
-    
+
     window.history.pushState(null, '', window.location.href);
 
     return () => {
@@ -136,9 +133,7 @@ export default function BookingPage() {
       )}
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {renderStep()}
-      </main>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">{renderStep()}</main>
 
       {/* Footer Info */}
       {currentStep < 5 && (

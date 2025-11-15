@@ -71,9 +71,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 key={item.id}
                 href={item.path}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                  isActive
-                    ? 'bg-pink-50 text-pink-600'
-                    : 'text-gray-700 hover:bg-gray-50'
+                  isActive ? 'bg-pink-50 text-pink-600' : 'text-gray-700 hover:bg-gray-50'
                 }`}
               >
                 <Icon className="w-5 h-5" />

@@ -26,9 +26,7 @@ export function EmployeeStatCard({
           {change !== undefined && (
             <div
               className={`flex items-center text-xs font-semibold ${
-                (trend === 'up' || change > 0)
-                  ? 'text-green-600'
-                  : 'text-red-600'
+                trend === 'up' || change > 0 ? 'text-green-600' : 'text-red-600'
               }`}
             >
               {trend === 'up' || change > 0 ? (

@@ -27,9 +27,7 @@ export class NotificationsService {
   /**
    * Send booking confirmation email (immediate)
    */
-  async sendBookingConfirmation(
-    data: BookingConfirmationData,
-  ): Promise<void> {
+  async sendBookingConfirmation(data: BookingConfirmationData): Promise<void> {
     this.logger.log(`Sending booking confirmation to ${data.recipientEmail}`);
 
     await this.emailQueue.add('send-template', {
@@ -65,9 +63,7 @@ export class NotificationsService {
   /**
    * Send booking cancelled email (immediate)
    */
-  async sendBookingCancelled(
-    data: BookingCancelledData,
-  ): Promise<void> {
+  async sendBookingCancelled(data: BookingCancelledData): Promise<void> {
     this.logger.log(`Sending booking cancellation to ${data.recipientEmail}`);
 
     await this.emailQueue.add('send-template', {

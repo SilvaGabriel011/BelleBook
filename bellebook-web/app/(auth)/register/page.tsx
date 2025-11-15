@@ -30,10 +30,7 @@ const registerSchema = z
     phone: z
       .string()
       .min(1, 'Telefone é obrigatório')
-      .regex(
-        /^\+?[1-9]\d{1,14}$/,
-        'Formato inválido. Use: +5511999999999 ou 11999999999'
-      ),
+      .regex(/^\+?[1-9]\d{1,14}$/, 'Formato inválido. Use: +5511999999999 ou 11999999999'),
     password: z.string().min(6, 'Senha deve ter pelo menos 6 caracteres'),
     confirmPassword: z.string(),
   })
@@ -72,8 +69,8 @@ export default function RegisterPage() {
     } catch (err) {
       const errorMessage =
         err && typeof err === 'object' && 'response' in err
-          ? ((err as { response?: { data?: { message?: string } } }).response?.data?.message ||
-            'Erro ao criar conta')
+          ? (err as { response?: { data?: { message?: string } } }).response?.data?.message ||
+            'Erro ao criar conta'
           : 'Erro ao criar conta';
       setError(errorMessage);
     } finally {

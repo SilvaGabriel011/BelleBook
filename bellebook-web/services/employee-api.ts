@@ -58,7 +58,7 @@ export const employeeApi = {
 
   // Performance
   getPerformance: async (
-    period: 'week' | 'month' | '3months' | 'year' = 'month',
+    period: 'week' | 'month' | '3months' | 'year' = 'month'
   ): Promise<EmployeePerformance> => {
     const { data } = await api.get('/employee/performance', {
       params: { period },

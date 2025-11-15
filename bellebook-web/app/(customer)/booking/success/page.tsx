@@ -22,7 +22,7 @@ export default function PaymentSuccessPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const bookingId = searchParams.get('bookingId');
-  
+
   const [booking, setBooking] = useState<BookingDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,14 +37,11 @@ export default function PaymentSuccessPage() {
       const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
       const token = localStorage.getItem('token');
 
-      const response = await axios.get(
-        `${API_URL}/bookings/${bookingId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${API_URL}/bookings/${bookingId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       setBooking(response.data);
     } catch (error) {
@@ -75,20 +72,14 @@ export default function PaymentSuccessPage() {
 
           {/* Success Message */}
           <div className="mb-8 text-center">
-            <h1 className="mb-2 text-3xl font-bold text-gray-900">
-              Pagamento Confirmado! 🎉
-            </h1>
-            <p className="text-gray-600">
-              Seu agendamento foi confirmado com sucesso.
-            </p>
+            <h1 className="mb-2 text-3xl font-bold text-gray-900">Pagamento Confirmado! 🎉</h1>
+            <p className="text-gray-600">Seu agendamento foi confirmado com sucesso.</p>
           </div>
 
           {/* Booking Details */}
           {booking && (
             <div className="mb-8 space-y-4 rounded-lg bg-pink-50 p-6">
-              <h2 className="mb-4 text-lg font-semibold text-gray-900">
-                Detalhes do Agendamento
-              </h2>
+              <h2 className="mb-4 text-lg font-semibold text-gray-900">Detalhes do Agendamento</h2>
 
               <div className="flex items-start gap-3">
                 <Calendar className="mt-0.5 h-5 w-5 text-primary" />
@@ -138,8 +129,7 @@ export default function PaymentSuccessPage() {
           {/* Info Message */}
           <div className="mb-6 rounded-lg bg-blue-50 p-4">
             <p className="text-sm text-blue-900">
-              📧 Enviamos um email de confirmação com todos os detalhes do seu
-              agendamento.
+              📧 Enviamos um email de confirmação com todos os detalhes do seu agendamento.
             </p>
             <p className="mt-2 text-sm text-blue-900">
               🔔 Você receberá lembretes antes da sua sessão.
@@ -155,11 +145,7 @@ export default function PaymentSuccessPage() {
             >
               Ver Meus Agendamentos
             </Button>
-            <Button
-              onClick={() => router.push('/customer')}
-              className="flex-1"
-              variant="outline"
-            >
+            <Button onClick={() => router.push('/customer')} className="flex-1" variant="outline">
               Voltar para Home
             </Button>
           </div>

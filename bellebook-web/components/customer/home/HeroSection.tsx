@@ -18,8 +18,7 @@ export default function HeroSection() {
           Bem-vinda ao <span className="text-yellow-300">BelleBook</span>
         </h1>
         <p className="text-lg md:text-xl mb-6 text-pink-100">
-          Agende seus serviços de beleza com profissionais incríveis e ganhe
-          pontos a cada reserva!
+          Agende seus serviços de beleza com profissionais incríveis e ganhe pontos a cada reserva!
         </p>
 
         {/* Search Bar */}
@@ -31,10 +30,7 @@ export default function HeroSection() {
               className="pl-10 bg-white text-gray-900 border-none h-12"
             />
           </div>
-          <Button
-            size="lg"
-            className="bg-white text-pink-600 hover:bg-pink-50 font-semibold"
-          >
+          <Button size="lg" className="bg-white text-pink-600 hover:bg-pink-50 font-semibold">
             Buscar
           </Button>
         </div>

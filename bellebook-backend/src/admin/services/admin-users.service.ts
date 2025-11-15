@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UserRole, AccountStatus } from '@prisma/client';
 import { AuditLogService } from './audit-log.service';
@@ -106,7 +110,13 @@ export class AdminUsersService {
     return user;
   }
 
-  async suspendUser(userId: string, adminId: string, reason: string, ipAddress?: string, userAgent?: string) {
+  async suspendUser(
+    userId: string,
+    adminId: string,
+    reason: string,
+    ipAddress?: string,
+    userAgent?: string,
+  ) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
@@ -135,7 +145,12 @@ export class AdminUsersService {
     return { message: 'Usuário suspensou com sucesso' };
   }
 
-  async reactivateUser(userId: string, adminId: string, ipAddress?: string, userAgent?: string) {
+  async reactivateUser(
+    userId: string,
+    adminId: string,
+    ipAddress?: string,
+    userAgent?: string,
+  ) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
@@ -234,10 +249,13 @@ export class AdminUsersService {
     }
 
     const updateData: any = {};
-    if (data.specialties) updateData.specialties = JSON.stringify(data.specialties);
+    if (data.specialties)
+      updateData.specialties = JSON.stringify(data.specialties);
     if (data.bio !== undefined) updateData.bio = data.bio;
-    if (data.workSchedule) updateData.workSchedule = JSON.stringify(data.workSchedule);
-    if (data.isAvailable !== undefined) updateData.isAvailable = data.isAvailable;
+    if (data.workSchedule)
+      updateData.workSchedule = JSON.stringify(data.workSchedule);
+    if (data.isAvailable !== undefined)
+      updateData.isAvailable = data.isAvailable;
 
     await this.prisma.employeeProfile.update({
       where: { userId },
@@ -258,13 +276,14 @@ export class AdminUsersService {
   }
 
   async getUserStats() {
-    const [totalUsers, activeUsers, employees, admins, suspendedUsers] = await Promise.all([
-      this.prisma.user.count(),
-      this.prisma.user.count({ where: { accountStatus: 'ACTIVE' } }),
-      this.prisma.user.count({ where: { role: 'EMPLOYEE' } }),
-      this.prisma.user.count({ where: { role: 'ADMIN' } }),
-      this.prisma.user.count({ where: { accountStatus: 'SUSPENDED' } }),
-    ]);
+    const [totalUsers, activeUsers, employees, admins, suspendedUsers] =
+      await Promise.all([
+        this.prisma.user.count(),
+        this.prisma.user.count({ where: { accountStatus: 'ACTIVE' } }),
+        this.prisma.user.count({ where: { role: 'EMPLOYEE' } }),
+        this.prisma.user.count({ where: { role: 'ADMIN' } }),
+        this.prisma.user.count({ where: { accountStatus: 'SUSPENDED' } }),
+      ]);
 
     return {
       totalUsers,

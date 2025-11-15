@@ -21,7 +21,7 @@ export default function EmployeeHomePage() {
   const fetchDashboardData = useCallback(async () => {
     try {
       setLoading(true);
-      
+
       const [summaryData, bookingsData, reviewsData] = await Promise.all([
         employeeApi.getDailySummary(),
         employeeApi.getNextBookings(5),
@@ -108,11 +108,7 @@ export default function EmployeeHomePage() {
             change={8}
             trend="up"
           />
-          <EmployeeStatCard
-            label="Avaliação Média"
-            value={summary.averageRating}
-            icon={Star}
-          />
+          <EmployeeStatCard label="Avaliação Média" value={summary.averageRating} icon={Star} />
         </div>
       )}
 
@@ -120,9 +116,7 @@ export default function EmployeeHomePage() {
         {/* Next Bookings */}
         <div className="lg:col-span-2 space-y-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-bold text-gray-900">
-              Próximos Agendamentos
-            </h2>
+            <h2 className="text-xl font-bold text-gray-900">Próximos Agendamentos</h2>
             <Button variant="outline" size="sm">
               Ver Todos
             </Button>
@@ -142,9 +136,7 @@ export default function EmployeeHomePage() {
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-12">
                 <Clock className="w-12 h-12 text-gray-400 mb-4" />
-                <p className="text-gray-600 text-center">
-                  Nenhum agendamento próximo
-                </p>
+                <p className="text-gray-600 text-center">Nenhum agendamento próximo</p>
               </CardContent>
             </Card>
           )}
@@ -185,10 +177,7 @@ export default function EmployeeHomePage() {
                     <p className="font-semibold text-sm">{review.customer.name}</p>
                     <div className="flex">
                       {[...Array(review.rating)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className="w-3 h-3 fill-yellow-400 text-yellow-400"
-                        />
+                        <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
                       ))}
                     </div>
                   </div>

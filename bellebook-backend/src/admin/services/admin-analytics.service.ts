@@ -7,28 +7,53 @@ export class AdminAnalyticsService {
 
   async getOverviewKPIs() {
     const now = new Date();
-    const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
-    const twoMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 2, now.getDate());
+    const lastMonth = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate(),
+    );
+    const twoMonthsAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 2,
+      now.getDate(),
+    );
 
     // Total active users
-    const [totalActiveUsers, lastMonthUsers, twoMonthsAgoUsers] = await Promise.all([
-      this.prisma.user.count({ where: { accountStatus: 'ACTIVE' } }),
-      this.prisma.user.count({
-        where: { accountStatus: 'ACTIVE', createdAt: { gte: lastMonth } },
-      }),
-      this.prisma.user.count({
-        where: { accountStatus: 'ACTIVE', createdAt: { gte: twoMonthsAgo, lt: lastMonth } },
-      }),
-    ]);
+    const [totalActiveUsers, lastMonthUsers, twoMonthsAgoUsers] =
+      await Promise.all([
+        this.prisma.user.count({ where: { accountStatus: 'ACTIVE' } }),
+        this.prisma.user.count({
+          where: { accountStatus: 'ACTIVE', createdAt: { gte: lastMonth } },
+        }),
+        this.prisma.user.count({
+          where: {
+            accountStatus: 'ACTIVE',
+            createdAt: { gte: twoMonthsAgo, lt: lastMonth },
+          },
+        }),
+      ]);
 
-    const usersChange = twoMonthsAgoUsers > 0
-      ? ((lastMonthUsers - twoMonthsAgoUsers) / twoMonthsAgoUsers) * 100
-      : 0;
+    const usersChange =
+      twoMonthsAgoUsers > 0
+        ? ((lastMonthUsers - twoMonthsAgoUsers) / twoMonthsAgoUsers) * 100
+        : 0;
 
     // Bookings today
-    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-    const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+    const startOfDay = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+    );
+    const endOfDay = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() + 1,
+    );
+    const yesterday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() - 1,
+    );
 
     const [bookingsToday, bookingsYesterday] = await Promise.all([
       this.prisma.booking.count({
@@ -39,9 +64,10 @@ export class AdminAnalyticsService {
       }),
     ]);
 
-    const bookingsChange = bookingsYesterday > 0
-      ? ((bookingsToday - bookingsYesterday) / bookingsYesterday) * 100
-      : 0;
+    const bookingsChange =
+      bookingsYesterday > 0
+        ? ((bookingsToday - bookingsYesterday) / bookingsYesterday) * 100
+        : 0;
 
     // Revenue this month
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -65,7 +91,8 @@ export class AdminAnalyticsService {
     ]);
 
     const revenueChange = lastMonthRevenue._sum.totalPaid
-      ? ((Number(thisMonthRevenue._sum.totalPaid || 0) - Number(lastMonthRevenue._sum.totalPaid)) /
+      ? ((Number(thisMonthRevenue._sum.totalPaid || 0) -
+          Number(lastMonthRevenue._sum.totalPaid)) /
           Number(lastMonthRevenue._sum.totalPaid)) *
         100
       : 0;
@@ -115,11 +142,14 @@ export class AdminAnalyticsService {
     });
 
     // Group by date
-    const groupedByDate = bookings.reduce((acc: Record<string, number>, booking) => {
-      const date = booking.createdAt.toISOString().split('T')[0];
-      acc[date] = (acc[date] || 0) + 1;
-      return acc;
-    }, {});
+    const groupedByDate = bookings.reduce(
+      (acc: Record<string, number>, booking) => {
+        const date = booking.createdAt.toISOString().split('T')[0];
+        acc[date] = (acc[date] || 0) + 1;
+        return acc;
+      },
+      {},
+    );
 
     return Object.entries(groupedByDate)
       .map(([date, count]) => ({ date, count }))
@@ -175,7 +205,8 @@ export class AdminAnalyticsService {
       }),
     ]);
 
-    const conversionRate = totalUsers > 0 ? (bookingsCount / totalUsers) * 100 : 0;
+    const conversionRate =
+      totalUsers > 0 ? (bookingsCount / totalUsers) * 100 : 0;
 
     return {
       totalUsers,
@@ -224,19 +255,24 @@ export class AdminAnalyticsService {
       },
     });
 
-    const revenueByService = bookings.reduce((acc: Record<string, { name: string; revenue: number }>, booking) => {
-      const serviceId = booking.service.id;
-      const serviceName = booking.service.name;
+    const revenueByService = bookings.reduce(
+      (acc: Record<string, { name: string; revenue: number }>, booking) => {
+        const serviceId = booking.service.id;
+        const serviceName = booking.service.name;
 
-      if (!acc[serviceId]) {
-        acc[serviceId] = { name: serviceName, revenue: 0 };
-      }
+        if (!acc[serviceId]) {
+          acc[serviceId] = { name: serviceName, revenue: 0 };
+        }
 
-      acc[serviceId].revenue += Number(booking.totalPaid);
-      return acc;
-    }, {});
+        acc[serviceId].revenue += Number(booking.totalPaid);
+        return acc;
+      },
+      {},
+    );
 
-    return Object.values(revenueByService).sort((a, b) => b.revenue - a.revenue);
+    return Object.values(revenueByService).sort(
+      (a, b) => b.revenue - a.revenue,
+    );
   }
 
   async getCancellationRate(days: number = 30) {
@@ -255,7 +291,8 @@ export class AdminAnalyticsService {
       }),
     ]);
 
-    const cancellationRate = totalBookings > 0 ? (cancelledBookings / totalBookings) * 100 : 0;
+    const cancellationRate =
+      totalBookings > 0 ? (cancelledBookings / totalBookings) * 100 : 0;
 
     return {
       totalBookings,

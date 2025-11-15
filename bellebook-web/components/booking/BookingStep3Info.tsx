@@ -53,7 +53,7 @@ export function BookingStep3Info() {
 
   const formatPhoneNumber = (value: string) => {
     const digits = value.replace(/\D/g, '');
-    
+
     if (digits.length <= 2) {
       return digits;
     } else if (digits.length <= 6) {
@@ -104,9 +104,7 @@ export function BookingStep3Info() {
                 {...register('name')}
                 aria-invalid={!!errors.name}
               />
-              {errors.name && (
-                <p className="text-sm text-destructive">{errors.name.message}</p>
-              )}
+              {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
             </div>
 
             {/* Email Field */}
@@ -122,9 +120,7 @@ export function BookingStep3Info() {
                 {...register('email')}
                 aria-invalid={!!errors.email}
               />
-              {errors.email && (
-                <p className="text-sm text-destructive">{errors.email.message}</p>
-              )}
+              {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
             </div>
 
             {/* Phone Field */}
@@ -142,9 +138,7 @@ export function BookingStep3Info() {
                 aria-invalid={!!errors.phone}
                 maxLength={15}
               />
-              {errors.phone && (
-                <p className="text-sm text-destructive">{errors.phone.message}</p>
-              )}
+              {errors.phone && <p className="text-sm text-destructive">{errors.phone.message}</p>}
             </div>
 
             {/* Notes Field */}
@@ -166,9 +160,7 @@ export function BookingStep3Info() {
 
             {/* Emergency Contact Field */}
             <div className="space-y-2">
-              <Label htmlFor="emergencyContact">
-                Contato de Emergência (opcional)
-              </Label>
+              <Label htmlFor="emergencyContact">Contato de Emergência (opcional)</Label>
               <Input
                 id="emergencyContact"
                 placeholder="Nome e telefone"
@@ -182,7 +174,7 @@ export function BookingStep3Info() {
               <p className="text-sm text-muted-foreground">
                 Como você gostaria de receber confirmações e lembretes?
               </p>
-              
+
               <div className="space-y-2">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -192,7 +184,7 @@ export function BookingStep3Info() {
                   />
                   <span className="text-sm">WhatsApp (recomendado)</span>
                 </label>
-                
+
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
@@ -201,7 +193,7 @@ export function BookingStep3Info() {
                   />
                   <span className="text-sm">Email</span>
                 </label>
-                
+
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
@@ -217,7 +209,8 @@ export function BookingStep3Info() {
             <Alert>
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
-                Seus dados serão utilizados apenas para confirmação e comunicação sobre este agendamento.
+                Seus dados serão utilizados apenas para confirmação e comunicação sobre este
+                agendamento.
               </AlertDescription>
             </Alert>
 

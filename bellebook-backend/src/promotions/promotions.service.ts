@@ -33,10 +33,7 @@ export class PromotionsService {
         isActive: true,
         OR: [
           {
-            AND: [
-              { validFrom: { lte: now } },
-              { validUntil: { gte: now } },
-            ],
+            AND: [{ validFrom: { lte: now } }, { validUntil: { gte: now } }],
           },
           {
             validFrom: null,

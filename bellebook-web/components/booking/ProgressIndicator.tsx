@@ -30,9 +30,7 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
           <span className="text-sm font-medium text-gray-700">
             Etapa {currentStep} de {steps.length}
           </span>
-          <span className="text-sm text-gray-500">
-            {steps[currentStep - 1]?.title}
-          </span>
+          <span className="text-sm text-gray-500">{steps[currentStep - 1]?.title}</span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
@@ -57,13 +55,9 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
                   <div
                     className={cn(
                       'w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300',
-                      isCompleted &&
-                        'bg-[#FF6B9D] text-white',
-                      isActive &&
-                        'bg-[#FF6B9D] text-white ring-4 ring-[#FFC8DD]',
-                      !isCompleted &&
-                        !isActive &&
-                        'bg-gray-200 text-gray-500'
+                      isCompleted && 'bg-[#FF6B9D] text-white',
+                      isActive && 'bg-[#FF6B9D] text-white ring-4 ring-[#FFC8DD]',
+                      !isCompleted && !isActive && 'bg-gray-200 text-gray-500'
                     )}
                   >
                     {isCompleted ? <Check className="w-5 h-5" /> : step.number}
@@ -74,7 +68,7 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
                     <p
                       className={cn(
                         'text-sm font-medium',
-                        (isActive || isCompleted) ? 'text-[#FF6B9D]' : 'text-gray-500'
+                        isActive || isCompleted ? 'text-[#FF6B9D]' : 'text-gray-500'
                       )}
                     >
                       {step.title}

@@ -12,9 +12,20 @@ import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export function BookingStep1Cart() {
-  const { items, coupon, discount, updateQuantity, removeFromCart, applyCoupon, removeCoupon, getSubtotal, getDiscount, getTotal } = useCartStore();
+  const {
+    items,
+    coupon,
+    discount,
+    updateQuantity,
+    removeFromCart,
+    applyCoupon,
+    removeCoupon,
+    getSubtotal,
+    getDiscount,
+    getTotal,
+  } = useCartStore();
   const { nextStep, setServices } = useBookingStore();
-  
+
   const [promoCode, setPromoCode] = useState('');
   const [promoError, setPromoError] = useState('');
   const [promoLoading, setPromoLoading] = useState(false);
@@ -39,7 +50,7 @@ export function BookingStep1Cart() {
 
     try {
       const isValid = await applyCoupon(promoCode);
-      
+
       if (isValid) {
         setPromoCode('');
         setPromoError('');
@@ -64,7 +75,7 @@ export function BookingStep1Cart() {
       return;
     }
 
-    const bookingServices = items.map(item => ({
+    const bookingServices = items.map((item) => ({
       serviceId: item.service.id,
       serviceName: item.service.name,
       price: Number(item.service.promoPrice || item.service.price),
@@ -175,7 +186,10 @@ export function BookingStep1Cart() {
                   </Button>
                 </div>
                 <span className="text-sm font-semibold">
-                  R$ {(Number(item.service.promoPrice || item.service.price) * item.quantity).toFixed(2)}
+                  R${' '}
+                  {(Number(item.service.promoPrice || item.service.price) * item.quantity).toFixed(
+                    2
+                  )}
                 </span>
               </div>
             </div>
@@ -223,10 +237,7 @@ export function BookingStep1Cart() {
                   }}
                   className="flex-1"
                 />
-                <Button
-                  onClick={handleApplyPromoCode}
-                  disabled={promoLoading || !promoCode.trim()}
-                >
+                <Button onClick={handleApplyPromoCode} disabled={promoLoading || !promoCode.trim()}>
                   {promoLoading ? 'Validando...' : 'Aplicar'}
                 </Button>
               </div>

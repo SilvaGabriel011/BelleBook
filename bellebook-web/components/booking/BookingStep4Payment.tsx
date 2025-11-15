@@ -22,8 +22,9 @@ interface PaymentMethod {
 }
 
 export function BookingStep4Payment() {
-  const { previousStep, nextStep, setPaymentMethod, totalAmount, subtotal, discount } = useBookingStore();
-  
+  const { previousStep, nextStep, setPaymentMethod, totalAmount, subtotal, discount } =
+    useBookingStore();
+
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethodType>('CREDIT_CARD');
   const [showStripeForm, setShowStripeForm] = useState(false);
 
@@ -90,11 +91,7 @@ export function BookingStep4Payment() {
       <div className="w-full max-w-2xl mx-auto">
         <Card className="p-6">
           <div className="mb-4">
-            <Button
-              variant="ghost"
-              onClick={() => setShowStripeForm(false)}
-              className="mb-4"
-            >
+            <Button variant="ghost" onClick={() => setShowStripeForm(false)} className="mb-4">
               ← Voltar para métodos de pagamento
             </Button>
           </div>
@@ -118,9 +115,7 @@ export function BookingStep4Payment() {
       <Card>
         <CardHeader>
           <CardTitle>Forma de Pagamento</CardTitle>
-          <p className="text-sm text-muted-foreground">
-            Escolha como deseja pagar pelo serviço
-          </p>
+          <p className="text-sm text-muted-foreground">Escolha como deseja pagar pelo serviço</p>
         </CardHeader>
         <CardContent>
           <RadioGroup value={selectedMethod} onValueChange={handleMethodChange}>
@@ -150,9 +145,7 @@ export function BookingStep4Payment() {
                       {method.icon}
                       {method.label}
                     </Label>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {method.description}
-                    </p>
+                    <p className="text-sm text-muted-foreground mt-1">{method.description}</p>
                     {method.requiresPoints && userLoyaltyPoints < 100 && (
                       <p className="text-xs text-destructive mt-1">
                         Mínimo de 100 pontos necessários
@@ -184,8 +177,8 @@ export function BookingStep4Payment() {
           {(selectedMethod === 'CREDIT_CARD' || selectedMethod === 'DEBIT_CARD') && (
             <div className="p-4 bg-muted rounded-lg">
               <p className="text-sm">
-                <strong>Pagamento Online:</strong> Você será redirecionado para o formulário
-                seguro de pagamento da Stripe.
+                <strong>Pagamento Online:</strong> Você será redirecionado para o formulário seguro
+                de pagamento da Stripe.
               </p>
             </div>
           )}
@@ -193,8 +186,9 @@ export function BookingStep4Payment() {
           {selectedMethod === 'LOYALTY_POINTS' && (
             <div className="p-4 bg-muted rounded-lg">
               <p className="text-sm">
-                <strong>Pontos de Fidelidade:</strong> Serão descontados {Math.ceil(totalAmount / 0.01)} pontos
-                da sua conta. Saldo restante: {userLoyaltyPoints - Math.ceil(totalAmount / 0.01)} pontos.
+                <strong>Pontos de Fidelidade:</strong> Serão descontados{' '}
+                {Math.ceil(totalAmount / 0.01)} pontos da sua conta. Saldo restante:{' '}
+                {userLoyaltyPoints - Math.ceil(totalAmount / 0.01)} pontos.
               </p>
             </div>
           )}
@@ -236,9 +230,7 @@ export function BookingStep4Payment() {
             </div>
           </div>
           {(selectedMethod === 'CREDIT_CARD' || selectedMethod === 'DEBIT_CARD') && (
-            <p className="text-center text-xs text-muted-foreground mt-2">
-              Powered by Stripe
-            </p>
+            <p className="text-center text-xs text-muted-foreground mt-2">Powered by Stripe</p>
           )}
         </CardContent>
       </Card>

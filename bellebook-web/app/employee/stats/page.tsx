@@ -1,14 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import {
-  DollarSign,
-  TrendingUp,
-  Star,
-  Calendar,
-  Users,
-  Award,
-} from 'lucide-react';
+import { DollarSign, TrendingUp, Star, Calendar, Users, Award } from 'lucide-react';
 import { EmployeeStatCard } from '@/components/employee/EmployeeStatCard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -66,7 +59,10 @@ export default function StatsPage() {
           <p className="text-gray-600 mt-1">Análise de desempenho e métricas</p>
         </div>
         <div className="flex gap-2">
-          <Select value={period} onValueChange={(value: 'week' | 'month' | '3months' | 'year') => setPeriod(value)}>
+          <Select
+            value={period}
+            onValueChange={(value: 'week' | 'month' | '3months' | 'year') => setPeriod(value)}
+          >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Período" />
             </SelectTrigger>
@@ -77,9 +73,7 @@ export default function StatsPage() {
               <SelectItem value="year">Ano Atual</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline">
-            Exportar
-          </Button>
+          <Button variant="outline">Exportar</Button>
         </div>
       </div>
 
@@ -106,11 +100,7 @@ export default function StatsPage() {
           change={8}
           trend="up"
         />
-        <EmployeeStatCard
-          label="Avaliação"
-          value={overview.averageRating}
-          icon={Star}
-        />
+        <EmployeeStatCard label="Avaliação" value={overview.averageRating} icon={Star} />
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
@@ -131,12 +121,8 @@ export default function StatsPage() {
                       <span className="font-semibold">{service.serviceName}</span>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-semibold text-gray-900">
-                        {service.count}x
-                      </p>
-                      <p className="text-xs text-gray-600">
-                        R$ {service.revenue.toFixed(2)}
-                      </p>
+                      <p className="text-sm font-semibold text-gray-900">{service.count}x</p>
+                      <p className="text-xs text-gray-600">R$ {service.revenue.toFixed(2)}</p>
                     </div>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
@@ -165,19 +151,14 @@ export default function StatsPage() {
                   <TrendingUp className="w-5 h-5 text-green-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">
-                    Taxa de Conclusão
-                  </p>
+                  <p className="text-sm font-semibold text-gray-900">Taxa de Conclusão</p>
                   <p className="text-xs text-gray-600">
                     {overview.completedBookings} de {overview.totalBookings}
                   </p>
                 </div>
               </div>
               <p className="text-xl font-bold text-green-600">
-                {((overview.completedBookings / overview.totalBookings) * 100).toFixed(
-                  1,
-                )}
-                %
+                {((overview.completedBookings / overview.totalBookings) * 100).toFixed(1)}%
               </p>
             </div>
 
@@ -187,19 +168,12 @@ export default function StatsPage() {
                   <Calendar className="w-5 h-5 text-red-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">
-                    Taxa de Cancelamento
-                  </p>
-                  <p className="text-xs text-gray-600">
-                    {overview.cancelledBookings} cancelados
-                  </p>
+                  <p className="text-sm font-semibold text-gray-900">Taxa de Cancelamento</p>
+                  <p className="text-xs text-gray-600">{overview.cancelledBookings} cancelados</p>
                 </div>
               </div>
               <p className="text-xl font-bold text-red-600">
-                {((overview.cancelledBookings / overview.totalBookings) * 100).toFixed(
-                  1,
-                )}
-                %
+                {((overview.cancelledBookings / overview.totalBookings) * 100).toFixed(1)}%
               </p>
             </div>
 
@@ -209,9 +183,7 @@ export default function StatsPage() {
                   <Users className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">
-                    Novos Clientes
-                  </p>
+                  <p className="text-sm font-semibold text-gray-900">Novos Clientes</p>
                   <p className="text-xs text-gray-600">Este período</p>
                 </div>
               </div>
@@ -224,9 +196,7 @@ export default function StatsPage() {
                   <Award className="w-5 h-5 text-purple-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">
-                    Taxa de Retenção
-                  </p>
+                  <p className="text-sm font-semibold text-gray-900">Taxa de Retenção</p>
                   <p className="text-xs text-gray-600">Clientes recorrentes</p>
                 </div>
               </div>
@@ -253,14 +223,9 @@ export default function StatsPage() {
                     <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                   </div>
                   <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-yellow-400"
-                      style={{ width: `${percentage}%` }}
-                    />
+                    <div className="h-full bg-yellow-400" style={{ width: `${percentage}%` }} />
                   </div>
-                  <span className="text-sm text-gray-600 w-12 text-right">
-                    {count}
-                  </span>
+                  <span className="text-sm text-gray-600 w-12 text-right">{count}</span>
                 </div>
               );
             })}

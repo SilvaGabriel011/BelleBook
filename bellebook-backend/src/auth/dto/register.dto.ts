@@ -1,4 +1,11 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength, IsOptional, Matches } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  MinLength,
+  IsOptional,
+  Matches,
+} from 'class-validator';
 
 export class RegisterDto {
   @IsEmail({}, { message: 'Email inválido' })
@@ -19,7 +26,10 @@ export class RegisterDto {
   displayName?: string;
 
   @IsString()
-  @Matches(/^\+?[1-9]\d{1,14}$/, { message: 'Telefone em formato inválido. Use formato internacional (+5511999999999)' })
+  @Matches(/^\+?[1-9]\d{1,14}$/, {
+    message:
+      'Telefone em formato inválido. Use formato internacional (+5511999999999)',
+  })
   @IsNotEmpty({ message: 'Telefone é obrigatório' })
   phone: string;
 }

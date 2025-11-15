@@ -1,4 +1,13 @@
-import { Controller, Get, Patch, Param, Query, Body, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Patch,
+  Param,
+  Query,
+  Body,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { AdminUsersService } from '../services/admin-users.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../auth/guards/roles.guard';
@@ -31,7 +40,11 @@ export class AdminUsersController {
   }
 
   @Patch(':id/suspend')
-  async suspendUser(@Param('id') id: string, @Body() body: { reason: string }, @Req() req: any) {
+  async suspendUser(
+    @Param('id') id: string,
+    @Body() body: { reason: string },
+    @Req() req: any,
+  ) {
     return this.usersService.suspendUser(
       id,
       req.user.id,
@@ -43,7 +56,12 @@ export class AdminUsersController {
 
   @Patch(':id/reactivate')
   async reactivateUser(@Param('id') id: string, @Req() req: any) {
-    return this.usersService.reactivateUser(id, req.user.id, req.ip, req.headers['user-agent']);
+    return this.usersService.reactivateUser(
+      id,
+      req.user.id,
+      req.ip,
+      req.headers['user-agent'],
+    );
   }
 
   @Patch('employees/:id')

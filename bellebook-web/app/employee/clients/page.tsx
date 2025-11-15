@@ -64,9 +64,7 @@ export default function ClientsPage() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Meus Clientes</h1>
-          <p className="text-gray-600 mt-1">
-            Gerencie seu relacionamento com clientes
-          </p>
+          <p className="text-gray-600 mt-1">Gerencie seu relacionamento com clientes</p>
         </div>
         <div className="flex items-center gap-2">
           <div className="bg-white p-3 rounded-lg border border-gray-200">
@@ -93,7 +91,12 @@ export default function ClientsPage() {
               />
             </div>
 
-            <Select value={orderBy} onValueChange={(value) => setOrderBy(value as 'lastBooking' | 'totalBookings' | 'name')}>
+            <Select
+              value={orderBy}
+              onValueChange={(value) =>
+                setOrderBy(value as 'lastBooking' | 'totalBookings' | 'name')
+              }
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Ordenar por" />
               </SelectTrigger>
@@ -105,7 +108,10 @@ export default function ClientsPage() {
               </SelectContent>
             </Select>
 
-            <Select value={filter} onValueChange={(value) => setFilter(value as 'active' | 'inactive' | 'all')}>
+            <Select
+              value={filter}
+              onValueChange={(value) => setFilter(value as 'active' | 'inactive' | 'all')}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Filtrar" />
               </SelectTrigger>
@@ -162,12 +168,8 @@ export default function ClientsPage() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Users className="w-12 h-12 text-gray-400 mb-4" />
-            <p className="text-gray-600 text-center">
-              Nenhum cliente encontrado
-            </p>
-            <p className="text-sm text-gray-500 mt-2">
-              Tente ajustar seus filtros ou busca
-            </p>
+            <p className="text-gray-600 text-center">Nenhum cliente encontrado</p>
+            <p className="text-sm text-gray-500 mt-2">Tente ajustar seus filtros ou busca</p>
           </CardContent>
         </Card>
       )}

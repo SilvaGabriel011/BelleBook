@@ -9,9 +9,11 @@ export class StripeService {
 
   constructor(private config: ConfigService) {
     const secretKey = this.config.get<string>('STRIPE_SECRET_KEY');
-    
+
     if (!secretKey) {
-      this.logger.warn('STRIPE_SECRET_KEY not configured. Payment features will not work.');
+      this.logger.warn(
+        'STRIPE_SECRET_KEY not configured. Payment features will not work.',
+      );
       return;
     }
 
@@ -60,7 +62,9 @@ export class StripeService {
       });
 
       if (existingCustomers.data.length > 0) {
-        this.logger.log(`Found existing customer: ${existingCustomers.data[0].id}`);
+        this.logger.log(
+          `Found existing customer: ${existingCustomers.data[0].id}`,
+        );
         return existingCustomers.data[0];
       }
 
@@ -127,7 +131,9 @@ export class StripeService {
       }
 
       const refund = await this.stripe.refunds.create(refundData);
-      this.logger.log(`Refund created: ${refund.id} for payment intent: ${paymentIntentId}`);
+      this.logger.log(
+        `Refund created: ${refund.id} for payment intent: ${paymentIntentId}`,
+      );
       return refund;
     } catch (error) {
       this.logger.error(`Error creating refund for ${paymentIntentId}`, error);
@@ -138,7 +144,9 @@ export class StripeService {
   /**
    * List payment methods for a customer
    */
-  async listPaymentMethods(customerId: string): Promise<Stripe.PaymentMethod[]> {
+  async listPaymentMethods(
+    customerId: string,
+  ): Promise<Stripe.PaymentMethod[]> {
     try {
       const paymentMethods = await this.stripe.paymentMethods.list({
         customer: customerId,
@@ -147,7 +155,10 @@ export class StripeService {
 
       return paymentMethods.data;
     } catch (error) {
-      this.logger.error(`Error listing payment methods for customer ${customerId}`, error);
+      this.logger.error(
+        `Error listing payment methods for customer ${customerId}`,
+        error,
+      );
       throw error;
     }
   }
@@ -155,12 +166,9 @@ export class StripeService {
   /**
    * Construct webhook event from raw body
    */
-  constructWebhookEvent(
-    payload: Buffer,
-    signature: string,
-  ): Stripe.Event {
+  constructWebhookEvent(payload: Buffer, signature: string): Stripe.Event {
     const webhookSecret = this.config.get<string>('STRIPE_WEBHOOK_SECRET');
-    
+
     if (!webhookSecret) {
       throw new Error('STRIPE_WEBHOOK_SECRET not configured');
     }

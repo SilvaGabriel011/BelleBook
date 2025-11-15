@@ -46,29 +46,20 @@ export function BookingCard({ booking, onStart, onChat }: BookingCardProps) {
               })}
             </p>
           </div>
-          <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
-            CONFIRMADO
-          </Badge>
+          <Badge className="bg-green-100 text-green-800 hover:bg-green-100">CONFIRMADO</Badge>
         </div>
 
         <div className="flex items-center gap-3 mb-4">
           <Avatar className="w-12 h-12">
-            <AvatarImage
-              src={booking.customer.avatar || undefined}
-              alt={booking.customer.name}
-            />
+            <AvatarImage src={booking.customer.avatar || undefined} alt={booking.customer.name} />
             <AvatarFallback className="bg-pink-100 text-pink-700">
               {booking.customer.name.substring(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1">
-            <p className="font-semibold text-gray-900">
-              {booking.customer.name}
-            </p>
+            <p className="font-semibold text-gray-900">{booking.customer.name}</p>
             <p className="text-sm text-gray-600">{booking.service.name}</p>
-            <p className="text-xs text-gray-500">
-              {booking.service.duration} min
-            </p>
+            <p className="text-xs text-gray-500">{booking.service.duration} min</p>
           </div>
         </div>
 
@@ -81,10 +72,7 @@ export function BookingCard({ booking, onStart, onChat }: BookingCardProps) {
         )}
 
         <div className="flex gap-2">
-          <Button
-            onClick={onStart}
-            className="flex-1 bg-pink-500 hover:bg-pink-600 text-white"
-          >
+          <Button onClick={onStart} className="flex-1 bg-pink-500 hover:bg-pink-600 text-white">
             <Play className="w-4 h-4 mr-2" />
             Iniciar
           </Button>

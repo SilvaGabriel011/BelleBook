@@ -98,19 +98,13 @@ export default function ChatPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start mb-1">
-                      <p className="font-semibold text-gray-900 truncate">
-                        {conv.customer.name}
-                      </p>
+                      <p className="font-semibold text-gray-900 truncate">{conv.customer.name}</p>
                       <span className="text-xs text-gray-500">{conv.time}</span>
                     </div>
-                    <p className="text-sm text-gray-600 truncate">
-                      {conv.lastMessage}
-                    </p>
+                    <p className="text-sm text-gray-600 truncate">{conv.lastMessage}</p>
                   </div>
                   {conv.unread > 0 && (
-                    <Badge className="bg-pink-500 hover:bg-pink-600">
-                      {conv.unread}
-                    </Badge>
+                    <Badge className="bg-pink-500 hover:bg-pink-600">{conv.unread}</Badge>
                   )}
                 </div>
               </div>
@@ -125,9 +119,7 @@ export default function ChatPage() {
             <div className="p-4 border-b flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Avatar className="w-10 h-10">
-                  <AvatarFallback className="bg-purple-100 text-purple-700">
-                    MS
-                  </AvatarFallback>
+                  <AvatarFallback className="bg-purple-100 text-purple-700">MS</AvatarFallback>
                 </Avatar>
                 <div>
                   <p className="font-semibold">Maria Silva</p>
@@ -152,15 +144,11 @@ export default function ChatPage() {
               {messages.map((msg) => (
                 <div
                   key={msg.id}
-                  className={`flex ${
-                    msg.sender === 'me' ? 'justify-end' : 'justify-start'
-                  }`}
+                  className={`flex ${msg.sender === 'me' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
                     className={`max-w-[70%] rounded-lg px-4 py-2 ${
-                      msg.sender === 'me'
-                        ? 'bg-pink-500 text-white'
-                        : 'bg-gray-100 text-gray-900'
+                      msg.sender === 'me' ? 'bg-pink-500 text-white' : 'bg-gray-100 text-gray-900'
                     }`}
                   >
                     <p className="text-sm">{msg.content}</p>

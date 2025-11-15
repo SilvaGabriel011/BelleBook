@@ -20,8 +20,9 @@ interface TimeSlot {
 }
 
 export function BookingStep2Schedule() {
-  const { previousStep, nextStep, setSchedule, totalDuration, providerId, setProvider } = useBookingStore();
-  
+  const { previousStep, nextStep, setSchedule, totalDuration, providerId, setProvider } =
+    useBookingStore();
+
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [selectedTime, setSelectedTime] = useState<string>();
   const [availableSlots, setAvailableSlots] = useState<TimeSlot[]>([]);
@@ -53,8 +54,8 @@ export function BookingStep2Schedule() {
       // });
       // setAvailableSlots(response.data.slots);
 
-      await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API delay
-      
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate API delay
+
       const mockSlots: TimeSlot[] = generateMockTimeSlots();
       setAvailableSlots(mockSlots);
     } catch (err) {
@@ -74,7 +75,7 @@ export function BookingStep2Schedule() {
     for (let hour = startHour; hour < endHour; hour++) {
       for (let minute = 0; minute < 60; minute += interval) {
         const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-        
+
         const random = Math.random();
         const available = random > 0.3; // 70% available
         const popular = available && random > 0.7; // Some slots are popular
@@ -163,7 +164,8 @@ export function BookingStep2Schedule() {
                 row: 'flex w-full mt-2',
                 cell: 'text-center text-sm p-0 relative [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20',
                 day: 'h-9 w-9 p-0 font-normal aria-selected:opacity-100 hover:bg-accent hover:text-accent-foreground rounded-md',
-                day_selected: 'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
+                day_selected:
+                  'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
                 day_today: 'bg-accent text-accent-foreground',
                 day_outside: 'text-muted-foreground opacity-50',
                 day_disabled: 'text-muted-foreground opacity-50 cursor-not-allowed',
@@ -219,10 +221,16 @@ export function BookingStep2Schedule() {
                     >
                       {slot.time}
                       {slot.popular && slot.available && (
-                        <span className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-500 rounded-full" title="Horário popular" />
+                        <span
+                          className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-500 rounded-full"
+                          title="Horário popular"
+                        />
                       )}
                       {slot.almostFull && slot.available && (
-                        <span className="absolute -top-1 -right-1 w-2 h-2 bg-orange-500 rounded-full" title="Quase lotado" />
+                        <span
+                          className="absolute -top-1 -right-1 w-2 h-2 bg-orange-500 rounded-full"
+                          title="Quase lotado"
+                        />
                       )}
                     </Button>
                   ))}
@@ -242,9 +250,7 @@ export function BookingStep2Schedule() {
 
                 {selectedTime && (
                   <div className="mt-4 p-3 bg-primary/10 border border-primary/20 rounded-md text-center">
-                    <p className="text-sm font-medium">
-                      Horário selecionado: {selectedTime}
-                    </p>
+                    <p className="text-sm font-medium">Horário selecionado: {selectedTime}</p>
                   </div>
                 )}
               </div>
@@ -260,8 +266,8 @@ export function BookingStep2Schedule() {
             <Button variant="outline" onClick={previousStep} className="flex-1">
               Voltar
             </Button>
-            <Button 
-              onClick={handleContinue} 
+            <Button
+              onClick={handleContinue}
               disabled={!selectedDate || !selectedTime}
               className="flex-1"
             >

@@ -11,17 +11,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 
 export function BookingStep5Confirmation() {
-  const { 
-    confirmationNumber, 
-    bookingId, 
-    scheduledAt, 
-    providerName, 
-    services, 
-    totalAmount, 
+  const {
+    confirmationNumber,
+    bookingId,
+    scheduledAt,
+    providerName,
+    services,
+    totalAmount,
     customerInfo,
-    reset: resetBooking 
+    reset: resetBooking,
   } = useBookingStore();
-  
+
   const { clearCart } = useCartStore();
 
   useEffect(() => {
@@ -47,8 +47,8 @@ export function BookingStep5Confirmation() {
       `DTSTAMP:${formatDate(new Date())}`,
       `DTSTART:${formatDate(startDate)}`,
       `DTEND:${formatDate(endDate)}`,
-      `SUMMARY:Agendamento BelleBook - ${services.map(s => s.serviceName).join(', ')}`,
-      `DESCRIPTION:Confirmação: ${confirmationNumber}\\nServiços: ${services.map(s => s.serviceName).join(', ')}`,
+      `SUMMARY:Agendamento BelleBook - ${services.map((s) => s.serviceName).join(', ')}`,
+      `DESCRIPTION:Confirmação: ${confirmationNumber}\\nServiços: ${services.map((s) => s.serviceName).join(', ')}`,
       `LOCATION:BelleBook`,
       'STATUS:CONFIRMED',
       'BEGIN:VALARM',
@@ -115,14 +115,13 @@ export function BookingStep5Confirmation() {
               <h2 className="text-3xl font-bold text-green-700 dark:text-green-400">
                 Agendamento Confirmado!
               </h2>
-              <p className="text-muted-foreground">
-                Seu agendamento foi realizado com sucesso
-              </p>
+              <p className="text-muted-foreground">Seu agendamento foi realizado com sucesso</p>
             </div>
             <div className="inline-block px-6 py-3 bg-muted rounded-lg">
               <p className="text-sm text-muted-foreground mb-1">Código de Confirmação</p>
               <p className="text-2xl font-bold tracking-wider">
-                {confirmationNumber || 'BELLE-' + Math.random().toString(36).substr(2, 9).toUpperCase()}
+                {confirmationNumber ||
+                  'BELLE-' + Math.random().toString(36).substr(2, 9).toUpperCase()}
               </p>
             </div>
           </div>
@@ -147,7 +146,7 @@ export function BookingStep5Confirmation() {
                   {format(scheduledAt, "EEEE, d 'de' MMMM 'de' yyyy", { locale: ptBR })}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  {format(scheduledAt, "HH:mm", { locale: ptBR })}
+                  {format(scheduledAt, 'HH:mm', { locale: ptBR })}
                 </p>
               </div>
             </div>
@@ -188,7 +187,10 @@ export function BookingStep5Confirmation() {
             <p className="font-medium mb-3">Serviços</p>
             <div className="space-y-2">
               {services.map((service, index) => (
-                <div key={index} className="flex justify-between items-center p-3 bg-muted rounded-lg">
+                <div
+                  key={index}
+                  className="flex justify-between items-center p-3 bg-muted rounded-lg"
+                >
                   <div>
                     <p className="font-medium">{service.serviceName}</p>
                     <p className="text-sm text-muted-foreground">
@@ -251,8 +253,8 @@ export function BookingStep5Confirmation() {
                 Confirmação Enviada por Email
               </p>
               <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
-                Enviamos todos os detalhes do seu agendamento para {customerInfo?.email}.
-                Você também receberá lembretes antes do horário marcado.
+                Enviamos todos os detalhes do seu agendamento para {customerInfo?.email}. Você
+                também receberá lembretes antes do horário marcado.
               </p>
             </div>
           </div>

@@ -38,7 +38,10 @@ export class AdminAnalyticsController {
   }
 
   @Get('revenue-by-service')
-  async getRevenueByService(@Query('startDate') startDate: string, @Query('endDate') endDate: string) {
+  async getRevenueByService(
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
+  ) {
     const start = new Date(startDate);
     const end = new Date(endDate);
     return this.analyticsService.getRevenueByService(start, end);

@@ -10,10 +10,7 @@ interface LoyaltyCardProps {
   nextRewardPoints?: number;
 }
 
-export default function LoyaltyCard({
-  points = 250,
-  nextRewardPoints = 500,
-}: LoyaltyCardProps) {
+export default function LoyaltyCard({ points = 250, nextRewardPoints = 500 }: LoyaltyCardProps) {
   const progress = (points / nextRewardPoints) * 100;
 
   return (
@@ -78,11 +75,7 @@ export default function LoyaltyCard({
             Ver Recompensas
           </Button>
         </Link>
-        <Button
-          variant="outline"
-          className="border-white text-white hover:bg-white/10"
-          size="icon"
-        >
+        <Button variant="outline" className="border-white text-white hover:bg-white/10" size="icon">
           <Share2 className="h-5 w-5" />
         </Button>
       </div>

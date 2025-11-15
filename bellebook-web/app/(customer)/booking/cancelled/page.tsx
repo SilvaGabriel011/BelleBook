@@ -30,20 +30,15 @@ export default function PaymentCancelledPage() {
 
           {/* Cancel Message */}
           <div className="mb-8 text-center">
-            <h1 className="mb-2 text-3xl font-bold text-gray-900">
-              Pagamento Cancelado
-            </h1>
+            <h1 className="mb-2 text-3xl font-bold text-gray-900">Pagamento Cancelado</h1>
             <p className="text-gray-600">
-              O pagamento não foi concluído. Não se preocupe, nenhum valor foi
-              cobrado.
+              O pagamento não foi concluído. Não se preocupe, nenhum valor foi cobrado.
             </p>
           </div>
 
           {/* Info Message */}
           <div className="mb-6 rounded-lg bg-amber-50 p-4">
-            <h3 className="mb-2 font-medium text-amber-900">
-              O que aconteceu?
-            </h3>
+            <h3 className="mb-2 font-medium text-amber-900">O que aconteceu?</h3>
             <ul className="space-y-1 text-sm text-amber-800">
               <li>• O pagamento foi interrompido antes de ser concluído</li>
               <li>• Nenhuma cobrança foi realizada</li>
@@ -53,14 +48,9 @@ export default function PaymentCancelledPage() {
 
           {/* Help Section */}
           <div className="mb-6 rounded-lg border border-gray-200 p-4">
-            <h3 className="mb-3 font-medium text-gray-900">
-              Precisa de ajuda?
-            </h3>
+            <h3 className="mb-3 font-medium text-gray-900">Precisa de ajuda?</h3>
             <div className="space-y-2 text-sm text-gray-600">
-              <p>
-                Se você enfrentou algum problema durante o pagamento, entre em
-                contato conosco:
-              </p>
+              <p>Se você enfrentou algum problema durante o pagamento, entre em contato conosco:</p>
               <div className="flex flex-col gap-1">
                 <p>📧 Email: suporte@bellebook.com</p>
                 <p>📱 WhatsApp: (11) 99999-9999</p>
@@ -70,19 +60,11 @@ export default function PaymentCancelledPage() {
 
           {/* Action Buttons */}
           <div className="flex flex-col gap-3 sm:flex-row">
-            <Button
-              onClick={handleRetryPayment}
-              className="flex-1"
-              variant="default"
-            >
+            <Button onClick={handleRetryPayment} className="flex-1" variant="default">
               <RotateCw className="mr-2 h-5 w-5" />
               Tentar Novamente
             </Button>
-            <Button
-              onClick={() => router.push('/customer')}
-              className="flex-1"
-              variant="outline"
-            >
+            <Button onClick={() => router.push('/customer')} className="flex-1" variant="outline">
               <ArrowLeft className="mr-2 h-5 w-5" />
               Voltar para Home
             </Button>
@@ -90,8 +72,8 @@ export default function PaymentCancelledPage() {
 
           {/* Additional Info */}
           <p className="mt-6 text-center text-xs text-gray-500">
-            Seus dados estão seguros. Utilizamos criptografia de ponta a ponta
-            para proteger suas informações.
+            Seus dados estão seguros. Utilizamos criptografia de ponta a ponta para proteger suas
+            informações.
           </p>
         </div>
       </div>

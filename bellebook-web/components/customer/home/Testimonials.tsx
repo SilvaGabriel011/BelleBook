@@ -68,8 +68,7 @@ export default function Testimonials({ reviews = [] }: TestimonialsProps) {
         },
         service: 'Depilação a Laser',
         rating: 4,
-        comment:
-          'Ótimo serviço! Processo indolor e resultados visíveis desde a primeira sessão.',
+        comment: 'Ótimo serviço! Processo indolor e resultados visíveis desde a primeira sessão.',
         date: '2024-01-12',
       },
     ];
@@ -78,9 +77,7 @@ export default function Testimonials({ reviews = [] }: TestimonialsProps) {
   return (
     <div>
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          O que nossas clientes dizem
-        </h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">O que nossas clientes dizem</h2>
         <p className="text-gray-600">
           Confira os depoimentos de quem já experimentou nossos serviços
         </p>
@@ -100,9 +97,7 @@ export default function Testimonials({ reviews = [] }: TestimonialsProps) {
                 <Star
                   key={i}
                   className={`h-4 w-4 ${
-                    i < review.rating
-                      ? 'fill-yellow-400 text-yellow-400'
-                      : 'text-gray-300'
+                    i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
                   }`}
                 />
               ))}
@@ -112,9 +107,7 @@ export default function Testimonials({ reviews = [] }: TestimonialsProps) {
             <p className="text-gray-700 mb-4 line-clamp-4">{review.comment}</p>
 
             {/* Service */}
-            <p className="text-sm text-pink-600 font-medium mb-4">
-              {review.service}
-            </p>
+            <p className="text-sm text-pink-600 font-medium mb-4">{review.service}</p>
 
             {/* User Info */}
             <div className="flex items-center gap-3 pt-4 border-t border-gray-100">

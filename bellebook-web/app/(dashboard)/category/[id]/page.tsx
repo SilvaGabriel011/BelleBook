@@ -195,7 +195,9 @@ export default function CategoryPage() {
                     <span className="text-6xl opacity-30">{meta.icon}</span>
                   </div>
                   {service.promoPrice && (
-                    <Badge className="absolute top-2 right-2 bg-red-500 text-white">Promotion</Badge>
+                    <Badge className="absolute top-2 right-2 bg-red-500 text-white">
+                      Promotion
+                    </Badge>
                   )}
                 </div>
 

@@ -1,5 +1,10 @@
 import axios from 'axios';
-import type { Service, ServicePackage, ServiceFilters, PaginationMeta } from '@/store/service.store';
+import type {
+  Service,
+  ServicePackage,
+  ServiceFilters,
+  PaginationMeta,
+} from '@/store/service.store';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -58,7 +63,7 @@ export async function getServices(
   limit: number = 12
 ): Promise<GetServicesResponse> {
   const params = new URLSearchParams();
-  
+
   if (filters.category) params.append('category', filters.category);
   if (filters.gender) params.append('gender', filters.gender);
   if (filters.minPrice !== undefined) params.append('minPrice', filters.minPrice.toString());

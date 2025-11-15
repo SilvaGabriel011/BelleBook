@@ -143,7 +143,9 @@ export class PaymentsService {
           booking.paymentId,
         );
       } catch (error) {
-        this.logger.warn(`Could not retrieve payment intent: ${booking.paymentId}`);
+        this.logger.warn(
+          `Could not retrieve payment intent: ${booking.paymentId}`,
+        );
       }
     }
 
@@ -191,7 +193,9 @@ export class PaymentsService {
         },
       });
 
-      this.logger.log(`Refund processed for booking ${booking.id}: ${refund.id}`);
+      this.logger.log(
+        `Refund processed for booking ${booking.id}: ${refund.id}`,
+      );
 
       return {
         success: true,

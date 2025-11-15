@@ -68,9 +68,7 @@ export default function SchedulePage() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Minha Agenda</h1>
-          <p className="text-gray-600 mt-1">
-            Gerencie seus agendamentos e disponibilidade
-          </p>
+          <p className="text-gray-600 mt-1">Gerencie seus agendamentos e disponibilidade</p>
         </div>
         <Button className="bg-pink-500 hover:bg-pink-600">
           <Plus className="w-4 h-4 mr-2" />
@@ -157,9 +155,7 @@ export default function SchedulePage() {
 
               return (
                 <div key={hour} className="flex gap-4 border-b last:border-0 py-2">
-                  <div className="w-20 flex-shrink-0 text-sm text-gray-600">
-                    {hour}:00
-                  </div>
+                  <div className="w-20 flex-shrink-0 text-sm text-gray-600">{hour}:00</div>
                   <div className="flex-1">
                     {hourEvents.length > 0 ? (
                       <div className="space-y-2">
@@ -167,7 +163,7 @@ export default function SchedulePage() {
                           <div
                             key={event.id}
                             className={`p-3 rounded-lg border-l-4 cursor-pointer hover:shadow-md transition-shadow ${getEventColor(
-                              event.status,
+                              event.status
                             )}`}
                           >
                             <div className="flex items-start justify-between">

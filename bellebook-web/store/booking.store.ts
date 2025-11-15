@@ -24,25 +24,25 @@ export interface BookingState {
 
   // Cart items (from cart store)
   services: BookingServiceItem[];
-  
+
   // Step 2: Provider & Schedule
   providerId?: string;
   providerName?: string;
   scheduledAt?: Date;
-  
+
   // Step 3: Customer Info
   customerInfo?: CustomerInfo;
-  
+
   // Step 4: Payment
   paymentMethod?: string;
-  
+
   // Pricing
   subtotal: number;
   discount: number;
   promoCode?: string;
   totalAmount: number;
   totalDuration: number;
-  
+
   // Confirmation
   confirmationNumber?: string;
   bookingId?: string;
@@ -51,7 +51,7 @@ export interface BookingState {
   setStep: (step: number) => void;
   nextStep: () => void;
   previousStep: () => void;
-  
+
   setServices: (services: BookingServiceItem[]) => void;
   setProvider: (providerId: string, providerName: string) => void;
   setSchedule: (scheduledAt: Date) => void;
@@ -59,9 +59,9 @@ export interface BookingState {
   setPaymentMethod: (method: string) => void;
   applyPromoCode: (code: string, discountAmount: number) => void;
   removePromoCode: () => void;
-  
+
   setConfirmation: (bookingId: string, confirmationNumber: string) => void;
-  
+
   calculateTotals: () => void;
   reset: () => void;
 }
@@ -80,14 +80,14 @@ export const useBookingStore = create<BookingState>((set, get) => ({
   ...initialState,
 
   setStep: (step) => set({ currentStep: step }),
-  
+
   nextStep: () => {
     const { currentStep, totalSteps } = get();
     if (currentStep < totalSteps) {
       set({ currentStep: currentStep + 1 });
     }
   },
-  
+
   previousStep: () => {
     const { currentStep } = get();
     if (currentStep > 1) {
@@ -132,19 +132,13 @@ export const useBookingStore = create<BookingState>((set, get) => ({
 
   calculateTotals: () => {
     const { services, discount } = get();
-    
-    const subtotal = services.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
-    
-    const totalDuration = services.reduce(
-      (sum, item) => sum + item.duration * item.quantity,
-      0
-    );
-    
+
+    const subtotal = services.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+    const totalDuration = services.reduce((sum, item) => sum + item.duration * item.quantity, 0);
+
     const totalAmount = Math.max(0, subtotal - discount);
-    
+
     set({ subtotal, totalAmount, totalDuration });
   },
 

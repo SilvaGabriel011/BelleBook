@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Patch, Param, Query, Body, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Param,
+  Query,
+  Body,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { AdminChatService } from '../services/admin-chat.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../auth/guards/roles.guard';
@@ -34,7 +44,12 @@ export class AdminChatController {
     @Body() body: { content: string; attachments?: string[] },
     @Req() req: any,
   ) {
-    return this.chatService.sendMessage(id, req.user.id, body.content, body.attachments);
+    return this.chatService.sendMessage(
+      id,
+      req.user.id,
+      body.content,
+      body.attachments,
+    );
   }
 
   @Patch('conversations/:id/read')
@@ -48,11 +63,14 @@ export class AdminChatController {
   }
 
   @Post('conversations')
-  async createConversation(@Body() body: {
-    participantIds: string[];
-    relatedBookingId?: string;
-    tags?: string[];
-  }) {
+  async createConversation(
+    @Body()
+    body: {
+      participantIds: string[];
+      relatedBookingId?: string;
+      tags?: string[];
+    },
+  ) {
     return this.chatService.createConversation(
       body.participantIds,
       body.relatedBookingId,

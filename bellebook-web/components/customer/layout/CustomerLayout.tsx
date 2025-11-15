@@ -60,9 +60,7 @@ export default function CustomerLayout({ children }: CustomerLayoutProps) {
               <div className="flex items-center space-x-2">
                 <Avatar>
                   <AvatarImage src="https://via.placeholder.com/40" />
-                  <AvatarFallback className="bg-pink-100 text-pink-600">
-                    U
-                  </AvatarFallback>
+                  <AvatarFallback className="bg-pink-100 text-pink-600">U</AvatarFallback>
                 </Avatar>
                 <Button variant="ghost" size="icon">
                   <User className="h-5 w-5" />
@@ -84,9 +82,7 @@ export default function CustomerLayout({ children }: CustomerLayoutProps) {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-6 pb-24 md:pb-6">
-        {children}
-      </main>
+      <main className="container mx-auto px-4 py-6 pb-24 md:pb-6">{children}</main>
 
       {/* Mobile Bottom Navigation */}
       <BottomNav />

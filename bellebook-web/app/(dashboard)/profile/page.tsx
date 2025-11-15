@@ -33,7 +33,10 @@ export default function ProfilePage() {
               <Avatar className="h-20 w-20 border-4 border-white">
                 <AvatarImage src="" alt={user.name} />
                 <AvatarFallback className="bg-pink-600 text-white text-2xl">
-                  {user.name.split(' ').map(n => n[0]).join('')}
+                  {user.name
+                    .split(' ')
+                    .map((n) => n[0])
+                    .join('')}
                 </AvatarFallback>
               </Avatar>
               <div>
@@ -99,10 +102,11 @@ export default function ProfilePage() {
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 pt-4">
-              <Button className="flex-1 bg-pink-500 hover:bg-pink-600">
-                Editar Perfil
-              </Button>
-              <Button variant="outline" className="flex-1 border-pink-500 text-pink-500 hover:bg-pink-50">
+              <Button className="flex-1 bg-pink-500 hover:bg-pink-600">Editar Perfil</Button>
+              <Button
+                variant="outline"
+                className="flex-1 border-pink-500 text-pink-500 hover:bg-pink-50"
+              >
                 Meus Pacotes
               </Button>
               <Button variant="outline" className="flex-1 border-gray-300">

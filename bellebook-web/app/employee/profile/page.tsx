@@ -50,9 +50,7 @@ export default function ProfilePage() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Meu Perfil</h1>
-        <p className="text-gray-600 mt-1">
-          Gerencie suas informações e configurações
-        </p>
+        <p className="text-gray-600 mt-1">Gerencie suas informações e configurações</p>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
@@ -76,9 +74,7 @@ export default function ProfilePage() {
                     <Camera className="w-4 h-4 mr-2" />
                     Alterar Foto
                   </Button>
-                  <p className="text-xs text-gray-500 mt-1">
-                    JPG, PNG ou GIF. Máx 2MB.
-                  </p>
+                  <p className="text-xs text-gray-500 mt-1">JPG, PNG ou GIF. Máx 2MB.</p>
                 </div>
               </div>
 
@@ -88,9 +84,7 @@ export default function ProfilePage() {
                   <Input
                     id="name"
                     value={profile.name}
-                    onChange={(e) =>
-                      setProfile({ ...profile, name: e.target.value })
-                    }
+                    onChange={(e) => setProfile({ ...profile, name: e.target.value })}
                   />
                 </div>
                 <div>
@@ -99,9 +93,7 @@ export default function ProfilePage() {
                     id="email"
                     type="email"
                     value={profile.email}
-                    onChange={(e) =>
-                      setProfile({ ...profile, email: e.target.value })
-                    }
+                    onChange={(e) => setProfile({ ...profile, email: e.target.value })}
                   />
                 </div>
               </div>
@@ -111,9 +103,7 @@ export default function ProfilePage() {
                 <Input
                   id="phone"
                   value={profile.phone}
-                  onChange={(e) =>
-                    setProfile({ ...profile, phone: e.target.value })
-                  }
+                  onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
                 />
               </div>
 
@@ -124,9 +114,7 @@ export default function ProfilePage() {
                   rows={4}
                   placeholder="Conte um pouco sobre sua experiência..."
                   value={profile.bio}
-                  onChange={(e) =>
-                    setProfile({ ...profile, bio: e.target.value })
-                  }
+                  onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Esta descrição será visível para os clientes
@@ -155,9 +143,7 @@ export default function ProfilePage() {
                     key={specialty.id}
                     variant={specialty.selected ? 'default' : 'outline'}
                     className={`cursor-pointer ${
-                      specialty.selected
-                        ? 'bg-pink-500 hover:bg-pink-600'
-                        : 'hover:bg-gray-100'
+                      specialty.selected ? 'bg-pink-500 hover:bg-pink-600' : 'hover:bg-gray-100'
                     }`}
                   >
                     {specialty.selected ? '✓ ' : ''}
@@ -267,7 +253,10 @@ export default function ProfilePage() {
               <Button variant="outline" className="w-full justify-start">
                 Termos de Uso
               </Button>
-              <Button variant="outline" className="w-full justify-start text-red-600 hover:text-red-700">
+              <Button
+                variant="outline"
+                className="w-full justify-start text-red-600 hover:text-red-700"
+              >
                 Sair
               </Button>
             </CardContent>

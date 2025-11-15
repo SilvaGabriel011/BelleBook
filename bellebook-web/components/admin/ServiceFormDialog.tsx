@@ -85,9 +85,7 @@ export function ServiceFormDialog({
     }
   }, [service, open]);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -175,9 +173,7 @@ export function ServiceFormDialog({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>
-            {service ? 'Editar Serviço' : 'Novo Serviço'}
-          </DialogTitle>
+          <DialogTitle>{service ? 'Editar Serviço' : 'Novo Serviço'}</DialogTitle>
           <DialogDescription>
             {service
               ? 'Edite as informações do serviço abaixo'
@@ -218,9 +214,7 @@ export function ServiceFormDialog({
             <Label htmlFor="categoryId">Categoria *</Label>
             <Select
               value={formData.categoryId}
-              onValueChange={(value) =>
-                setFormData((prev) => ({ ...prev, categoryId: value }))
-              }
+              onValueChange={(value) => setFormData((prev) => ({ ...prev, categoryId: value }))}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Selecione uma categoria" />
@@ -296,12 +290,7 @@ export function ServiceFormDialog({
                   }
                 }}
               />
-              <Button
-                type="button"
-                onClick={handleAddImage}
-                variant="outline"
-                size="icon"
-              >
+              <Button type="button" onClick={handleAddImage} variant="outline" size="icon">
                 <Upload className="w-4 h-4" />
               </Button>
             </div>
@@ -313,12 +302,7 @@ export function ServiceFormDialog({
                     key={index}
                     className="relative group aspect-square rounded border overflow-hidden"
                   >
-                    <Image
-                      src={img}
-                      alt={`Imagem ${index + 1}`}
-                      fill
-                      className="object-cover"
-                    />
+                    <Image src={img} alt={`Imagem ${index + 1}`} fill className="object-cover" />
                     <button
                       type="button"
                       onClick={() => handleRemoveImage(index)}
@@ -336,11 +320,7 @@ export function ServiceFormDialog({
             <Button type="button" variant="outline" onClick={onClose}>
               Cancelar
             </Button>
-            <Button
-              type="submit"
-              disabled={loading}
-              className="bg-pink-500 hover:bg-pink-600"
-            >
+            <Button type="submit" disabled={loading} className="bg-pink-500 hover:bg-pink-600">
               {loading ? 'Salvando...' : service ? 'Atualizar' : 'Criar'}
             </Button>
           </DialogFooter>

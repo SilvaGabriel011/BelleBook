@@ -1,11 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  PaymentElement,
-  useStripe,
-  useElements,
-} from '@stripe/react-stripe-js';
+import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Loader2, CreditCard } from 'lucide-react';
@@ -17,16 +13,11 @@ interface PaymentFormProps {
   onError?: (error: string) => void;
 }
 
-export function PaymentForm({
-  amount,
-  bookingId,
-  onSuccess,
-  onError,
-}: PaymentFormProps) {
+export function PaymentForm({ amount, bookingId, onSuccess, onError }: PaymentFormProps) {
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
-  
+
   // Derive ready state from stripe and elements
   const isReady = !!(stripe && elements);
 

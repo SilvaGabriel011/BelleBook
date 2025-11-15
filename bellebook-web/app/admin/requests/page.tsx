@@ -45,7 +45,8 @@ export default function RoleRequestsPage() {
           },
           currentRole: 'CUSTOMER',
           requestedRole: 'EMPLOYEE',
-          requestReason: 'Sou manicure profissional com 5 anos de experiência e gostaria de oferecer meus serviços na plataforma.',
+          requestReason:
+            'Sou manicure profissional com 5 anos de experiência e gostaria de oferecer meus serviços na plataforma.',
           status: 'PENDING',
           createdAt: '2024-01-15T14:30:00Z',
         },
@@ -102,9 +103,8 @@ export default function RoleRequestsPage() {
     }
   };
 
-  const filteredRequests = filter === 'all' 
-    ? requests 
-    : requests.filter(r => r.status === filter);
+  const filteredRequests =
+    filter === 'all' ? requests : requests.filter((r) => r.status === filter);
 
   const columns = [
     {
@@ -150,7 +150,9 @@ export default function RoleRequestsPage() {
           REJECTED: 'bg-red-100 text-red-700',
         };
         return (
-          <span className={`px-3 py-1 text-xs font-medium rounded-full ${colors[status as keyof typeof colors]}`}>
+          <span
+            className={`px-3 py-1 text-xs font-medium rounded-full ${colors[status as keyof typeof colors]}`}
+          >
             {status}
           </span>
         );
@@ -246,7 +248,7 @@ export default function RoleRequestsPage() {
             <Clock className="w-8 h-8 text-yellow-600" />
             <div>
               <p className="text-2xl font-bold text-yellow-900">
-                {requests.filter(r => r.status === 'PENDING').length}
+                {requests.filter((r) => r.status === 'PENDING').length}
               </p>
               <p className="text-sm text-yellow-700">Pendentes</p>
             </div>
@@ -257,7 +259,7 @@ export default function RoleRequestsPage() {
             <Check className="w-8 h-8 text-green-600" />
             <div>
               <p className="text-2xl font-bold text-green-900">
-                {requests.filter(r => r.status === 'APPROVED').length}
+                {requests.filter((r) => r.status === 'APPROVED').length}
               </p>
               <p className="text-sm text-green-700">Aprovadas</p>
             </div>
@@ -268,7 +270,7 @@ export default function RoleRequestsPage() {
             <X className="w-8 h-8 text-red-600" />
             <div>
               <p className="text-2xl font-bold text-red-900">
-                {requests.filter(r => r.status === 'REJECTED').length}
+                {requests.filter((r) => r.status === 'REJECTED').length}
               </p>
               <p className="text-sm text-red-700">Rejeitadas</p>
             </div>
@@ -302,27 +304,48 @@ export default function RoleRequestsPage() {
             <div className="p-6 space-y-6">
               {/* User Info */}
               <div>
-                <h3 className="text-sm font-semibold text-gray-900 uppercase mb-3">Informações do Usuário</h3>
+                <h3 className="text-sm font-semibold text-gray-900 uppercase mb-3">
+                  Informações do Usuário
+                </h3>
                 <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-                  <p><span className="font-medium">Nome:</span> {selectedRequest.user.name}</p>
-                  <p><span className="font-medium">Email:</span> {selectedRequest.user.email}</p>
-                  <p><span className="font-medium">Conta criada em:</span> {new Date(selectedRequest.user.createdAt).toLocaleDateString('pt-BR')}</p>
+                  <p>
+                    <span className="font-medium">Nome:</span> {selectedRequest.user.name}
+                  </p>
+                  <p>
+                    <span className="font-medium">Email:</span> {selectedRequest.user.email}
+                  </p>
+                  <p>
+                    <span className="font-medium">Conta criada em:</span>{' '}
+                    {new Date(selectedRequest.user.createdAt).toLocaleDateString('pt-BR')}
+                  </p>
                 </div>
               </div>
 
               {/* Request Details */}
               <div>
-                <h3 className="text-sm font-semibold text-gray-900 uppercase mb-3">Detalhes da Solicitação</h3>
+                <h3 className="text-sm font-semibold text-gray-900 uppercase mb-3">
+                  Detalhes da Solicitação
+                </h3>
                 <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-                  <p><span className="font-medium">Role Atual:</span> {selectedRequest.currentRole}</p>
-                  <p><span className="font-medium">Role Solicitado:</span> {selectedRequest.requestedRole}</p>
-                  <p><span className="font-medium">Data da Solicitação:</span> {new Date(selectedRequest.createdAt).toLocaleDateString('pt-BR')}</p>
+                  <p>
+                    <span className="font-medium">Role Atual:</span> {selectedRequest.currentRole}
+                  </p>
+                  <p>
+                    <span className="font-medium">Role Solicitado:</span>{' '}
+                    {selectedRequest.requestedRole}
+                  </p>
+                  <p>
+                    <span className="font-medium">Data da Solicitação:</span>{' '}
+                    {new Date(selectedRequest.createdAt).toLocaleDateString('pt-BR')}
+                  </p>
                 </div>
               </div>
 
               {/* Reason */}
               <div>
-                <h3 className="text-sm font-semibold text-gray-900 uppercase mb-3">Justificativa</h3>
+                <h3 className="text-sm font-semibold text-gray-900 uppercase mb-3">
+                  Justificativa
+                </h3>
                 <div className="bg-gray-50 rounded-lg p-4">
                   <p className="text-gray-700">{selectedRequest.requestReason}</p>
                 </div>

@@ -1,7 +1,17 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Shield, Scissors, User, Calendar, FileText, Check, X, Loader2, Filter } from 'lucide-react';
+import {
+  Shield,
+  Scissors,
+  User,
+  Calendar,
+  FileText,
+  Check,
+  X,
+  Loader2,
+  Filter,
+} from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -52,8 +62,8 @@ export default function AdminRoleRequestsPage() {
     } catch (err) {
       const errorMessage =
         err && typeof err === 'object' && 'response' in err
-          ? ((err as { response?: { data?: { message?: string } } }).response?.data?.message ||
-            'Erro ao carregar solicitações')
+          ? (err as { response?: { data?: { message?: string } } }).response?.data?.message ||
+            'Erro ao carregar solicitações'
           : 'Erro ao carregar solicitações';
       setError(errorMessage);
     } finally {
@@ -82,8 +92,8 @@ export default function AdminRoleRequestsPage() {
     } catch (err) {
       const errorMessage =
         err && typeof err === 'object' && 'response' in err
-          ? ((err as { response?: { data?: { message?: string } } }).response?.data?.message ||
-            'Erro ao aprovar solicitação')
+          ? (err as { response?: { data?: { message?: string } } }).response?.data?.message ||
+            'Erro ao aprovar solicitação'
           : 'Erro ao aprovar solicitação';
       setError(errorMessage);
     } finally {
@@ -111,8 +121,8 @@ export default function AdminRoleRequestsPage() {
     } catch (err) {
       const errorMessage =
         err && typeof err === 'object' && 'response' in err
-          ? ((err as { response?: { data?: { message?: string } } }).response?.data?.message ||
-            'Erro ao rejeitar solicitação')
+          ? (err as { response?: { data?: { message?: string } } }).response?.data?.message ||
+            'Erro ao rejeitar solicitação'
           : 'Erro ao rejeitar solicitação';
       setError(errorMessage);
     } finally {
@@ -249,9 +259,7 @@ export default function AdminRoleRequestsPage() {
 
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <h3 className="font-semibold text-lg">
-                          {request.user?.name || 'Usuário'}
-                        </h3>
+                        <h3 className="font-semibold text-lg">{request.user?.name || 'Usuário'}</h3>
                         {getStatusBadge(request.status)}
                       </div>
 
@@ -320,7 +328,10 @@ export default function AdminRoleRequestsPage() {
       </div>
 
       {/* Request Details Dialog */}
-      <Dialog open={!!selectedRequest && !showApproveDialog && !showRejectDialog} onOpenChange={() => setSelectedRequest(null)}>
+      <Dialog
+        open={!!selectedRequest && !showApproveDialog && !showRejectDialog}
+        onOpenChange={() => setSelectedRequest(null)}
+      >
         <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
           {selectedRequest && (
             <>
@@ -339,12 +350,16 @@ export default function AdminRoleRequestsPage() {
                 <div>
                   <Label className="text-base font-semibold">Usuário</Label>
                   <div className="mt-2 space-y-1 text-sm">
-                    <p><strong>Nome:</strong> {selectedRequest.user?.name}</p>
-                    <p><strong>Email:</strong> {selectedRequest.user?.email}</p>
+                    <p>
+                      <strong>Nome:</strong> {selectedRequest.user?.name}
+                    </p>
+                    <p>
+                      <strong>Email:</strong> {selectedRequest.user?.email}
+                    </p>
                     <p>
                       <strong>Membro desde:</strong>{' '}
                       {selectedRequest.user?.createdAt &&
-                        format(new Date(selectedRequest.user.createdAt), "dd/MM/yyyy")}
+                        format(new Date(selectedRequest.user.createdAt), 'dd/MM/yyyy')}
                     </p>
                   </div>
                 </div>

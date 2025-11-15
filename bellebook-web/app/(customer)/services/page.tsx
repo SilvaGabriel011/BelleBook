@@ -69,7 +69,7 @@ export default function ServicesPage() {
       <div className="border-b bg-white">
         <div className="container mx-auto px-4 py-6">
           <h1 className="mb-4 text-3xl font-bold text-gray-900">Nossos Serviços</h1>
-          
+
           {/* Search and View Toggle */}
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="relative flex-1 max-w-md">
@@ -113,9 +113,7 @@ export default function ServicesPage() {
               {/* Placeholder for ServiceFilters component */}
               <div className="rounded-lg border bg-white p-6">
                 <h3 className="mb-4 text-lg font-bold">Filtros</h3>
-                <p className="text-sm text-gray-600">
-                  Componente de filtros será adicionado aqui
-                </p>
+                <p className="text-sm text-gray-600">Componente de filtros será adicionado aqui</p>
               </div>
             </div>
           </aside>
@@ -134,10 +132,11 @@ export default function ServicesPage() {
 
             {/* Loading State */}
             {isLoading && (
-              <div className={viewMode === 'grid' 
-                ? 'grid gap-6 sm:grid-cols-2 lg:grid-cols-3' 
-                : 'space-y-4'
-              }>
+              <div
+                className={
+                  viewMode === 'grid' ? 'grid gap-6 sm:grid-cols-2 lg:grid-cols-3' : 'space-y-4'
+                }
+              >
                 {Array.from({ length: 6 }).map((_, i) => (
                   <div key={i} className="space-y-4">
                     <Skeleton className="h-48 w-full" />
@@ -150,16 +149,13 @@ export default function ServicesPage() {
 
             {/* Services Grid */}
             {!isLoading && services.length > 0 && (
-              <div className={viewMode === 'grid' 
-                ? 'grid gap-6 sm:grid-cols-2 lg:grid-cols-3' 
-                : 'space-y-4'
-              }>
+              <div
+                className={
+                  viewMode === 'grid' ? 'grid gap-6 sm:grid-cols-2 lg:grid-cols-3' : 'space-y-4'
+                }
+              >
                 {services.map((service) => (
-                  <ServiceCard
-                    key={service.id}
-                    service={service}
-                    variant={viewMode}
-                  />
+                  <ServiceCard key={service.id} service={service} variant={viewMode} />
                 ))}
               </div>
             )}
@@ -168,16 +164,12 @@ export default function ServicesPage() {
             {!isLoading && services.length === 0 && (
               <div className="flex flex-col items-center justify-center py-16">
                 <div className="text-6xl mb-4">😔</div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  Nenhum serviço encontrado
-                </h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Nenhum serviço encontrado</h3>
                 <p className="text-gray-600 mb-6 text-center max-w-md">
-                  Não encontramos serviços que correspondam aos seus filtros.
-                  Tente ajustar os filtros ou buscar por outro termo.
+                  Não encontramos serviços que correspondam aos seus filtros. Tente ajustar os
+                  filtros ou buscar por outro termo.
                 </p>
-                <Button onClick={() => setFilters({})}>
-                  Limpar Filtros
-                </Button>
+                <Button onClick={() => setFilters({})}>Limpar Filtros</Button>
               </div>
             )}
 
@@ -191,7 +183,7 @@ export default function ServicesPage() {
                 >
                   Anterior
                 </Button>
-                
+
                 {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((page) => {
                   // Show first page, last page, current page, and pages around current
                   if (
@@ -208,11 +200,12 @@ export default function ServicesPage() {
                         {page}
                       </Button>
                     );
-                  } else if (
-                    page === pagination.page - 2 ||
-                    page === pagination.page + 2
-                  ) {
-                    return <span key={page} className="px-2">...</span>;
+                  } else if (page === pagination.page - 2 || page === pagination.page + 2) {
+                    return (
+                      <span key={page} className="px-2">
+                        ...
+                      </span>
+                    );
                   }
                   return null;
                 })}

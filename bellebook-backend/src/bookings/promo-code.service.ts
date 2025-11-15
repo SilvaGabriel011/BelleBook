@@ -61,7 +61,10 @@ export class PromoCodeService {
       };
     }
 
-    if (promoCode.minAmount && data.totalAmount < promoCode.minAmount.toNumber()) {
+    if (
+      promoCode.minAmount &&
+      data.totalAmount < promoCode.minAmount.toNumber()
+    ) {
       return {
         valid: false,
         discount: 0,

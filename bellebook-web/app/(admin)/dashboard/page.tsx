@@ -118,7 +118,10 @@ export default function AdminDashboard() {
             </div>
 
             <div className="flex items-center gap-4">
-              <Select value={period} onValueChange={(v: string) => setPeriod(v as 'day' | 'week' | 'month')}>
+              <Select
+                value={period}
+                onValueChange={(v: string) => setPeriod(v as 'day' | 'week' | 'month')}
+              >
                 <SelectTrigger className="w-40">
                   <SelectValue />
                 </SelectTrigger>

@@ -2,14 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import {
-  Home,
-  Calendar,
-  Users,
-  MessageSquare,
-  TrendingUp,
-  User,
-} from 'lucide-react';
+import { Home, Calendar, Users, MessageSquare, TrendingUp, User } from 'lucide-react';
 
 const menuItems = [
   { id: 'home', label: 'Início', icon: Home, path: '/employee' },
@@ -20,11 +13,7 @@ const menuItems = [
   { id: 'profile', label: 'Perfil', icon: User, path: '/employee/profile' },
 ];
 
-export default function EmployeeLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function EmployeeLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   return (
@@ -46,9 +35,7 @@ export default function EmployeeLayout({
                   key={item.id}
                   href={item.path}
                   className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
-                    isActive
-                      ? 'bg-pink-50 text-pink-700'
-                      : 'text-gray-700 hover:bg-gray-100'
+                    isActive ? 'bg-pink-50 text-pink-700' : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 >
                   <Icon className="w-5 h-5 mr-3" />

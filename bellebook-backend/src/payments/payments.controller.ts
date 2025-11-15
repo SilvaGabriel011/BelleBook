@@ -73,7 +73,7 @@ export class PaymentsController {
     try {
       // Get raw body for signature verification
       const rawBody = req.rawBody;
-      
+
       if (!rawBody) {
         return { error: 'Missing raw body' };
       }

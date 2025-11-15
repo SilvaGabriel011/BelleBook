@@ -27,17 +27,12 @@ export default function NextAppointment({ booking }: NextAppointmentProps) {
     <Card className="p-6 bg-gradient-to-br from-pink-50 to-purple-50 border-pink-200">
       <div className="flex items-start justify-between mb-4">
         <div>
-          <h3 className="text-sm font-semibold text-gray-600 mb-1">
-            Próximo Agendamento
-          </h3>
+          <h3 className="text-sm font-semibold text-gray-600 mb-1">Próximo Agendamento</h3>
           <h2 className="text-2xl font-bold text-gray-900">
             {format(appointmentDate, "EEEE, d 'de' MMMM", { locale: ptBR })}
           </h2>
         </div>
-        <Badge
-          variant="secondary"
-          className="bg-green-100 text-green-700 border-green-200"
-        >
+        <Badge variant="secondary" className="bg-green-100 text-green-700 border-green-200">
           {booking.status === 'CONFIRMED' ? 'CONFIRMADO' : booking.status}
         </Badge>
       </div>
@@ -60,9 +55,7 @@ export default function NextAppointment({ booking }: NextAppointmentProps) {
       </div>
 
       <div className="flex gap-2">
-        <Button className="flex-1 bg-pink-500 hover:bg-pink-600">
-          Ver Detalhes
-        </Button>
+        <Button className="flex-1 bg-pink-500 hover:bg-pink-600">Ver Detalhes</Button>
         <Button variant="outline" className="flex-1 border-pink-300 text-pink-600 hover:bg-pink-50">
           Reagendar
         </Button>
