@@ -131,11 +131,7 @@ export default function BookingPage() {
       {/* Progress Indicator */}
       {currentStep < 5 && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <ProgressIndicator
-            currentStep={currentStep}
-            totalSteps={totalSteps - 1}
-            steps={STEP_TITLES.slice(0, -1)}
-          />
+          <ProgressIndicator currentStep={currentStep} />
         </div>
       )}
 
