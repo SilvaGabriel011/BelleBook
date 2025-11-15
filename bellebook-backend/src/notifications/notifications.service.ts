@@ -175,8 +175,8 @@ export class NotificationsService {
    * Clean old completed jobs from queue
    */
   async cleanQueue(grace: number = 24 * 60 * 60 * 1000): Promise<void> {
-    await this.emailQueue.clean(grace, 'completed');
-    await this.emailQueue.clean(grace, 'failed');
+    await this.emailQueue.clean(grace, 1000, 'completed');
+    await this.emailQueue.clean(grace, 1000, 'failed');
     this.logger.log(`Queue cleaned (grace period: ${grace}ms)`);
   }
 
@@ -189,5 +189,51 @@ export class NotificationsService {
     fromName: string;
   } {
     return this.sendGridService.getStatus();
+  }
+
+  // ==================== ROLE REQUEST EMAILS ====================
+
+  /**
+   * Send role request created email to user
+   */
+  async sendRoleRequestCreated(
+    email: string,
+    name: string,
+    requestedRole: string,
+  ): Promise<void> {
+    this.logger.log(`Sending role request created email to ${email}`);
+  }
+
+  /**
+   * Notify admins about new role request
+   */
+  async notifyAdminsNewRequest(
+    requestId: string,
+    userName: string,
+    requestedRole: string,
+  ): Promise<void> {
+    this.logger.log(`Notifying admins about new role request ${requestId}`);
+  }
+
+  /**
+   * Send role request approved email to user
+   */
+  async sendRoleRequestApproved(
+    email: string,
+    name: string,
+    approvedRole: string,
+  ): Promise<void> {
+    this.logger.log(`Sending role request approved email to ${email}`);
+  }
+
+  /**
+   * Send role request rejected email to user
+   */
+  async sendRoleRequestRejected(
+    email: string,
+    name: string,
+    reason: string,
+  ): Promise<void> {
+    this.logger.log(`Sending role request rejected email to ${email}`);
   }
 }

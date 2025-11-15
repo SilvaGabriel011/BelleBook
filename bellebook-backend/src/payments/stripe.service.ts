@@ -15,9 +15,7 @@ export class StripeService {
       return;
     }
 
-    this.stripe = new Stripe(secretKey, {
-      apiVersion: '2024-11-20.acacia',
-    });
+    this.stripe = new Stripe(secretKey);
 
     this.logger.log('Stripe service initialized successfully');
   }

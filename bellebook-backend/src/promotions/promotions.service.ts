@@ -91,6 +91,10 @@ export class PromotionsService {
       where: { id },
     });
 
+    if (!banner) {
+      throw new Error('Banner not found');
+    }
+
     return this.prisma.promoBanner.update({
       where: { id },
       data: {

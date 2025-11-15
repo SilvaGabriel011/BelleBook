@@ -1,10 +1,16 @@
 import { Injectable, NestMiddleware, ForbiddenException } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 
+type AccountStatus = 'ACTIVE' | 'PENDING_APPROVAL' | 'SUSPENDED' | 'REJECTED';
+
+interface UserWithAccountStatus {
+  accountStatus?: AccountStatus;
+}
+
 @Injectable()
 export class AccountStatusMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
-    const user = req.user;
+    const user = req.user as unknown as UserWithAccountStatus | undefined;
     
     if (!user) {
       return next();
