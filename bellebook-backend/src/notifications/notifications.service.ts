@@ -197,11 +197,11 @@ export class NotificationsService {
    * Send role request created email to user
    */
   async sendRoleRequestCreated(
-    email: string,
-    name: string,
-    requestedRole: string,
+    _email: string,
+    _name: string,
+    _requestedRole: string,
   ): Promise<void> {
-    this.logger.log(`Sending role request created email to ${email}`);
+    this.logger.log(`Sending role request created email to ${_email}`);
   }
 
   /**
@@ -209,8 +209,8 @@ export class NotificationsService {
    */
   async notifyAdminsNewRequest(
     requestId: string,
-    userName: string,
-    requestedRole: string,
+    _userName: string,
+    _requestedRole: string,
   ): Promise<void> {
     this.logger.log(`Notifying admins about new role request ${requestId}`);
   }
@@ -219,21 +219,21 @@ export class NotificationsService {
    * Send role request approved email to user
    */
   async sendRoleRequestApproved(
-    email: string,
-    name: string,
-    approvedRole: string,
+    _email: string,
+    _name: string,
+    _approvedRole: string,
   ): Promise<void> {
-    this.logger.log(`Sending role request approved email to ${email}`);
+    this.logger.log(`Sending role request approved email to ${_email}`);
   }
 
   /**
    * Send role request rejected email to user
    */
   async sendRoleRequestRejected(
-    email: string,
-    name: string,
-    reason: string,
+    _email: string,
+    _name: string,
+    _reason: string,
   ): Promise<void> {
-    this.logger.log(`Sending role request rejected email to ${email}`);
+    this.logger.log(`Sending role request rejected email to ${_email}`);
   }
 }
