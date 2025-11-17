@@ -365,6 +365,16 @@ export class BookingsService {
       },
     });
 
+    // Cancelar eventos no Google Calendar
+    if (this.googleCalendarService) {
+      try {
+        await this.googleCalendarService.cancelBookingEvents(updatedBooking);
+      } catch (error) {
+        console.error('Erro ao cancelar eventos no Google Calendar:', error);
+        // Não falhar o cancelamento se o Google Calendar falhar
+      }
+    }
+
     // TODO: Enviar notificação de cancelamento
 
     return updatedBooking;
@@ -413,8 +423,47 @@ export class BookingsService {
             category: true,
           },
         },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+          },
+        },
       },
     });
+
+    // Atualizar eventos no Google Calendar
+    if (this.googleCalendarService) {
+      try {
+        // Atualizar evento do cliente
+        if (updatedBooking.googleEventId && updatedBooking.userId) {
+          await this.googleCalendarService.updateCalendarEvent(
+            updatedBooking.googleEventId,
+            updatedBooking,
+            updatedBooking.userId,
+            false,
+          );
+        }
+
+        // Atualizar evento do prestador
+        if (updatedBooking.googleProviderEventId) {
+          const providerId = process.env.PROVIDER_USER_ID;
+          if (providerId) {
+            await this.googleCalendarService.updateCalendarEvent(
+              updatedBooking.googleProviderEventId,
+              updatedBooking,
+              providerId,
+              true,
+            );
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao atualizar eventos no Google Calendar:', error);
+        // Não falhar o reagendamento se o Google Calendar falhar
+      }
+    }
 
     // TODO: Enviar notificação de reagendamento
 

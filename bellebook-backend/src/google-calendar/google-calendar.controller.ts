@@ -1,4 +1,5 @@
-import { Controller, Get, Query, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards, Request, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { OAuth2Client } from 'google-auth-library';
 import { GoogleCalendarService } from './google-calendar.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -25,6 +26,7 @@ export class GoogleCalendarController {
   async handleCallback(
     @Query('code') code: string,
     @Query('state') state: string,
+    @Res() res: Response,
   ) {
     try {
       const stateData = JSON.parse(state);
@@ -47,13 +49,12 @@ export class GoogleCalendarController {
         ? `${process.env.FRONTEND_URL}/settings?google=connected&type=provider`
         : `${process.env.FRONTEND_URL}/settings?google=connected&type=client`;
 
-      return { success: true, redirect: redirectUrl };
+      return res.redirect(redirectUrl);
     } catch (error) {
       console.error('Erro no callback OAuth:', error);
-      return {
-        success: false,
-        redirect: `${process.env.FRONTEND_URL}/settings?google=error`,
-      };
+      return res.redirect(
+        `${process.env.FRONTEND_URL}/settings?google=error`,
+      );
     }
   }
 

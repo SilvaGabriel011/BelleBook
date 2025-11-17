@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, Logger } from '@nestjs/common';
 import { google, calendar_v3 } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 import { ConfigService } from '@nestjs/config';
@@ -26,6 +26,7 @@ export interface GoogleCalendarEvent {
 
 @Injectable()
 export class GoogleCalendarService {
+  private readonly logger = new Logger(GoogleCalendarService.name);
   private oauth2Client: OAuth2Client;
   private calendar: calendar_v3.Calendar;
 
@@ -158,6 +159,11 @@ Valor: R$ ${booking.totalPaid}
 Agendamento realizado via BelleBook
       `.trim();
 
+      const timeZone = 
+        booking.timezone || 
+        this.configService.get('DEFAULT_TIMEZONE') || 
+        'America/Sao_Paulo';
+
       // Preparar o evento
       const event: GoogleCalendarEvent = {
         summary: isProvider
@@ -167,11 +173,11 @@ Agendamento realizado via BelleBook
         location: this.configService.get('BUSINESS_ADDRESS') || 'A confirmar',
         start: {
           dateTime: startDate.toISOString(),
-          timeZone: 'America/Sao_Paulo',
+          timeZone: timeZone,
         },
         end: {
           dateTime: endDate.toISOString(),
-          timeZone: 'America/Sao_Paulo',
+          timeZone: timeZone,
         },
         reminders: {
           useDefault: false,
@@ -215,7 +221,7 @@ Agendamento realizado via BelleBook
 
       return response.data.id || '';
     } catch (error) {
-      console.error('Erro ao criar evento no Google Calendar:', error);
+      this.logger.error('Erro ao criar evento no Google Calendar', error);
       throw new BadRequestException('Erro ao criar evento no calendário');
     }
   }
@@ -239,7 +245,7 @@ Agendamento realizado via BelleBook
             false,
           );
         } catch (error) {
-          console.log('Cliente não autenticado com Google Calendar');
+          this.logger.warn('Cliente não autenticado com Google Calendar', error);
         }
       }
 
@@ -253,7 +259,7 @@ Agendamento realizado via BelleBook
             true,
           );
         } catch (error) {
-          console.log('Prestador não autenticado com Google Calendar');
+          this.logger.warn('Prestador não autenticado com Google Calendar', error);
         }
       }
 
@@ -270,7 +276,7 @@ Agendamento realizado via BelleBook
 
       return result;
     } catch (error) {
-      console.error('Erro ao criar eventos:', error);
+      this.logger.error('Erro ao criar eventos no Google Calendar', error);
       throw error;
     }
   }
@@ -295,17 +301,22 @@ Agendamento realizado via BelleBook
         endDate.getMinutes() + (booking.service?.duration || 60),
       );
 
+      const timeZone = 
+        booking.timezone || 
+        this.configService.get('DEFAULT_TIMEZONE') || 
+        'America/Sao_Paulo';
+
       const event: GoogleCalendarEvent = {
         summary: isProvider
           ? `${booking.service?.name} - ${booking.user?.name}`
           : `${booking.service?.name} - BelleBook`,
         start: {
           dateTime: startDate.toISOString(),
-          timeZone: 'America/Sao_Paulo',
+          timeZone: timeZone,
         },
         end: {
           dateTime: endDate.toISOString(),
-          timeZone: 'America/Sao_Paulo',
+          timeZone: timeZone,
         },
       };
 
@@ -316,7 +327,7 @@ Agendamento realizado via BelleBook
         sendUpdates: 'all',
       });
     } catch (error) {
-      console.error('Erro ao atualizar evento:', error);
+      this.logger.error('Erro ao atualizar evento no Google Calendar', error);
       throw new BadRequestException('Erro ao atualizar evento no calendário');
     }
   }
@@ -337,7 +348,7 @@ Agendamento realizado via BelleBook
         sendUpdates: 'all', // Notifica participantes sobre o cancelamento
       });
     } catch (error) {
-      console.error('Erro ao cancelar evento:', error);
+      this.logger.error('Erro ao cancelar evento no Google Calendar', error);
       // Se o evento não existir, não é erro crítico
       if (error.code !== 404) {
         throw new BadRequestException('Erro ao cancelar evento no calendário');
@@ -356,7 +367,7 @@ Agendamento realizado via BelleBook
           false,
         );
       } catch (error) {
-        console.log('Erro ao cancelar evento do cliente:', error);
+        this.logger.warn('Erro ao cancelar evento do cliente no Google Calendar', error);
       }
     }
 
@@ -371,7 +382,7 @@ Agendamento realizado via BelleBook
             true,
           );
         } catch (error) {
-          console.log('Erro ao cancelar evento do prestador:', error);
+          this.logger.warn('Erro ao cancelar evento do prestador no Google Calendar', error);
         }
       }
     }
@@ -431,7 +442,7 @@ Agendamento realizado via BelleBook
 
       return busySlots;
     } catch (error) {
-      console.error('Erro ao buscar horários ocupados:', error);
+      this.logger.error('Erro ao buscar horários ocupados no Google Calendar', error);
       return [];
     }
   }
