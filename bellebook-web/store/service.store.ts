@@ -8,8 +8,12 @@ export interface Service {
   category: {
     id: string;
     name: string;
+    description?: string;
     icon?: string;
     image?: string;
+    order: number;
+    isActive: boolean;
+    servicesCount: number;
   };
   price: number;
   promoPrice?: number;
@@ -169,7 +173,7 @@ export const useServiceStore = create<ServiceStore>((set, get) => ({
       );
     }
 
-    if (filters.gender && filters.gender !== '') {
+    if (filters.gender) {
       filtered = filtered.filter((service) => service.gender === filters.gender);
     }
 

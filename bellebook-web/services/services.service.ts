@@ -54,6 +54,7 @@ export interface CreateServiceDto {
   duration: number;
   images: string[];
   isActive?: boolean;
+  customFields?: Record<string, string>;
 }
 
 export interface UpdateServiceDto {
@@ -65,6 +66,7 @@ export interface UpdateServiceDto {
   duration?: number;
   images?: string[];
   isActive?: boolean;
+  customFields?: Record<string, string>;
 }
 
 export const servicesService = {

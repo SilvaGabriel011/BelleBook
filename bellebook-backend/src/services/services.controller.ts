@@ -10,7 +10,8 @@ import {
   BadRequestException,
   UseGuards,
 } from '@nestjs/common';
-import { ServicesService, ServiceFilters, CreateServiceDto, UpdateServiceDto } from './services.service';
+import { ServicesService } from './services.service';
+import type { ServiceFilters, CreateServiceDto, UpdateServiceDto } from './services.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';

@@ -22,6 +22,9 @@ export interface CreateServiceDto {
   duration: number;
   images: string[];
   isActive?: boolean;
+  customFields?: Record<string, any>;
+  templateId?: string;
+  attributes?: Array<{ attributeId: string; value: string }>;
 }
 
 export interface UpdateServiceDto {
@@ -33,6 +36,9 @@ export interface UpdateServiceDto {
   duration?: number;
   images?: string[];
   isActive?: boolean;
+  customFields?: Record<string, any>;
+  templateId?: string;
+  attributes?: Array<{ attributeId: string; value: string }>;
 }
 
 @Injectable()
@@ -77,8 +83,8 @@ export class ServicesService {
     // Search filter
     if (search) {
       where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } },
+        { name: { contains: search } },
+        { description: { contains: search } },
       ];
     }
 
@@ -440,7 +446,7 @@ export class ServicesService {
   }
 
   async create(createServiceDto: CreateServiceDto) {
-    const { images, price, promoPrice, ...rest } = createServiceDto;
+    const { images, price, promoPrice, customFields, attributes, ...rest } = createServiceDto;
     
     // Verificar se a categoria existe
     const category = await this.prisma.category.findUnique({
@@ -451,21 +457,48 @@ export class ServicesService {
       throw new NotFoundException('Categoria não encontrada');
     }
 
+    // Verificar se o template existe (se fornecido)
+    if (createServiceDto.templateId) {
+      const template = await this.prisma.serviceTemplate.findUnique({
+        where: { id: createServiceDto.templateId },
+      });
+      if (!template) {
+        throw new NotFoundException('Template não encontrado');
+      }
+    }
+
     const service = await this.prisma.service.create({
       data: {
         ...rest,
         price: price.toString(),
         promoPrice: promoPrice ? promoPrice.toString() : null,
         images: JSON.stringify(images || []),
+        customFields: customFields ? JSON.stringify(customFields) : null,
       },
       include: {
         category: true,
+        template: true,
       },
     });
+
+    if (attributes && attributes.length > 0) {
+      await Promise.all(
+        attributes.map((attr) =>
+          this.prisma.serviceAttributeAssignment.create({
+            data: {
+              serviceId: service.id,
+              attributeId: attr.attributeId,
+              value: attr.value,
+            },
+          }),
+        ),
+      );
+    }
 
     return {
       ...service,
       images: JSON.parse(service.images || '[]'),
+      customFields: service.customFields ? JSON.parse(service.customFields) : null,
     };
   }
 
@@ -489,7 +522,17 @@ export class ServicesService {
       }
     }
 
-    const { images, price, promoPrice, ...rest } = updateServiceDto;
+    // Verificar se o template existe (se fornecido)
+    if (updateServiceDto.templateId) {
+      const template = await this.prisma.serviceTemplate.findUnique({
+        where: { id: updateServiceDto.templateId },
+      });
+      if (!template) {
+        throw new NotFoundException('Template não encontrado');
+      }
+    }
+
+    const { images, price, promoPrice, customFields, attributes, ...rest } = updateServiceDto;
 
     const updated = await this.prisma.service.update({
       where: { id },
@@ -498,15 +541,38 @@ export class ServicesService {
         ...(price !== undefined && { price: price.toString() }),
         ...(promoPrice !== undefined && { promoPrice: promoPrice ? promoPrice.toString() : null }),
         ...(images && { images: JSON.stringify(images) }),
+        ...(customFields !== undefined && { customFields: customFields ? JSON.stringify(customFields) : null }),
       },
       include: {
         category: true,
+        template: true,
       },
     });
+
+    if (attributes) {
+      await this.prisma.serviceAttributeAssignment.deleteMany({
+        where: { serviceId: id },
+      });
+      
+      if (attributes.length > 0) {
+        await Promise.all(
+          attributes.map((attr) =>
+            this.prisma.serviceAttributeAssignment.create({
+              data: {
+                serviceId: id,
+                attributeId: attr.attributeId,
+                value: attr.value,
+              },
+            }),
+          ),
+        );
+      }
+    }
 
     return {
       ...updated,
       images: JSON.parse(updated.images || '[]'),
+      customFields: updated.customFields ? JSON.parse(updated.customFields) : null,
     };
   }
 

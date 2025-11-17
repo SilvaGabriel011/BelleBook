@@ -8,7 +8,8 @@ import {
   Body,
   UseGuards,
 } from '@nestjs/common';
-import { PromotionsService, CreatePromoBannerDto, UpdatePromoBannerDto } from './promotions.service';
+import { PromotionsService } from './promotions.service';
+import type { CreatePromoBannerDto, UpdatePromoBannerDto } from './promotions.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
