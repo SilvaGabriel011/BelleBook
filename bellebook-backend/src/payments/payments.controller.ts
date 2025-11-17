@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { StripeService } from './stripe.service';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import {
   CreatePaymentIntentDto,
   ConfirmPaymentDto,

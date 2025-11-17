@@ -1,8 +1,9 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
-import { PricingRulesService, CreatePricingRuleDto, UpdatePricingRuleDto } from './pricing-rules.service';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { RolesGuard } from '../auth/roles.guard';
-import { Roles } from '../auth/roles.decorator';
+import { PricingRulesService } from './pricing-rules.service';
+import type { CreatePricingRuleDto, UpdatePricingRuleDto } from './pricing-rules.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @Controller('pricing-rules')
 export class PricingRulesController {
