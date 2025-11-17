@@ -150,7 +150,10 @@ export default function EmployeeHomePage() {
               {nextBookings.map((booking) => (
                 <BookingCard
                   key={booking.id}
-                  booking={booking}
+                  booking={{
+                    ...booking,
+                    scheduledAt: new Date(booking.scheduledAt),
+                  }}
                   onStart={() => console.log('Start', booking.id)}
                   onChat={() => console.log('Chat', booking.id)}
                 />

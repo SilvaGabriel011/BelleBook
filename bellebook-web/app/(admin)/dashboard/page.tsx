@@ -62,7 +62,7 @@ export default function AdminDashboard() {
   }, [period]);
 
   const checkAccess = () => {
-    if (!isAuthenticated || (user?.role !== 'ADMIN' && user?.role !== 'PROVIDER')) {
+    if (!isAuthenticated || user?.role !== 'ADMIN') {
       toast.error('Access denied. Administrators only.');
       router.push('/home');
     }
