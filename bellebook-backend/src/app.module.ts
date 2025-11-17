@@ -17,6 +17,9 @@ import { PromotionsModule } from './promotions/promotions.module';
 import { LoyaltyModule } from './loyalty/loyalty.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { ServiceTemplatesModule } from './service-templates/service-templates.module';
+import { ServiceAttributesModule } from './service-attributes/service-attributes.module';
+import { PricingRulesModule } from './pricing-rules/pricing-rules.module';
 
 @Module({
   imports: [
@@ -44,6 +47,9 @@ import { NotificationsModule } from './notifications/notifications.module';
     LoyaltyModule,
     ReviewsModule,
     NotificationsModule,
+    ServiceTemplatesModule,
+    ServiceAttributesModule,
+    PricingRulesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

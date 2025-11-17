@@ -88,15 +88,20 @@ model Service {
   gender        String?   // FEMININO, MASCULINO, UNISEX
   isActive      Boolean   @default(true)
   isPopular     Boolean   @default(false)
+  customFields  String?   // JSON: {key: value} para campos personalizados extensíveis
+  templateId    String?   // Referência ao template usado (opcional)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   
   category      Category  @relation(fields: [categoryId], references: [id])
+  template      ServiceTemplate? @relation(fields: [templateId], references: [id])
   bookings      Booking[]
   reviews       Review[]
   favoritedBy   User[]    @relation("UserFavorites")
   cartItems     CartItem[]
   variants      ServiceVariant[]
+  attributes    ServiceAttributeAssignment[]
+  pricingRules  PricingRule[]
   
   @@map("services")
 }
@@ -132,6 +137,76 @@ model ServicePackage {
   updatedAt     DateTime @updatedAt
   
   @@map("service_packages")
+}
+
+// Templates de serviços para facilitar criação de novos tipos
+model ServiceTemplate {
+  id            String   @id @default(cuid())
+  name          String   @unique
+  description   String?
+  categoryId    String?  // Categoria padrão (opcional)
+  defaultFields String   // JSON: {duration, price, customFields, etc}
+  fieldSchema   String?  // JSON Schema para validação de customFields
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  services      Service[]
+  
+  @@map("service_templates")
+}
+
+// Atributos/Tags flexíveis para serviços
+model ServiceAttribute {
+  id          String   @id @default(cuid())
+  key         String   @unique // Ex: "location-type", "requires-consultation", "skill-level"
+  name        String   // Nome amigável: "Tipo de Localização"
+  description String?
+  valueType   String   @default("boolean") // boolean, string, number, select
+  options     String?  // JSON array para tipo "select": ["in-salon", "at-home", "both"]
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  assignments ServiceAttributeAssignment[]
+  
+  @@map("service_attributes")
+}
+
+// Atribuição de atributos a serviços (many-to-many)
+model ServiceAttributeAssignment {
+  id          String   @id @default(cuid())
+  serviceId   String
+  attributeId String
+  value       String   // Valor do atributo (true/false, texto, número, etc)
+  createdAt   DateTime @default(now())
+  
+  service     Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  attribute   ServiceAttribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
+  
+  @@unique([serviceId, attributeId])
+  @@map("service_attribute_assignments")
+}
+
+// Regras de precificação dinâmica
+model PricingRule {
+  id          String   @id @default(cuid())
+  serviceId   String
+  name        String
+  description String?
+  ruleType    String   // TIME_BASED, DAY_BASED, SEASON_BASED, DEMAND_BASED
+  conditions  String   // JSON: {dayOfWeek: [1,2,3], timeRange: "18:00-22:00", season: "summer"}
+  adjustment  String   // JSON: {type: "percentage|fixed", value: 20, operation: "increase|decrease"}
+  priority    Int      @default(0) // Ordem de aplicação (maior = mais prioritário)
+  isActive    Boolean  @default(true)
+  validFrom   DateTime?
+  validUntil  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  service     Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  
+  @@map("pricing_rules")
 }
 
 // Códigos promocionais

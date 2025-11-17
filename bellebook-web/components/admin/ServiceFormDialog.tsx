@@ -56,8 +56,11 @@ export function ServiceFormDialog({
     duration: '',
     images: [] as string[],
     isActive: true,
+    customFields: {} as Record<string, any>,
   });
   const [imageUrl, setImageUrl] = useState('');
+  const [customFieldKey, setCustomFieldKey] = useState('');
+  const [customFieldValue, setCustomFieldValue] = useState('');
 
   useEffect(() => {
     if (service) {
@@ -70,6 +73,7 @@ export function ServiceFormDialog({
         duration: service.duration.toString(),
         images: service.images || [],
         isActive: service.isActive,
+        customFields: (service as any).customFields || {},
       });
     } else {
       setFormData({
@@ -81,6 +85,7 @@ export function ServiceFormDialog({
         duration: '',
         images: [],
         isActive: true,
+        customFields: {},
       });
     }
   }, [service, open]);
@@ -107,6 +112,31 @@ export function ServiceFormDialog({
       ...prev,
       images: prev.images.filter((_, i) => i !== index),
     }));
+  };
+
+  const handleAddCustomField = () => {
+    if (customFieldKey.trim() && customFieldValue.trim()) {
+      setFormData((prev) => ({
+        ...prev,
+        customFields: {
+          ...prev.customFields,
+          [customFieldKey.trim()]: customFieldValue.trim(),
+        },
+      }));
+      setCustomFieldKey('');
+      setCustomFieldValue('');
+    }
+  };
+
+  const handleRemoveCustomField = (key: string) => {
+    setFormData((prev) => {
+      const newCustomFields = { ...prev.customFields };
+      delete newCustomFields[key];
+      return {
+        ...prev,
+        customFields: newCustomFields,
+      };
+    });
   };
 
   const validateForm = () => {
@@ -154,6 +184,7 @@ export function ServiceFormDialog({
         duration: parseInt(formData.duration),
         images: formData.images,
         isActive: formData.isActive,
+        customFields: Object.keys(formData.customFields).length > 0 ? formData.customFields : undefined,
       };
 
       if (service) {
@@ -325,6 +356,60 @@ export function ServiceFormDialog({
                       className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <Trash2 className="w-3 h-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Campos Personalizados */}
+          <div className="space-y-2">
+            <Label>Campos Personalizados (Extensibilidade)</Label>
+            <div className="flex gap-2">
+              <Input
+                value={customFieldKey}
+                onChange={(e) => setCustomFieldKey(e.target.value)}
+                placeholder="Nome do campo (ex: location, skill_level)"
+                className="flex-1"
+              />
+              <Input
+                value={customFieldValue}
+                onChange={(e) => setCustomFieldValue(e.target.value)}
+                placeholder="Valor"
+                className="flex-1"
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleAddCustomField();
+                  }
+                }}
+              />
+              <Button
+                type="button"
+                onClick={handleAddCustomField}
+                variant="outline"
+              >
+                Adicionar
+              </Button>
+            </div>
+
+            {Object.keys(formData.customFields).length > 0 && (
+              <div className="mt-2 space-y-1">
+                {Object.entries(formData.customFields).map(([key, value]) => (
+                  <div
+                    key={key}
+                    className="flex items-center justify-between bg-gray-50 p-2 rounded"
+                  >
+                    <span className="text-sm">
+                      <strong>{key}:</strong> {String(value)}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveCustomField(key)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 ))}
